@@ -1,0 +1,1 @@
+- `.agents/notes/` 存放会话归档笔记：每完成一项任务，复制其中的 `template.md` 为 `YYYY-MM-DD-<主题>.md` 并填写（front matter 的 author 用 `模型@harness` 格式），笔记须关联相关 git 提交。
