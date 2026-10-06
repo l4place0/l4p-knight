@@ -304,9 +304,15 @@ function showChipOffer() {
 }
 
 /* ---------- 商店 ---------- */
+let shopSig = '';
 function showShop() {
   if (!G.shopItems) return;
   ui.shopOverlay.classList.add('show');
+  // 签名守卫：仅开新店/购买后重绘。此前的每帧重建会不断替换 DOM 节点，
+  // 点击事件落在已移除的节点上——商店卡片因此无法点击（实机 bug）
+  const sig = G.shopVisits + ':' + G.shopItems.map(it => it.sold ? 1 : 0).join('');
+  if (sig === shopSig && ui.shopCards.childElementCount === G.shopItems.length) return;
+  shopSig = sig;
   ui.shopCards.innerHTML = '';
   G.shopItems.forEach((it, i) => {
     const div = document.createElement('div');
@@ -341,8 +347,10 @@ function updateHUD(dt) {
     ui.hpPips.children[i].classList.toggle('on', i < P.hp);
   }
   ui.shieldFill.style.width = (P.shield / P.maxShield * 100) + '%';
-  // 武器
-  if (ui.wpnRow.childElementCount !== G.weapons.length) {
+  // 武器（按武器签名重建：换装不改数量，仅凭数量判断会残留旧文案）
+  const wSig = G.weapons.map(w => w.id).join(',');
+  if (ui.wpnRow.childElementCount !== G.weapons.length || ui.wpnRow.dataset.sig !== wSig) {
+    ui.wpnRow.dataset.sig = wSig;
     ui.wpnRow.innerHTML = '';
     G.weapons.forEach((w, i) => {
       const d = document.createElement('div');

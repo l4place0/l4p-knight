@@ -210,6 +210,30 @@ console.log('【每日挑战】玻璃开局 · 结构断言');
   console.log('');
 }
 
+/* --- 1d. 双 Boss 区分度回归：boss2 必须实际使用专属攻击（镜像裂变/引力井/相位风暴） --- */
+console.log('【双 Boss 区分】boss2 专属攻击回归');
+{
+  const G = GAME.createGame({ seed: 5, headless: true });
+  const bot = BOT.createBot(5);
+  G.startRun('vanguard');
+  G.debugDmg = 12;
+  G.loadBossRoom('boss2');
+  const seen = new Set();
+  let t = 0, ok = false;
+  while (t < 240 && G.state === 'playing') {
+    bot.update(G, DT, G.input);
+    G.update(DT); t += DT;
+    const b = G.bossRef;
+    if (b && b.atk) {
+      seen.add(b.atk.kind);
+      if (seen.has('clones') && seen.has('gravity') && seen.has('blinkstorm')) { ok = true; break; }
+    }
+  }
+  log('结果: ' + (ok ? '✓' : '✗') + ' ' + Math.round(t) + 's 游戏时间内出现: ' + [...seen].sort().join(' '));
+  check(ok, 'boss2 未实际使用全部专属攻击（clones/gravity/blinkstorm）: ' + [...seen].join(','));
+  console.log('');
+}
+
 /* --- 2. 高压压力测试：不卡死、无异常 --- */
 {
   console.log('【压力仿真】30 敌 + 260 弹高压场景 × 600 帧');

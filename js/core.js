@@ -127,9 +127,9 @@ const ENEMY_DEFS = {
     name: '终焉 · 回响体', hp: 1250, r: 15, speed: 46, mass: 9, contact: 2, score: 1500,
     isBoss: true, final: true, color: '#e8e8ee', sub: 'FINAL BOSS', phases: BOSS2_PHASES,
     pools: {
-      1: ['clones', 'fan', 'ring'],
-      2: ['gravity', 'spiral', 'fanlaser'],
-      3: ['blinkstorm', 'gravity', 'clones', 'mines'],
+      1: ['ring', 'clones', 'fan', 'clones'],
+      2: ['spiral', 'gravity', 'fanlaser', 'gravity'],
+      3: ['clones', 'blinkstorm', 'gravity', 'mines', 'blinkstorm'],
     },
   },
 };

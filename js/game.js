@@ -532,6 +532,7 @@ function createGame(opts) {
   /* ---------------- Boss ---------------- */
   function bossTransition(e, ph) {
     e.st = 'transition'; e.t = 1.5; e.phase = ph; e.invuln = 1.6;
+    e.atk = null; e.atkIdx = 0;   // 转阶段重置攻击轮换 → 下一段以该阶段签名攻击开场
     G.bossLaser = null;
     // 清除敌方弹幕 → 火花
     for (const b of G.bullets) if (!b.friendly) { addParts(b.x, b.y, 2, '#ff4757', { spd: 40, life: 0.3 }); b.life = 0; }
