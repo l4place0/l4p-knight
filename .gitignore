@@ -8,3 +8,6 @@ desktop.ini
 .vscode/
 .idea/
 *.log
+
+# 工具派生文件（ZCode 自动从 .gitignore 同步生成，不跟踪）
+.zcodeignore
