@@ -26,7 +26,7 @@ function createGame(opts) {
     enemies: [], bullets: [], pickups: [], mines: [],
     lasers: [], beams: [], bossLaser: null, wells: [],
     particles: [], floaters: [], rings: [], ghosts: [],
-    chips: [], synActive: [],
+    chips: [], chipLv: {}, synActive: [],
     stats: null,
     combo: 0, comboT: 0, maxCombo: 0,
     coins: 0, coinsCollected: 0, shopVisits: 0, shopItems: null,
@@ -212,12 +212,17 @@ function createGame(opts) {
       railMul: 1, railAoe: 0,
       frost: 0, chain: 0, reload: 0, lucky: 0, dashEcho: 0, chainBig: 0, frostAmp: 0,
     };
-    for (const id of G.chips) { const c = CHIPS.find(c => c.id === id); if (c) c.apply(s); }
+    // 晶片：lv = 升级次数，效果缩放 k = 1.5^lv
+    for (const id of G.chips) {
+      const c = CHIPS.find(c => c.id === id); if (!c) continue;
+      const lv = (G.chipLv && G.chipLv[id]) || 0;
+      c.apply(s, lv > 0 ? Math.pow(1.5, lv) : 1);
+    }
     G.synActive = [];
     for (const syn of SYNERGIES) {
       if (syn.need.every(n => G.chips.includes(n))) { syn.apply(s); G.synActive.push(syn); }
     }
-    if (s.noSplitPenalty && G.chips.includes('split')) s.dmg += 0.22;
+    if (s.noSplitPenalty && G.chips.includes('split')) s.dmg += 0.22 * (s.splitK || 1);
     // 商店永久强化与英雄底子
     s.shieldMax += (G.bonusShield || 0);
     s.dmg *= (1 + (G.powerBonus || 0));
@@ -377,7 +382,7 @@ function createGame(opts) {
     }
     if (e.slowT > 0 && G.stats.frostAmp) dmg = dmg * 1.2;
     e.hp -= dmg;
-    if (G.stats.frost) e.slowT = Math.max(e.slowT || 0, e.type === 'boss' ? 0.6 : (G.stats.frostAmp ? 2.2 : 1.8));
+    if (G.stats.frost) e.slowT = Math.max(e.slowT || 0, e.type === 'boss' ? 0.6 : (G.stats.frostAmp ? 2.2 : 1.8) * (G.stats.frostK || 1));
     e.flash = 1; e.hitCd = 0.05;
     if (knock) {
       const m = e.mass || 1;
@@ -431,7 +436,7 @@ function createGame(opts) {
     }
     e.dead = true;
     // 金币掉落
-    const luckyMul = G.stats.lucky ? 1.6 : 1;
+    const luckyMul = G.stats.lucky ? 1 + 0.6 * (G.stats.luckyK || 1) : 1;
     const coinN = e.elite ? 3 : (e.type === 'guard' ? 2 : 1);
     if (e.elite || rng.chance(0.65 * luckyMul)) {
       for (let ci = 0; ci < coinN; ci++) {
@@ -440,10 +445,10 @@ function createGame(opts) {
     }
     // 引爆核心：敌人死亡爆炸
     if (G.stats.chain) {
-      explode(e.x, e.y, G.stats.chainBig ? 42 : 26, (G.stats.chainBig ? 9 : 6) * G.stats.dmg, true, '#ffb84d');
+      explode(e.x, e.y, G.stats.chainBig ? 42 : 26, (G.stats.chainBig ? 9 : 6) * G.stats.dmg * (G.stats.chainK || 1), true, '#ffb84d');
     }
     // 弹药回涌
-    if (G.stats.reload) G.player.fireT *= 0.8;
+    if (G.stats.reload) G.player.fireT *= 1 - Math.min(0.6, 0.2 * (G.stats.reloadK || 1));
     addParts(e.x, e.y, 16, ['#a9a9b4', '#6a6a76', e.type === 'charger' ? '#ff4757' : '#45f0e2'], { spd: 150, life: 0.6, size: 2.4 });
     addRing(e.x, e.y, '#ffffff', { vr: 240, life: 0.3, width: 2 });
     shake(2);
@@ -514,7 +519,11 @@ function createGame(opts) {
     return {
       time: t, kills: G.kills, maxCombo: G.maxCombo, damageTaken: G.damageTaken,
       score: G.score, rating,
-      chips: G.chips.map(id => CHIPS.find(c => c.id === id).name),
+      chips: G.chips.map(id => {
+        const c = CHIPS.find(c => c.id === id);
+        const lv = (G.chipLv && G.chipLv[id]) || 0;
+        return c.name + (lv > 0 ? '·Lv' + (lv + 1) : '');
+      }),
       syn: G.synActive.map(s => s.name),
     };
   }
@@ -1383,24 +1392,39 @@ function createGame(opts) {
     }
     G.chipOffer = picks.map(c => ({
       id: c.id, name: c.name, desc: c.desc, rarity: c.rarity,
+      owned: G.chips.includes(c.id), lv: (G.chipLv && G.chipLv[c.id]) || 0,
       syn: SYNERGIES.filter(s => s.need.includes(c.id) && s.need.every(n2 => n2 === c.id || G.chips.includes(n2))),
     }));
     G.state = 'chip';
     G.sfx('chipOffer');
   }
 
+  // 获取晶片：已持有 → 升级一级（效果 ×1.5），否则新装备。返回 'new' | 'up'
+  G.acquireChip = function (id) {
+    if (G.chips.includes(id)) {
+      G.chipLv[id] = (G.chipLv[id] || 0) + 1;
+      G.computeStats();
+      return 'up';
+    }
+    G.chips.push(id);
+    G.computeStats();
+    return 'new';
+  };
+
   G.chooseChip = function (i) {
     if (G.state !== 'chip' || !G.chipOffer || !G.chipOffer[i]) return;
     const c = G.chipOffer[i];
     const before = G.synActive.map(s => s.id);
-    G.chips.push(c.id);
-    G.computeStats();
+    const res = G.acquireChip(c.id);
     const newly = G.synActive.filter(s => !before.includes(s.id));
     for (const syn of newly) {
       banner('羁绊激活 · ' + syn.name, syn.desc, '#ffb84d', 2.4);
       G.sfx('syn');
     }
-    if (!newly.length) toast('已装备晶片：' + c.name, '#45f0e2');
+    if (!newly.length) {
+      if (res === 'up') toast('晶片升级：' + c.name + ' → Lv.' + ((G.chipLv[c.id] || 0) + 1) + '（效果 ×1.5）', '#ffb84d');
+      else toast('已装备晶片：' + c.name, '#45f0e2');
+    }
     G.sfx('chipPick');
     G.chipOffer = null;
     G.state = 'playing';
@@ -1429,7 +1453,7 @@ function createGame(opts) {
   };
 
   function openShop() {
-    const disc = G.stats.lucky ? 0.85 : 1;
+    const disc = G.stats.lucky ? 1 - Math.min(0.5, 0.15 * (G.stats.luckyK || 1)) : 1;
     const P = (n) => Math.max(1, Math.round(n * disc));
     const items = [{ kind: 'heal', name: '纳米医疗包', desc: '回复 2 点生命', price: P(6), rarity: 1 }];
     const pool = ['chip', 'battery', 'weapon', 'power'];
@@ -1465,10 +1489,10 @@ function createGame(opts) {
       addFloater(G.player.x, G.player.y - 12, '+2', '#ff4757');
     } else if (it.kind === 'chip') {
       const before = G.synActive.map(s2 => s2.id);
-      G.chips.push(it.chipId);
-      G.computeStats();
+      const res = G.acquireChip(it.chipId);
       const newly = G.synActive.filter(s2 => !before.includes(s2.id));
       for (const syn of newly) { banner('羁绊激活 · ' + syn.name, syn.desc, '#ffb84d', 2.4); G.sfx('syn'); }
+      if (!newly.length && res === 'up') toast('晶片升级：' + it.name + ' → Lv.' + ((G.chipLv[it.chipId] || 0) + 1) + '（效果 ×1.5）', '#ffb84d');
     } else if (it.kind === 'battery') {
       G.bonusShield = (G.bonusShield || 0) + 1;
       G.computeStats();
@@ -1730,7 +1754,7 @@ function createGame(opts) {
   /* ---------------- 开始 / 调试 ---------------- */
   G.startRun = function (heroId) {
     G.heroId = heroId || 'vanguard';
-    G.chips = []; G.synActive = []; G.weaponSlot = 0;
+    G.chips = []; G.chipLv = {}; G.synActive = []; G.weaponSlot = 0;
     G.weapons = [WEAPONS[(HEROES[G.heroId] || HEROES.vanguard).weapon], WEAPONS.blade];
     G.coins = 0; G.coinsCollected = 0; G.shopVisits = 0;
     G.bonusShield = 0; G.powerBonus = 0; G.dashEchoT = 0; G.shopItems = null;

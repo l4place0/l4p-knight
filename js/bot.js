@@ -30,6 +30,8 @@ function createBot(seed) {
     let best = 0, bestScore = -1;
     G.chipOffer.forEach((meta, i) => {
       let sc = CHIP_SCORE[meta.id] || 1;
+      // 已持有 → 第二次出现即升级（效果 ×1.5），按基础分的 1/3 计升级价值
+      if (G.chips.includes(meta.id)) sc += (CHIP_SCORE[meta.id] || 1) / 3;
       for (const syn of C.SYNERGIES) {
         if (syn.need.includes(meta.id) && syn.need.every(n => n === meta.id || G.chips.includes(n))) sc += 6;
       }

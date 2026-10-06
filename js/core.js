@@ -135,28 +135,30 @@ const ENEMY_DEFS = {
 
 /* ---------------- 战术晶片 ----------------
  * rarity: 1 常规(灰) 2 稀有(青) 3 史诗(琥珀)
- * apply(s, G) 修改属性袋；s 字段见 game.computeStats
+ * apply(s, k) 修改属性袋；s 字段见 game.computeStats
+ * k = 效果缩放（1.5^升级等级），晶片升级时数值面随之放大；
+ * 整数型效果取 ceil 保证逐级单调，乘法减益设下限防负值/零值。
  * ---------------------------------------- */
 const CHIPS = [
-  { id: 'overcharge', name: '过载弹头', rarity: 1, desc: '武器伤害 +25%', weight: 3, apply: s => { s.dmg += 0.25; } },
-  { id: 'overclock', name: '超频电机', rarity: 1, desc: '射击速率 +20%', weight: 3, apply: s => { s.rate += 0.20; } },
-  { id: 'split', name: '分裂弹匣', rarity: 2, desc: '弹道数量 +2，伤害 -22%（霰弹枪额外 +1 弹）', weight: 2.2, apply: s => { s.proj += 2; s.dmg -= 0.22; } },
-  { id: 'pierce', name: '贯穿弹芯', rarity: 2, desc: '子弹可贯穿 +1 名敌人（电磁炮：贯穿一切）', weight: 2.0, apply: s => { s.pierce += 1; } },
-  { id: 'bounce', name: '反弹涂层', rarity: 1, desc: '子弹可在墙面反弹 +2 次', weight: 1.6, apply: s => { s.bounce += 2; } },
-  { id: 'glass', name: '玻璃大炮', rarity: 3, desc: '伤害 +60%，最大生命 -1', weight: 1.6, apply: s => { s.dmg += 0.6; s.maxHpAdd -= 1; } },
-  { id: 'nano', name: '纳米修复', rarity: 1, desc: '击杀敌人时 12% 概率回复 1 生命', weight: 2.0, apply: s => { s.killHeal = Math.max(s.killHeal, 0.12); } },
-  { id: 'kinetic', name: '动能核心', rarity: 1, desc: '击杀后 1.5 秒内移速 +30%', weight: 1.8, apply: s => { s.killSpeed = 1.5; } },
-  { id: 'capacitor', name: '护盾电容', rarity: 1, desc: '护盾上限 +1，充能延迟 -30%', weight: 2.2, apply: s => { s.shieldMax += 1; s.shieldDelay *= 0.7; } },
-  { id: 'bladecore', name: '荧惑刃芯', rarity: 2, desc: '近战伤害 +100%，格挡范围 +40%', weight: 1.6, apply: s => { s.melee += 1.0; s.meleeRange += 0.4; } },
-  { id: 'crit', name: '猎杀协议', rarity: 2, desc: '暴击率 +15%，暴击倍率 +0.3x', weight: 2.0, apply: s => { s.crit += 0.15; s.critMul += 0.3; } },
-  { id: 'servo', name: '暴走引擎', rarity: 1, desc: '移速 +15%，冲刺冷却 -25%', weight: 2.2, apply: s => { s.speed += 0.15; s.dashCd *= 0.75; } },
-  { id: 'steady', name: '弹道稳定', rarity: 1, desc: '散布 -60%（霰弹枪 -35%）', weight: 1.8, apply: s => { s.spreadMul *= 0.4; } },
-  { id: 'vengeance', name: '复仇芯片', rarity: 2, desc: '受伤后 3 秒内伤害 +50%', weight: 2.0, apply: s => { s.revenge = Math.max(s.revenge, 0.5); } },
-  { id: 'frost', name: '冰霜弹头', rarity: 1, desc: '命中使敌人减速，持续 1.8 秒', weight: 2.2, apply: s => { s.frost = 1; } },
-  { id: 'chain', name: '引爆核心', rarity: 2, desc: '敌人死亡时发生重力爆炸', weight: 2.0, apply: s => { s.chain = 1; } },
-  { id: 'reload', name: '弹药回涌', rarity: 1, desc: '击杀使武器冷却缩短 20%', weight: 2.0, apply: s => { s.reload = 1; } },
-  { id: 'lucky', name: '幸运之手', rarity: 1, desc: '金币掉落 +60%，商店价格 -15%', weight: 1.8, apply: s => { s.lucky = 1; } },
-  { id: 'dashecho', name: '相位回响', rarity: 2, desc: '冲刺后 1 秒内伤害 +30%', weight: 2.0, apply: s => { s.dashEcho = Math.max(s.dashEcho, 0.3); } },
+  { id: 'overcharge', name: '过载弹头', rarity: 1, desc: '武器伤害 +25%', weight: 3, apply: (s, k) => { s.dmg += 0.25 * k; } },
+  { id: 'overclock', name: '超频电机', rarity: 1, desc: '射击速率 +20%', weight: 3, apply: (s, k) => { s.rate += 0.20 * k; } },
+  { id: 'split', name: '分裂弹匣', rarity: 2, desc: '弹道数量 +2，伤害 -22%（霰弹枪额外 +1 弹）', weight: 2.2, apply: (s, k) => { s.proj += Math.ceil(2 * k); s.dmg -= 0.22 * k; s.splitK = k; } },
+  { id: 'pierce', name: '贯穿弹芯', rarity: 2, desc: '子弹可贯穿 +1 名敌人（电磁炮：贯穿一切）', weight: 2.0, apply: (s, k) => { s.pierce += Math.ceil(k); } },
+  { id: 'bounce', name: '反弹涂层', rarity: 1, desc: '子弹可在墙面反弹 +2 次', weight: 1.6, apply: (s, k) => { s.bounce += Math.ceil(2 * k); } },
+  { id: 'glass', name: '玻璃大炮', rarity: 3, desc: '伤害 +60%，最大生命 -1', weight: 1.6, apply: (s, k) => { s.dmg += 0.6 * k; s.maxHpAdd -= 1; } },
+  { id: 'nano', name: '纳米修复', rarity: 1, desc: '击杀敌人时 12% 概率回复 1 生命', weight: 2.0, apply: (s, k) => { s.killHeal = Math.max(s.killHeal, Math.min(1, 0.12 * k)); } },
+  { id: 'kinetic', name: '动能核心', rarity: 1, desc: '击杀后 1.5 秒内移速 +30%', weight: 1.8, apply: (s, k) => { s.killSpeed = 1.5 * k; } },
+  { id: 'capacitor', name: '护盾电容', rarity: 1, desc: '护盾上限 +1，充能延迟 -30%', weight: 2.2, apply: (s, k) => { s.shieldMax += Math.ceil(k); s.shieldDelay *= Math.max(0.15, 1 - 0.3 * k); } },
+  { id: 'bladecore', name: '荧惑刃芯', rarity: 2, desc: '近战伤害 +100%，格挡范围 +40%', weight: 1.6, apply: (s, k) => { s.melee += 1.0 * k; s.meleeRange += 0.4 * k; } },
+  { id: 'crit', name: '猎杀协议', rarity: 2, desc: '暴击率 +15%，暴击倍率 +0.3x', weight: 2.0, apply: (s, k) => { s.crit += 0.15 * k; s.critMul += 0.3 * k; } },
+  { id: 'servo', name: '暴走引擎', rarity: 1, desc: '移速 +15%，冲刺冷却 -25%', weight: 2.2, apply: (s, k) => { s.speed += 0.15 * k; s.dashCd *= Math.max(0.25, 1 - 0.25 * k); } },
+  { id: 'steady', name: '弹道稳定', rarity: 1, desc: '散布 -60%（霰弹枪 -35%）', weight: 1.8, apply: (s, k) => { s.spreadMul *= Math.max(0.05, 1 - 0.6 * k); } },
+  { id: 'vengeance', name: '复仇芯片', rarity: 2, desc: '受伤后 3 秒内伤害 +50%', weight: 2.0, apply: (s, k) => { s.revenge = Math.max(s.revenge, Math.min(2, 0.5 * k)); } },
+  { id: 'frost', name: '冰霜弹头', rarity: 1, desc: '命中使敌人减速，持续 1.8 秒', weight: 2.2, apply: (s, k) => { s.frost = 1; s.frostK = k; } },
+  { id: 'chain', name: '引爆核心', rarity: 2, desc: '敌人死亡时发生重力爆炸', weight: 2.0, apply: (s, k) => { s.chain = 1; s.chainK = k; } },
+  { id: 'reload', name: '弹药回涌', rarity: 1, desc: '击杀使武器冷却缩短 20%', weight: 2.0, apply: (s, k) => { s.reload = 1; s.reloadK = k; } },
+  { id: 'lucky', name: '幸运之手', rarity: 1, desc: '金币掉落 +60%，商店价格 -15%', weight: 1.8, apply: (s, k) => { s.lucky = 1; s.luckyK = k; } },
+  { id: 'dashecho', name: '相位回响', rarity: 2, desc: '冲刺后 1 秒内伤害 +30%', weight: 2.0, apply: (s, k) => { s.dashEcho = Math.max(s.dashEcho, Math.min(1.5, 0.3 * k)); } },
 ];
 
 /* ---------------- 协同羁绊（Synergy） ----------------

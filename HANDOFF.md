@@ -1,6 +1,6 @@
 # HANDOFF · 零号协议 ZERO PROTOCOL 开发交接文档
 
-> 交接日期：2026-10-05 · 交接版本：v1.2（基于 v1.1 评测 A 版本，按路线图第 1 项扩展）
+> 交接日期：2026-10-06 · 交接版本：v1.3（基于 v1.2，按路线图第 2 项扩展）
 > 项目来源：`ai-benchmark/glm-5,3-flash/zcode/My Soul Knight/shot01`（已完整复制至本目录，逐文件 diff 校验一致）
 > 本文目标：让任何开发者（人或 AI）在不询问原作者的情况下继续开发。
 
@@ -9,8 +9,9 @@
 ## 1. 这是什么项目
 
 类《元气骑士》的黑白灰像素风 2D 肉鸽弹幕射击游戏。纯原生 HTML5 Canvas + Web Audio，
-**零依赖、零外部资源、零构建步骤**。当前内容：3 英雄 / 4 区域 / 6 武器 / 19 晶片 / 10 羁绊 /
-7 敌种 + 精英词条 / **双三阶段 Boss**（第 3 区守卫 + 最终首领）/ 金币商店 / 历史纪录存档。
+**零依赖、零外部资源、零构建步骤**。当前内容：3 英雄 / 4 区域 / 6 武器 / 19 晶片（同名重复
+获取转为升级，×1.5/级）/ 10 羁绊 / 7 敌种 + 精英词条 / **双三阶段 Boss**（第 3 区守卫 +
+最终首领）/ 金币商店 / 历史纪录存档。
 
 **当前状态：功能完备、验收全绿。** 接手后第一件事：跑一遍验收（见 §3），确认基线。
 
@@ -98,6 +99,7 @@ test/serve.js     静态服务器
 | 房间流程 | `updateWaves` → `offerChips` → `chooseChip` → 区域末尾 `openShop` → `shopLeave` → `openPortal` → `nextLevel` | `nextLevel`：房内推进 → 区域末尾有 `bossId` 且未击破 → 首领房；首领房传送门 → 下一区。`chipOffered` 一次性标志防重复触发 |
 | 引力井 | game.js `G.wells` / `updateWells` | Boss2 专属：范围内拉扯玩家（冲刺 `dashT > 0` 时免疫拉扯），到期内爆 `explode`；bot 在 `computeDanger` 规避 |
 | 属性系统 | `computeStats` | 晶片 apply → 羁绊 apply → 武器自适应（pierce+电磁炮=无限贯穿）→ 商店永久加成（bonusShield/powerBonus）→ 英雄底子；**createGame 时即初始化**（标题 HUD 依赖，bug #10） |
+| 晶片升级 | `G.chipLv` / `G.acquireChip` | 已持有晶片再次获取 → `chipLv[id]++`（不重复入列表）；`computeStats` 以 k = 1.5^lv 调 `apply(s, k)`；整数型效果 ceil 进位、乘法减益设下限、触发型晶片缩放数值面（`frostK/chainK/reloadK/luckyK/splitK` 随属性袋传递）；分裂减伤的羁绊退款按 `s.splitK` 同步 |
 | 弹道扩展 | `updateBullets` | `b.kind`：'homing'（转向最近敌人）/ 'grenade'（撞墙/命中/超时引爆 `grenadeBoom`） |
 | 状态机 | `G.state` | title / playing / chip / shop / victory / defeat / paused；chip 与 shop 冻结世界 |
 | bot 导航 | bot.js `bfsPath` + 16 向评分 | 无视线目标或传送门 → BFS 路径跟随；评分含**箱体真实位移模拟**（防卡墙）；连续受困 3 次给随机脱困脉冲 |
@@ -121,7 +123,9 @@ test/serve.js     静态服务器
 6. 若它会自爆/召唤，注意与 `killEnemy`（连击/金币/引爆核心链）的交互
 
 ### 加晶片 / 羁绊
-1. `core.js` CHIPS / SYNERGIES（晶片 `apply(s)` 修改属性袋；羁绊 `need` 引用晶片 id）
+1. `core.js` CHIPS / SYNERGIES（晶片 `apply(s, k)` 修改属性袋，**k = 1.5^升级等级**：加成写 `s.x += 基值*k`，
+   整数型用 `Math.ceil(基值*k)`，乘法减益设下限；触发型晶片把 k 存入属性袋如 `s.chainK = k`，在效果落点读取）；
+   羁绊 `need` 引用晶片 id
 2. game.js `computeStats` 的 `s` 默认值加字段；效果落点通常在 `damageEnemy` / `killEnemy` / `updatePlayer`
 3. bot.js `CHIP_SCORE` 加权重（bot 才会选它）
 
@@ -147,18 +151,17 @@ debugClear 清场、debugSpawn 摆怪、限时断言）。诊断卡点用 `test/
 ## 6. 已知限制 / 技术债（遗留）
 
 1. **无背景音乐**：只有音效。可做 Web Audio 步进音序器循环，注意与静音键（M）统一。
-2. **同名牌晶片可重复叠取**（如双「猎杀协议」暴击叠加）：是否去重/升级为层级是设计决策。
-3. **bot 单帧峰值有 JIT 预热尖峰**（首次 BFS/大量分配）：无害（远低于 3s 熔断），
+2. **bot 单帧峰值有 JIT 预热尖峰**（首次 BFS/大量分配）：无害（远低于 3s 熔断），
    若扩展弹幕规模建议做对象池。
-4. **纪录仅存 localStorage**：file:// 与 http 的存储隔离，无跨设备。
-5. **bot 高压下仍可能掉血但能通关**：英雄平衡改动后务必重跑全英雄仿真。
-6. **z2a 地图有 32 格封闭内室**（装饰性，BFS 可达刷怪已规避死局，纯浪费空间）；如改造需重验第 2 区平衡。
-7. **引力井仅拉扯玩家**：如需拉扯敌军，注意与击退衰减、`resolveOutOfWall` 的交互并重跑嵌墙回归。
+3. **纪录仅存 localStorage**：file:// 与 http 的存储隔离，无跨设备。
+4. **bot 高压下仍可能掉血但能通关**：英雄平衡改动后务必重跑全英雄仿真。
+5. **z2a 地图有 32 格封闭内室**（装饰性，BFS 可达刷怪已规避死局，纯浪费空间）；如改造需重验第 2 区平衡。
+6. **引力井仅拉扯玩家**：如需拉扯敌军，注意与击退衰减、`resolveOutOfWall` 的交互并重跑嵌墙回归。
 
 ## 7. 建议开发路线图（按优先级）
 
 1. ~~第 4 区 + 第二 Boss~~ ✅ 已完成（v1.2：z4a/z4b + 终焉·回响体 + 虚空徘徊者/镜像残影 + 双 Boss 流程）
-2. **晶片去重与升级**：同 id 第二次出现转为「晶片升一级」（数值 ×1.5），商店同规则。
+2. ~~晶片去重与升级~~ ✅ 已完成（v1.3：同 id 重复获取转为升级 ×1.5/级，商店同规则，UI/bot/矩阵基线全同步）
 3. **背景音乐**：两首（探索/Boss），步进音序器 + 低通，Boss 战自动切换。
 4. **每日挑战**：`seed = YYYYMMDD` 固定种子 + 修改器（如"只掉金币"），本地排行。
 5. **元进度解锁**：纪录达标解锁英雄/初始晶片，提升重复可玩性。

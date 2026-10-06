@@ -153,7 +153,8 @@ for (const seed of SEEDS) {
   check(s.bossPhasesSeen.includes(2) && s.bossPhasesSeen.includes(3), 'Boss 三阶段未完整推进: ' + s.bossPhasesSeen.join(','));
   check(s.bossPhasesSeen.filter(p => p === 3).length >= 2, '两位 Boss 均需完整走完三阶段: ' + s.bossPhasesSeen.join(','));
   check(r.G.bossDown[2] && r.G.bossDown[3], '第 3 区守卫与最终 Boss 均未确认击破: ' + JSON.stringify(r.G.bossDown));
-  check(r.G.chips.length >= 6, '局内晶片获取异常（每战斗房间 1 枚，7 房应 ≥6，实际 ' + r.G.chips.length + '）');
+  const upCount = Object.values(r.G.chipLv || {}).reduce((a, b) => a + b, 0);
+  check(r.G.chips.length + upCount >= 6, '局内晶片获取异常（每战斗房间 1 枚，7 房应 ≥6，实际 ' + r.G.chips.length + ' 枚 + ' + upCount + ' 次升级）');
   check(r.G.kills >= 10, '击杀数异常偏低: ' + r.G.kills);
   check(r.G.shopVisits >= 4, '补给站访问异常（4 个区域末尾应各开店一次，实际 ' + r.G.shopVisits + ' 次）');
   check(r.G.coinsCollected > 0, '金币经济未生效（拾取数 0）');

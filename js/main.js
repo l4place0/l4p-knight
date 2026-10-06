@@ -193,9 +193,11 @@ function showChipOffer() {
     const div = document.createElement('div');
     div.className = 'chipCard r' + c.rarity;
     const rarName = ['', '常规', '稀有', '史诗'][c.rarity];
+    const owned = G.chips.includes(c.id);
+    const upBadge = owned ? '<div class="ccUp">升级 → Lv.' + (c.lv + 2) + '（效果 ×1.5）</div>' : '';
     div.innerHTML =
       '<div class="ccRarity">' + '★'.repeat(c.rarity) + ' ' + rarName + '</div>' +
-      '<div class="ccName">' + c.name + '</div>' +
+      '<div class="ccName">' + c.name + '</div>' + upBadge +
       '<div class="ccDesc">' + c.desc + '</div>' +
       (c.syn && c.syn.length ? '<div class="ccSyn">羁绊：' + c.syn.map(s => s.name).join(' / ') + '</div>' : '');
     div.addEventListener('click', () => { AUDIO.play('chipPick'); G.chooseChip(i); });
@@ -212,9 +214,10 @@ function showShop() {
   G.shopItems.forEach((it, i) => {
     const div = document.createElement('div');
     div.className = 'shopCard' + (it.sold ? ' sold' : '');
+    const isUp = it.kind === 'chip' && G.chips.includes(it.chipId);
     div.innerHTML =
-      '<div class="ccRarity" style="color:' + ['', '#a9a9b4', '#45f0e2', '#ffb84d'][it.rarity || 1] + '">' + it.name + '</div>' +
-      '<div class="sDesc">' + it.desc + '</div>' +
+      '<div class="ccRarity" style="color:' + ['', '#a9a9b4', '#45f0e2', '#ffb84d'][it.rarity || 1] + '">' + it.name + (isUp ? ' · 升级' : '') + '</div>' +
+      '<div class="sDesc">' + (isUp ? '已持有 → 升一级（效果 ×1.5）<br>' : '') + it.desc + '</div>' +
       '<div class="sPrice">' + (it.sold ? '已购入' : '\u25C6 ' + it.price + ' 金币') + '</div>';
     if (!it.sold) div.addEventListener('click', () => { G.shopBuy(i); AUDIO.play('buy'); });
     ui.shopCards.appendChild(div);
@@ -273,7 +276,8 @@ function updateHUD(dt) {
   let html = '';
   for (const id of G.chips) {
     const c = C.CHIPS.find(x => x.id === id);
-    html += '<span class="chipTag r' + c.rarity + '">' + c.name + '</span>';
+    const lv = (G.chipLv && G.chipLv[id]) || 0;
+    html += '<span class="chipTag r' + c.rarity + '">' + c.name + (lv > 0 ? '·Lv' + (lv + 1) : '') + '</span>';
   }
   for (const syn of G.synActive) {
     html += '<span class="chipTag synTag">羁绊·' + syn.name + '</span>';

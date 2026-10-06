@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-05T16:18:47.171Z",
+ "generatedAt": "2026-10-06T08:13:53.046Z",
  "templates": {
   "z1a/vanguard": {
    "n": 3000,
@@ -167,6 +167,6 @@
  "config": {
   "seeds": "1-3000",
   "heroes": "all",
-  "savedAt": "2026-10-05T16:18:47.404Z"
+  "savedAt": "2026-10-06T08:13:53.084Z"
  }
 }
