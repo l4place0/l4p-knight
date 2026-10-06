@@ -45,6 +45,7 @@ node test/matrix.js --seeds 1-5 --save-baseline test/matrix.baseline.json  # 存
 node test/matrix.js --seeds 1-5 --baseline test/matrix.baseline.json       # 与基线对比劣化
 node test/diag.js <seed>       # 卡点诊断：逐秒打印玩家/敌人/输入微观状态
 node test/serve.js 8941        # 本地服务器 → http://127.0.0.1:8941/
+node test/structure.check.js   # 结构守护：脚本编排顺序/模块导出面/逐文件语法（patch 后必做）
 node --check js/<file>.js      # 语法检查（patch 后必做）
 ```
 
@@ -64,31 +65,47 @@ node --check js/<file>.js      # 语法检查（patch 后必做）
 
 ## 4. 架构与文件地图
 
+> v1.8 起采用「经典脚本 + ZERO_* 命名空间 + 双端导出」的部件化结构（零构建、file:// 可玩不变）。
+> 加载顺序由 test/structure.check.js 钉死守护；依赖方向：core ← game 部件 ← 门面 ← render/audio/music/bot ← UI 模块 ← main。
+
 ```
-index.html      界面壳：canvas + 全中文 HUD/横幅/晶片卡片/商店/结算屏（DOM 层，CSS 内联）
-js/core.js      纯数据层：常量、武器、英雄、敌人、晶片、羁绊、地图、3x5 像素字体、字符画精灵
-js/game.js      游戏逻辑层：状态机、玩家、敌人 AI、Boss、子弹/地雷/激光、波次、商店、碰撞
-js/render.js    渲染层：精灵预渲染缓存、瓦片底图缓存、发光弹幕、特效（仅浏览器加载）
-js/bot.js       AI 代打：BFS 寻路接敌（含路由粘滞：目标瓦片挪 1 格不重算路径，防等长备选路线反复
-                横跳）+ 16 向评分走位 + 弹幕/地雷/激光（隔墙光束不规避）/引力井/自爆蜂威胁场 +
-                破盾战术 + 全场进展僵局看门狗（4 秒零伤害进展 → 锁定最近敌人 + 贴身刃破盾 +
-                压制拾取物吸引与自爆蜂规避）+ 晶片/商店购买决策（与人类玩家共用同一 G.input 接口）
-js/audio.js     Web Audio 合成音效（约 35 种），压缩器限幅
-js/music.js     步进音序器 BGM：探索/Boss 双曲目，低通氛围区分（950/2800Hz），Boss 战自动切换，
-                前瞻调度（音频时钟）+ 标签页隐藏停排；输出挂 audio.js 主总线（M 键一并静音）；
-                仅浏览器加载，main.js 以 `ZERO_MUSIC || null` 引用，删文件即下线
-js/main.js        启动、输入映射（键鼠/手柄 Gamepad 标准映射/触控虚拟摇杆+自动瞄准）、固定步长主循环、
-                  HUD DOM 更新、界面流转、localStorage 纪录、每日挑战面板与排行、
-                  场景回放 URL 参数（hero/chips/power/shield）
-test/sim.test.js  ★ 验收测试（§2）
-test/matrix.js    场景矩阵：无头批量 × worker 并行 × 停滞检测 × 失败轨迹 + 回放 URL（§3）
-test/diag.js      卡点诊断工具
-test/serve.js     静态服务器
+index.html          界面壳：canvas + 全中文 HUD/横幅/晶片卡片/商店/结算屏（DOM 层，CSS 内联）
+js/core.js          纯数据层：常量、武器、英雄、敌人、晶片、羁绊、地图、3x5 像素字体、字符画精灵（单一数据文件是有意设计）
+js/game/            逻辑层部件（每个 = ZERO_GAME_PARTS 注册的工厂，facade 按 state→systems→player→
+                    enemies→bosses→rooms 顺序装配；跨部件依赖一律经 ctx 显式传递）
+  state.js            G 状态工厂 / RNG / timers / 对象池基础设施 / spawn 基础助手 / loadMap / computeReachable
+  systems.js          碰撞（boxHitsWall/moveAxis/resolveOutOfWall/pointSegDist）/爆炸 / 子弹·地雷·激光·
+                      光束·引力井·拾取物更新
+  player.js           computeStats / 玩家更新 / 冲刺 / 武器开火 / 近战 / damagePlayer
+  enemies.js          spawnEnemy（含精英）/ updateEnemy（7 种 AI）/ damageEnemy / killEnemy / separation
+  bosses.js           loadBossRoom / updateBoss（8 种攻击）/ 三阶段转阶段 / 濒死演出 / 引力井布设
+  rooms.js            loadRoom / 波次 / nextLevel / 晶片三选一 / 商店 / 传送门 / endStats / startRun / debug 系列
+js/game.js          逻辑层装配 facade（54 行）：按序调部件工厂、拼装 ctx 与 G、保持 ZERO_GAME.createGame 导出面
+js/render.js        渲染层：精灵预渲染缓存、瓦片底图缓存、发光弹幕、特效（仅浏览器加载）
+js/bot.js           AI 代打：BFS 寻路接敌（含路由粘滞）+ 16 向评分走位 + 弹幕/地雷/激光规避 + 破盾战术 +
+                    僵局看门狗 + 晶片/商店购买决策（与人类玩家共用同一 G.input 接口）
+js/audio.js         Web Audio 合成音效（约 35 种），压缩器限幅
+js/music.js         步进音序器 BGM：探索/Boss 双曲目，低通氛围区分（950/2800Hz），Boss 战自动切换；
+                    输出挂 audio.js 主总线（M 键一并静音）；仅浏览器加载，可随时删除
+js/storage.js       UI 数据模块：zp_records/zp_daily/zp_meta 三组存取（含形状校验）/ 解锁推导 / 每日排行
+js/input.js         输入模块：键鼠 / 手柄（Gamepad 标准映射）/ 触控（虚拟摇杆 + 自动瞄准）→ G.input；
+                    bot 接管时让位；触控件显隐
+js/hud.js           HUD 模块：生命/护盾/武器/关卡/金币/连击/晶片标签/横幅/浮动提示/Boss 条（增量 DOM 更新）
+js/ui.js            界面流转模块：标题构建（英雄卡/每日面板/晶片槽）/ 晶片三选一 / 商店 / 结算屏 /
+                    暂停 / 帮助 / 覆盖层逐帧流转
+js/main.js          薄启动层（155 行）：URL 参数解析 / 模块接线 / startRun 编排 / 固定步长主循环 / 结算写档
+test/sim.test.js    ★ 验收测试入口（§2；基建已抽至 test/lib.js，回归用例在 test/cases/ 以模块注册）
+test/lib.js         测试基建：check/log/failureCount + simulateRun（多种子/英雄/每日/限时/观测钩）
+test/cases/         回归用例（模块化注册，新场景照此范式）
+test/structure.check.js  结构守护：index.html 脚本编排顺序钉死 / 模块导出面 / 逐文件语法 / UI 模块存在性
+test/matrix.js      场景矩阵：无头批量 × worker 并行 × 停滞检测 × 失败轨迹 + 回放 URL（§3）
+test/diag.js        卡点诊断工具
+test/serve.js       静态服务器
 ```
 
 ### 模块边界契约（改动前必读）
 
-- **game.js 必须保持 headless 可运行**：逻辑中禁止直接触 DOM / canvas / AudioContext /
+- **逻辑层（js/game.js 门面 + js/game/ 部件）必须保持 headless 可运行**：逻辑中禁止直接触 DOM / canvas / AudioContext /
   `setTimeout`。渲染通过 `root.ZERO_RENDER.attach(G)` 在非 headless 时注入；
   音效通过 `G.sfx(name)` 钩子（headless 为空函数）；延时用内置 `setTimeoutLike` 队列。
   这是无头仿真得以成立的前提。
@@ -101,16 +118,16 @@ test/serve.js     静态服务器
 
 | 机制 | 位置 | 要点 |
 | --- | --- | --- |
-| 碰撞 | game.js `moveAxis` / `resolveOutOfWall` | 逐轴回退式（位移 < 9px < 墙厚 16px 防隧穿）+ 中心在墙内时最小面推出 + **箱体角嵌入墙角时最小穿透轴兜底推出**（历史 bug #4、#9）。**不要改回钳位式** |
+| 碰撞 | game/systems.js `moveAxis` / `resolveOutOfWall` | 逐轴回退式（位移 < 9px < 墙厚 16px 防隧穿）+ 中心在墙内时最小面推出 + **箱体角嵌入墙角时最小穿透轴兜底推出**（历史 bug #4、#9）。**不要改回钳位式** |
 | 刷怪点 | `computeReachable` / `farSpot` | 只用玩家出生瓦片 BFS 可达点，杜绝封闭凹室死局 |
 | Boss 定义 | core.js `ENEMY_DEFS.boss / .boss2` | `isBoss` 走 Boss 状态机；`phases` 三阶段名/色；`pools` 各阶段攻击池；`final` 标记最终首领（击破 → VICTORY），非 final 击破 → 传送门进下一区 |
 | Boss 死亡 | `bossDying` / `updateBoss` | Boss 死后**滞留** enemies 列表走 dying 演出，完成后置 `dead` 并写 `G.bossDown[zoneIdx]`；提前移除会死锁（历史 bug #2） |
 | 房间流程 | `updateWaves` → `offerChips` → `chooseChip` → 区域末尾 `openShop` → `shopLeave` → `openPortal` → `nextLevel` | `nextLevel`：房内推进 → 区域末尾有 `bossId` 且未击破 → 首领房；首领房传送门 → 下一区。`chipOffered` 一次性标志防重复触发 |
-| 引力井 | game.js `G.wells` / `updateWells` | Boss2 专属：范围内拉扯玩家（冲刺 `dashT > 0` 时免疫拉扯），到期内爆 `explode`；bot 在 `computeDanger` 规避 |
-| 属性系统 | `computeStats` | 晶片 apply → 羁绊 apply → 武器自适应（pierce+电磁炮=无限贯穿）→ 商店永久加成（bonusShield/powerBonus）→ 英雄底子；**createGame 时即初始化**（标题 HUD 依赖，bug #10） |
+| 引力井 | game/systems.js `G.wells`·`updateWells`（布设于 game/bosses.js） | Boss2 专属：范围内拉扯玩家（冲刺 `dashT > 0` 时免疫拉扯），到期内爆 `explode`；bot 在 `computeDanger` 规避 |
+| 属性系统 | game/player.js `computeStats` | 晶片 apply → 羁绊 apply → 武器自适应（pierce+电磁炮=无限贯穿）→ 商店永久加成（bonusShield/powerBonus）→ 英雄底子；**createGame 时即初始化**（标题 HUD 依赖，bug #10） |
 | 晶片升级 | `G.chipLv` / `G.acquireChip` | 已持有晶片再次获取 → `chipLv[id]++`（不重复入列表）；`computeStats` 以 k = 1.5^lv 调 `apply(s, k)`；整数型效果 ceil 进位、乘法减益设下限、触发型晶片缩放数值面（`frostK/chainK/reloadK/luckyK/splitK` 随属性袋传递）；分裂减伤的羁绊退款按 `s.splitK` 同步 |
 | 每日挑战 | core.js `DAILY_MODIFIERS` / `dailyForDate` | 日期字符串 FNV 哈希 → 当日两枚去重修改器 + seed=YYYYMMDD；`startRun(hero, daily)` 写 `G.daily.flag`，效果落点：守卫/Boss/清房掉落（coinOnly）、金币数（coinRain）、精英概率（eliteUp）、商店折扣（shopSale）、开局晶片（glassStart）；**非每日路径逐位不变**（矩阵基线不受影响）；排行在 main.js localStorage `zp_daily`（每日前 5） |
-| 对象池 | game.js `makePool` × 4 | bullets/particles/floaters/rings freelist 复用：acquire 逐一重初始化全部字段（防上一任字段泄漏）、release 在出数组时归还、整表清空走 `pooledClear`；**数组顺序与 RNG 消费顺序零改动**（逐位一致已由逐帧状态哈希对比证明）；`G.__poolStats()` 可观测（峰值追踪惰性开启）；**新增弹种/字段必须在对应 init 中重置**，否则池化复用会泄漏 |
+| 对象池 | game/state.js `makePool` × 4 | bullets/particles/floaters/rings freelist 复用：acquire 逐一重初始化全部字段（防上一任字段泄漏）、release 在出数组时归还、整表清空走 `pooledClear`；**数组顺序与 RNG 消费顺序零改动**（逐位一致已由逐帧状态哈希对比证明）；`G.__poolStats()` 可观测（峰值追踪惰性开启）；**新增弹种/字段必须在对应 init 中重置**，否则池化复用会泄漏 |
 | 弹道扩展 | `updateBullets` | `b.kind`：'homing'（转向最近敌人）/ 'grenade'（撞墙/命中/超时引爆 `grenadeBoom`） |
 | 状态机 | `G.state` | title / playing / chip / shop / victory / defeat / paused；chip 与 shop 冻结世界 |
 | bot 导航 | bot.js `bfsPath` + 16 向评分 | 无视线目标或传送门 → BFS 路径跟随；评分含**箱体真实位移模拟**（防卡墙）；连续受困 3 次给随机脱困脉冲 |
@@ -122,13 +139,13 @@ test/serve.js     静态服务器
 1. `core.js` WEAPONS 加定义（特殊弹道加 `kind`/`bulletLife`/`bulletR`，在 `updateBullets` 实现行为）
 2. `core.js` SPRITES 加武器字符画（枪口朝右，渲染时按瞄准角旋转）
 3. `bot.js` WEAPON_TIER / BAND / CONE 加条目（bot 才会用它）
-4. 加入晶片箱池（game.js `loadRoom` 的 crate pool）与商店武器池（`openShop`）
+4. 加入晶片箱池（game/rooms.js `loadRoom` 的 crate pool）与商店武器池（`openShop`）
 5. 跑验收：bot 需要能用它通关
 
 ### 加一种敌人
 1. `core.js` ENEMY_DEFS 加数值（contact: 0 表示无接触伤害，如自爆蜂）
 2. 区域 `weights` 加入（控制出现区段与频率）
-3. game.js `updateEnemy` 加 AI 分支（注意复用 `e.state/e.t/e.cd` 计时惯例）
+3. game/enemies.js `updateEnemy` 加 AI 分支（注意复用 `e.state/e.t/e.cd` 计时惯例）
 4. `core.js` SPRITES 加精灵
 5. bot.js：`pickTarget` 权重 + `computeDanger` 威胁场（若它有爆发性威胁，如自爆蜂）
 6. 若它会自爆/召唤，注意与 `killEnemy`（连击/金币/引爆核心链）的交互
@@ -137,7 +154,7 @@ test/serve.js     静态服务器
 1. `core.js` CHIPS / SYNERGIES（晶片 `apply(s, k)` 修改属性袋，**k = 1.5^升级等级**：加成写 `s.x += 基值*k`，
    整数型用 `Math.ceil(基值*k)`，乘法减益设下限；触发型晶片把 k 存入属性袋如 `s.chainK = k`，在效果落点读取）；
    羁绊 `need` 引用晶片 id
-2. game.js `computeStats` 的 `s` 默认值加字段；效果落点通常在 `damageEnemy` / `killEnemy` / `updatePlayer`
+2. game/player.js `computeStats` 的 `s` 默认值加字段；效果落点通常在 `damageEnemy` / `killEnemy` / `updatePlayer`
 3. bot.js `CHIP_SCORE` 加权重（bot 才会选它）
 
 ### 加英雄
@@ -184,11 +201,13 @@ debugClear 清场、debugSpawn 摆怪、限时断言）。诊断卡点用 `test/
 
 ## 8. 改动完成标准（Definition of Done）
 
-- [ ] `node --check js/*.js` 全部通过
+- [ ] `node --check js/*.js js/game/*.js` 全部通过
+- [ ] `node test/structure.check.js` 通过（脚本编排顺序 / 模块导出面 / 语法）
 - [ ] `node test/sim.test.js` 全绿（全部种子 + 全英雄 + 压力/稳定性/隔墙回归）
 - [ ] 浏览器冒烟：标题 → 开一局 → 见到 Boss → VICTORY，控制台零报错
 - [ ] 若改了玩法/内容：更新 README 的内容清单与自检结果数字
 - [ ] 若发现新 bug：先写复现测试（diag.js 或 sim.test.js 场景），修复后保留为回归
+- [ ] 逻辑层改动若涉及时序/RNG 顺序：跑逐帧状态哈希黄金对比（对照 `git show HEAD:js/game.js`）
 
 ---
 

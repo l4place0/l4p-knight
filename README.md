@@ -8,6 +8,24 @@
 
 ---
 
+## v1.8 更新（2026-10-07 · 工程化改造）
+
+代码从「巨头文件 + 平铺散落」重构为部件化模块结构（**零构建、file:// 双击可玩不变**，
+无 ES modules/打包器——经典脚本 + ZERO_* 命名空间 + 双端导出）：
+
+- **逻辑层部件化**：js/game.js（1960 行单闭包）→ 54 行装配门面 + js/game/ 六部件
+  （state 状态与池 / systems 碰撞与弹幕系统 / player / enemies / bosses / rooms），
+  跨部件依赖经 ctx 显式传递，加载顺序由 script 清单钉死。
+- **UI 层拆分**：js/main.js（613 行大杂烩）→ js/storage.js（存取与解锁推导）+
+  js/input.js（键鼠/手柄/触控）+ js/hud.js（HUD 增量更新）+ js/ui.js（界面流转）+ 155 行薄启动层。
+- **测试工程化**：基建抽至 test/lib.js（check/simulateRun），回归用例模块化（test/cases/ 注册范式），
+  新增 **test/structure.check.js 结构守护**（脚本编排顺序钉死 / 模块导出面 / 逐文件语法）。
+- **行为逐位不变的硬证据**：重构全程以「逐帧全状态 FNV 哈希黄金对比」守护——原版单体 vs 部件化结构
+  三场景（通关 10398 帧 / 压力 1600 帧 / boss2 击杀 1929 帧）共 13926 帧 × 双局 **0 帧差异**；
+  sim.test 断言语义零弱化，矩阵基线零漂移。
+- 多 Agent 分工：A（UI 拆分，owns main/index）· B（game 部件化，owns game/**）· C（测试整理，owns test/**），
+  文件所有权严格隔离 + script 清单由编排者预先钉死，零冲突合入。
+
 ## v1.7 更新（2026-10-06 · 手柄 / 触控 + 对象池）
 
 按 HANDOFF 路线图第 6、7 项扩展（多 Agent 并行开发），验收全绿后合入：
@@ -237,18 +255,27 @@ node test/matrix.js --seeds 1-5 --baseline test/matrix.baseline.json   # 与基�
 
 ## 架构
 
+> 经典脚本 + ZERO_* 命名空间的部件化结构（零构建、file:// 双击可玩），加载顺序由 `test/structure.check.js` 钉死守护。
+
 ```
-index.html          界面壳（全中文 HUD / 晶片卡片 / 结算屏，CSS 像素扫描线）
-js/core.js          数据层：武器/敌人(含双Boss定义)/晶片/羁绊/地图/像素画/3x5字体（浏览器+Node 双端）
-js/game.js          逻辑层：玩家/敌人AI/双Boss状态机/引力井/碰撞(逐轴回退+推出解析+墙角兜底)/波次/晶片
-js/render.js        渲染层：精灵预渲染/瓦片地图/发光弹幕/特效（headless 下不加载）
-js/bot.js           AI 代打：BFS 网格寻路接敌/16向评分走位/弹幕与引力井规避/破盾战术/晶片与商店决策（与人类同输入接口）
-js/audio.js         Web Audio 合成音效
-js/music.js         步进音序器 BGM（探索/Boss 双曲目，低通氛围区分，Boss 战自动切换；仅浏览器加载）
-js/main.js          启动/输入(键鼠·手柄·触控)/固定步长主循环/HUD
-test/sim.test.js    ★ 全自动仿真自检（见下）
-test/diag.js        卡点诊断工具（观测任意种子任意时刻的微观状态）
-test/serve.js       静态服务器
+index.html              界面壳（全中文 HUD / 晶片卡片 / 结算屏，CSS 像素扫描线）
+js/core.js              数据层：武器/敌人(含双Boss定义)/晶片/羁绊/地图/像素画/3x5字体（浏览器+Node 双端）
+js/game/                逻辑层部件（state 状态与池 / systems 碰撞与弹幕系统 / player / enemies / bosses / rooms），
+                        跨部件依赖经 ctx 显式传递
+js/game.js              逻辑层装配门面（54 行）：按序装配部件 → ZERO_GAME.createGame
+js/render.js            渲染层：精灵预渲染/瓦片地图/发光弹幕/特效（headless 下不加载）
+js/bot.js               AI 代打：BFS 网格寻路接敌/16向评分走位/弹幕与引力井规避/破盾战术/晶片与商店决策（与人类同输入接口）
+js/audio.js             Web Audio 合成音效
+js/music.js             步进音序器 BGM（探索/Boss 双曲目，低通氛围区分，Boss 战自动切换；仅浏览器加载）
+js/storage.js           UI 数据模块：纪录/每日排行/元进度存取与解锁推导（localStorage，形状校验）
+js/input.js             输入模块：键鼠/手柄(Gamepad 标准映射)/触控(虚拟摇杆+自动瞄准) → G.input
+js/hud.js               HUD 模块：生命/武器/连击/晶片标签/横幅/浮动提示/Boss 条（增量 DOM 更新）
+js/ui.js                界面流转模块：标题构建/晶片三选一/商店/结算屏/暂停/帮助
+js/main.js              薄启动层：URL 参数/模块接线/startRun 编排/固定步长主循环
+test/sim.test.js        ★ 全自动仿真自检入口（基建在 test/lib.js，回归用例在 test/cases/）
+test/structure.check.js 结构守护：脚本编排顺序/模块导出面/逐文件语法
+test/diag.js            卡点诊断工具（观测任意种子任意时刻的微观状态）
+test/serve.js           静态服务器
 ```
 
 ## ★ 核心硬性验收 —— 全自动仿真自检

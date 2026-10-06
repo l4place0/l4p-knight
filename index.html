@@ -312,7 +312,7 @@ canvas {
   <div id="scan"></div>
 </div>
 
-<!-- 触控层:仅触屏设备在对局中显示(main.js 控制 .show),容器 pointer-events:none -->
+<!-- 触控层:仅触屏设备在对局中显示(input.js 控制 .show),容器 pointer-events:none -->
 <div id="touchUI">
   <div id="stickBase"><div id="stickKnob"></div></div>
   <div class="tbtn" id="btnFire">射击</div>
@@ -323,11 +323,21 @@ canvas {
 </div>
 
 <script src="js/core.js"></script>
-<script src="js/render.js"></script>
+<script src="js/game/state.js"></script>
+<script src="js/game/systems.js"></script>
+<script src="js/game/player.js"></script>
+<script src="js/game/enemies.js"></script>
+<script src="js/game/bosses.js"></script>
+<script src="js/game/rooms.js"></script>
 <script src="js/game.js"></script>
+<script src="js/render.js"></script>
 <script src="js/audio.js"></script>
 <script src="js/music.js"></script>
 <script src="js/bot.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/input.js"></script>
+<script src="js/hud.js"></script>
+<script src="js/ui.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
