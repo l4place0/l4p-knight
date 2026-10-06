@@ -1,6 +1,6 @@
 # HANDOFF · 零号协议 ZERO PROTOCOL 开发交接文档
 
-> 交接日期：2026-10-06 · 交接版本：v1.4（基于 v1.3，按路线图第 3 项扩展）
+> 交接日期：2026-10-06 · 交接版本：v1.5（基于 v1.4，按路线图第 4 项扩展）
 > 项目来源：`ai-benchmark/glm-5,3-flash/zcode/My Soul Knight/shot01`（已完整复制至本目录，逐文件 diff 校验一致）
 > 本文目标：让任何开发者（人或 AI）在不询问原作者的情况下继续开发。
 
@@ -11,7 +11,8 @@
 类《元气骑士》的黑白灰像素风 2D 肉鸽弹幕射击游戏。纯原生 HTML5 Canvas + Web Audio，
 **零依赖、零外部资源、零构建步骤**。当前内容：3 英雄 / 4 区域 / 6 武器 / 19 晶片（同名重复
 获取转为升级，×1.5/级）/ 10 羁绊 / 7 敌种 + 精英词条 / **双三阶段 Boss**（第 3 区守卫 +
-最终首领）/ 金币商店 / 历史纪录存档 / **两首合成 BGM**（探索/Boss，战况自动切换）。
+最终首领）/ 金币商店 / 历史纪录存档 / **两首合成 BGM**（探索/Boss，战况自动切换）/
+**每日挑战**（固定种子 + 按日轮换修改器 + 本地排行）。
 
 **当前状态：功能完备、验收全绿。** 接手后第一件事：跑一遍验收（见 §3），确认基线。
 
@@ -54,7 +55,8 @@ node --check js/<file>.js      # 语法检查（patch 后必做）
 
 直接双击 `index.html` 也能玩（file:// 可用，无 fetch/模块依赖）。
 
-调试 URL 参数：`?seed=1` `?bot=1`（AI 代打） `?autostart=1` `?zone=2&room=1` `?boss=1`
+调试 URL 参数：`?seed=1` `?bot=1`（AI 代打） `?autostart=1` `?daily=1`（每日挑战：强制 seed=YYYYMMDD +
+当日修改器 + 结算计入本地排行） `?zone=2&room=1` `?boss=1`
 `?dmg=8` `?bosshp=210`（数值调试）`?fps=1`。页面暴露 `window.__advance(frames)` / `window.__draw()`
 （无头推进 + 重绘，供自动化截图与 QA）。
 
@@ -74,7 +76,7 @@ js/music.js     步进音序器 BGM：探索/Boss 双曲目，低通氛围区分
                 前瞻调度（音频时钟）+ 标签页隐藏停排；输出挂 audio.js 主总线（M 键一并静音）；
                 仅浏览器加载，main.js 以 `ZERO_MUSIC || null` 引用，删文件即下线
 js/main.js        启动、输入映射、固定步长主循环、HUD DOM 更新、界面流转、localStorage 纪录、
-                  场景回放 URL 参数（hero/chips/power/shield）
+                  每日挑战面板与排行、场景回放 URL 参数（hero/chips/power/shield）
 test/sim.test.js  ★ 验收测试（§2）
 test/matrix.js    场景矩阵：无头批量 × worker 并行 × 停滞检测 × 失败轨迹 + 回放 URL（§3）
 test/diag.js      卡点诊断工具
@@ -104,6 +106,7 @@ test/serve.js     静态服务器
 | 引力井 | game.js `G.wells` / `updateWells` | Boss2 专属：范围内拉扯玩家（冲刺 `dashT > 0` 时免疫拉扯），到期内爆 `explode`；bot 在 `computeDanger` 规避 |
 | 属性系统 | `computeStats` | 晶片 apply → 羁绊 apply → 武器自适应（pierce+电磁炮=无限贯穿）→ 商店永久加成（bonusShield/powerBonus）→ 英雄底子；**createGame 时即初始化**（标题 HUD 依赖，bug #10） |
 | 晶片升级 | `G.chipLv` / `G.acquireChip` | 已持有晶片再次获取 → `chipLv[id]++`（不重复入列表）；`computeStats` 以 k = 1.5^lv 调 `apply(s, k)`；整数型效果 ceil 进位、乘法减益设下限、触发型晶片缩放数值面（`frostK/chainK/reloadK/luckyK/splitK` 随属性袋传递）；分裂减伤的羁绊退款按 `s.splitK` 同步 |
+| 每日挑战 | core.js `DAILY_MODIFIERS` / `dailyForDate` | 日期字符串 FNV 哈希 → 当日两枚去重修改器 + seed=YYYYMMDD；`startRun(hero, daily)` 写 `G.daily.flag`，效果落点：守卫/Boss/清房掉落（coinOnly）、金币数（coinRain）、精英概率（eliteUp）、商店折扣（shopSale）、开局晶片（glassStart）；**非每日路径逐位不变**（矩阵基线不受影响）；排行在 main.js localStorage `zp_daily`（每日前 5） |
 | 弹道扩展 | `updateBullets` | `b.kind`：'homing'（转向最近敌人）/ 'grenade'（撞墙/命中/超时引爆 `grenadeBoom`） |
 | 状态机 | `G.state` | title / playing / chip / shop / victory / defeat / paused；chip 与 shop 冻结世界 |
 | bot 导航 | bot.js `bfsPath` + 16 向评分 | 无视线目标或传送门 → BFS 路径跟随；评分含**箱体真实位移模拟**（防卡墙）；连续受困 3 次给随机脱困脉冲 |
@@ -166,7 +169,7 @@ debugClear 清场、debugSpawn 摆怪、限时断言）。诊断卡点用 `test/
 1. ~~第 4 区 + 第二 Boss~~ ✅ 已完成（v1.2：z4a/z4b + 终焉·回响体 + 虚空徘徊者/镜像残影 + 双 Boss 流程）
 2. ~~晶片去重与升级~~ ✅ 已完成（v1.3：同 id 重复获取转为升级 ×1.5/级，商店同规则，UI/bot/矩阵基线全同步）
 3. ~~背景音乐~~ ✅ 已完成（v1.4：探索/Boss 双曲步进音序器 + 低通氛围区分 + Boss 战自动切换 + M 键统一静音）
-4. **每日挑战**：`seed = YYYYMMDD` 固定种子 + 修改器（如"只掉金币"），本地排行。
+4. ~~每日挑战~~ ✅ 已完成（v1.5：seed=YYYYMMDD + 五枚按日轮换修改器 + 标题面板 + localStorage 每日前 5）
 5. **元进度解锁**：纪录达标解锁英雄/初始晶片，提升重复可玩性。
 6. **手柄 / 移动端触控**：main.js 输入层已隔离，加映射即可。
 7. **性能**：若弹幕规模扩到 1000+，particles/bullets 改对象池 + 分帧碰撞。

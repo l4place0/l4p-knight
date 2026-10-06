@@ -30,7 +30,7 @@ function createGame(opts) {
     stats: null,
     combo: 0, comboT: 0, maxCombo: 0,
     coins: 0, coinsCollected: 0, shopVisits: 0, shopItems: null,
-    heroId: 'vanguard', bonusShield: 0, powerBonus: 0, dashEchoT: 0,
+    heroId: 'vanguard', daily: null, bonusShield: 0, powerBonus: 0, dashEchoT: 0,
     score: 0, kills: 0, damageTaken: 0,
     eid: 0, wavIdx: 0, waves: [], pendSpawns: [], waveDelay: 0, roomClearT: 0,
     portal: null, chipOffer: null, endScreen: null, bossDown: {},
@@ -427,7 +427,7 @@ function createGame(opts) {
     }
     if (s.killSpeed) G.killSpeedT = s.killSpeed;
     if (s.dashResetKill) G.player.dashCd = 0;
-    if (e.type === 'guard' && rng.chance(0.22)) G.pickups.push({ x: e.x, y: e.y, kind: 'heart', t: 0 });
+    if (e.type === 'guard' && rng.chance(0.22)) G.pickups.push({ x: e.x, y: e.y, kind: (G.daily && G.daily.flag.coinOnly) ? 'coin' : 'heart', t: 0 });
     if (e.isBoss) {
       // Boss 走独立死亡流程：滞留场内直至演出结束（否则状态机死锁）
       bossDying(e);
@@ -437,7 +437,7 @@ function createGame(opts) {
     e.dead = true;
     // 金币掉落
     const luckyMul = G.stats.lucky ? 1 + 0.6 * (G.stats.luckyK || 1) : 1;
-    const coinN = e.elite ? 3 : (e.type === 'guard' ? 2 : 1);
+    const coinN = (e.elite ? 3 : (e.type === 'guard' ? 2 : 1)) * (G.daily && G.daily.flag.coinRain ? 2 : 1);
     if (e.elite || rng.chance(0.65 * luckyMul)) {
       for (let ci = 0; ci < coinN; ci++) {
         G.pickups.push({ x: e.x + rng.range(-7, 7), y: e.y + rng.range(-7, 7), kind: 'coin', t: 0 });
@@ -592,11 +592,15 @@ function createGame(opts) {
           G.sfx('victory');
         } else {
           // 区域守卫击破：掉落补给 → 开启传送门挺进下一区（非最终 Boss 不结算）
-          for (let ci = 0; ci < 8; ci++) {
+          for (let ci = 0, n = 8 * (G.daily && G.daily.flag.coinRain ? 2 : 1); ci < n; ci++) {
             G.pickups.push({ x: e.x + rng.range(-20, 20), y: e.y + rng.range(-16, 16), kind: 'coin', t: 0 });
           }
-          G.pickups.push({ x: e.x - 14, y: e.y + 10, kind: 'heart', t: 0 });
-          G.pickups.push({ x: e.x + 14, y: e.y + 10, kind: 'battery', t: 0 });
+          if (G.daily && G.daily.flag.coinOnly) {
+            G.pickups.push({ x: e.x, y: e.y + 10, kind: 'coin', t: 0 });  // 通货紧缩：补给折算为金币
+          } else {
+            G.pickups.push({ x: e.x - 14, y: e.y + 10, kind: 'heart', t: 0 });
+            G.pickups.push({ x: e.x + 14, y: e.y + 10, kind: 'battery', t: 0 });
+          }
           banner('区域守卫已击破', '传送门开启 · 挺进下一区', ZONES[G.zoneIdx].accent, 2.6);
           G.sfx('phase');
           openPortal();
@@ -821,11 +825,15 @@ function createGame(opts) {
       strafeT: rng.range(1, 2), facing: Math.PI / 2, broken: 0, staggerT: 0,
       dashA: 0, locked: false,
     };
-    // 精英词条（第 2 区起概率出现，越深入越高）
-    if (G.zoneIdx >= 1 && rng.chance(G.zoneIdx >= 2 ? 0.22 : 0.15)) {
-      e.elite = true;
-      e.hp *= 2.2; e.maxHp *= 2.2;
-      e.speed *= 1.05;
+    // 精英词条（第 2 区起概率出现，越深入越高；每日「精英横行」约 3 倍）
+    if (G.zoneIdx >= 1) {
+      const eliteBase = G.zoneIdx >= 2 ? 0.22 : 0.15;
+      const eliteP = (G.daily && G.daily.flag.eliteUp) ? Math.min(0.85, eliteBase * 3) : eliteBase;
+      if (rng.chance(eliteP)) {
+        e.elite = true;
+        e.hp *= 2.2; e.maxHp *= 2.2;
+        e.speed *= 1.05;
+      }
     }
     G.enemies.push(e);
     addParts(x, y, 8, ['#45f0e2', '#a9a9b4'], { spd: 60, life: 0.5 });
@@ -1370,8 +1378,9 @@ function createGame(opts) {
         G.chipOffered = true;
         // 战利品（掉在可达点）
         const spot = farSpot(30) || { x: G.player.x, y: G.player.y };
-        if (rng.chance(0.4)) G.pickups.push({ x: spot.x, y: spot.y, kind: 'heart', t: 0 });
-        else if (rng.chance(0.5)) G.pickups.push({ x: spot.x, y: spot.y, kind: 'battery', t: 0 });
+        const co = G.daily && G.daily.flag.coinOnly;
+        if (rng.chance(0.4)) G.pickups.push({ x: spot.x, y: spot.y, kind: co ? 'coin' : 'heart', t: 0 });
+        else if (rng.chance(0.5)) G.pickups.push({ x: spot.x, y: spot.y, kind: co ? 'coin' : 'battery', t: 0 });
         offerChips();
       }
     }
@@ -1453,7 +1462,8 @@ function createGame(opts) {
   };
 
   function openShop() {
-    const disc = G.stats.lucky ? 1 - Math.min(0.5, 0.15 * (G.stats.luckyK || 1)) : 1;
+    let disc = G.stats.lucky ? 1 - Math.min(0.5, 0.15 * (G.stats.luckyK || 1)) : 1;
+    if (G.daily && G.daily.flag.shopSale) disc *= 0.7;
     const P = (n) => Math.max(1, Math.round(n * disc));
     const items = [{ kind: 'heal', name: '纳米医疗包', desc: '回复 2 点生命', price: P(6), rarity: 1 }];
     const pool = ['chip', 'battery', 'weapon', 'power'];
@@ -1752,9 +1762,16 @@ function createGame(opts) {
   };
 
   /* ---------------- 开始 / 调试 ---------------- */
-  G.startRun = function (heroId) {
+  G.startRun = function (heroId, daily) {
     G.heroId = heroId || 'vanguard';
     G.chips = []; G.chipLv = {}; G.synActive = []; G.weaponSlot = 0;
+    // 每日挑战：按当日修改器设置 G.daily.flag（非每日路径逐位不变，矩阵基线不受影响）
+    G.daily = null;
+    if (daily && daily.mods && daily.mods.length) {
+      G.daily = { date: daily.date, name: daily.mods.map(m => m.name).join('+'), flag: {} };
+      for (const m of daily.mods) for (const k in m.flag) G.daily.flag[k] = m.flag[k];
+      if (G.daily.flag.glassStart) G.chips.push('glass');
+    }
     G.weapons = [WEAPONS[(HEROES[G.heroId] || HEROES.vanguard).weapon], WEAPONS.blade];
     G.coins = 0; G.coinsCollected = 0; G.shopVisits = 0;
     G.bonusShield = 0; G.powerBonus = 0; G.dashEchoT = 0; G.shopItems = null;

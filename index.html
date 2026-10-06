@@ -127,6 +127,15 @@ canvas {
 .heroCard .hName { font-size: calc(8px * var(--s)); font-weight: bold; }
 .heroCard .hDesc { font-size: calc(6px * var(--s)); color: #a9a9b4; margin-top: calc(2px * var(--s)); }
 #records { font-size: calc(6px * var(--s)); color: #8b8b98; letter-spacing: calc(1px * var(--s)); margin-top: calc(4px * var(--s)); }
+#dailyPanel { box-sizing: border-box; width: calc(324px * var(--s)); margin-top: calc(6px * var(--s));
+  padding: calc(4px * var(--s)) calc(8px * var(--s)); text-align: left;
+  border: 1px solid rgba(255,184,77,.45); background: rgba(255,184,77,.05); }
+#dailyHead { font-size: calc(7px * var(--s)); font-weight: bold; color: var(--amber); letter-spacing: calc(1px * var(--s)); }
+#dailyMods { font-size: calc(6px * var(--s)); color: #a9a9b4; margin-top: calc(2px * var(--s)); }
+.dailyMod b { color: var(--amber); margin-right: calc(3px * var(--s)); }
+#dailyBest { font-size: calc(6px * var(--s)); color: #8b8b98; margin-top: calc(2px * var(--s)); }
+.btn.amber { border-color: rgba(255,184,77,.6); color: var(--amber); }
+.btn.amber:hover { box-shadow: 0 0 calc(8px * var(--s)) rgba(255,184,77,.45); }
 #shopOverlay { position: absolute; inset: 0; z-index: 50; display: none;
   background: rgba(5,5,8,.86); align-items: center; justify-content: center; flex-direction: column; gap: calc(6px * var(--s)); }
 #shopOverlay.show { display: flex; }
@@ -223,9 +232,15 @@ canvas {
     <div class="subLogo">ZERO PROTOCOL</div>
     <div style="color:#6a6a76; font-size:calc(6px*var(--s)); letter-spacing:calc(1px*var(--s));">黑白灰废土 · 高强度肉鸽弹幕射击</div>
     <div id="heroRow"></div>
+    <div id="dailyPanel">
+      <div id="dailyHead">每日挑战 · <span id="dailyDate"></span></div>
+      <div id="dailyMods"></div>
+      <div id="dailyBest"></div>
+    </div>
     <div id="records"></div>
     <div style="display:flex; gap:calc(6px*var(--s)); margin-top:calc(6px*var(--s));">
       <button class="btn primary" id="btnStart">开始游戏</button>
+      <button class="btn amber" id="btnDaily">每日挑战</button>
       <button class="btn" id="btnBot">AI 代打演示</button>
       <button class="btn" id="btnHelp">操作说明</button>
     </div>

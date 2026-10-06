@@ -13,7 +13,11 @@ ctx.imageSmoothingEnabled = false;
 
 /* ---------- URL 参数（调试 / 自检） ---------- */
 const q = new URLSearchParams(location.search);
-const seed = parseInt(q.get('seed') || '1') || 1;
+const dailyParam = q.get('daily') === '1';
+const _d = new Date();
+const todayStr = _d.getFullYear() + '-' + String(_d.getMonth() + 1).padStart(2, '0') + '-' + String(_d.getDate()).padStart(2, '0');
+const today = C.dailyForDate(todayStr);   // 每日挑战：日期 → 固定种子 + 修改器
+const seed = dailyParam ? today.seed : (parseInt(q.get('seed') || '1') || 1);
 const botParam = q.get('bot') === '1';
 const autostart = q.get('autostart') === '1';
 const jumpZone = q.get('zone') ? parseInt(q.get('zone')) : null;
@@ -40,6 +44,36 @@ function showRecords() {
   el2.textContent = r ? ('最佳纪录 · 通关 ' + r.clears + ' 次 · 最高分 ' + r.bestScore + ' · 最高连击 ×' + r.maxCombo + (isFinite(r.bestTime) ? ' · 最速 ' + r.bestTime.toFixed(0) + 's' : '')) : '尚无通关纪录 · 成为第一位协议完成者';
 }
 
+/* 每日挑战：本地排行（localStorage，每日保留前 5 名） */
+const dStore = {
+  get() { try { return JSON.parse(localStorage.getItem('zp_daily') || '{}'); } catch (e) { return {}; } },
+  set(v) { try { localStorage.setItem('zp_daily', JSON.stringify(v)); } catch (e) {} },
+};
+function dailyBest() { const l = dStore.get()[today.date]; return l && l.length ? l[0] : null; }
+function recordDaily(es) {
+  const b = dStore.get();
+  const list = b[today.date] || [];
+  const entry = { score: es.stats.score, time: +es.stats.time.toFixed(1), kills: es.stats.kills,
+    hero: (C.HEROES[G.heroId] || C.HEROES.vanguard).name, rating: es.stats.rating };
+  list.push(entry);
+  list.sort((x, y) => y.score - x.score);
+  const rank = list.indexOf(entry) + 1;   // 挤出前 5 则记 0（未上榜）
+  b[today.date] = list.slice(0, 5);
+  dStore.set(b);
+  return rank;
+}
+function buildDailyPanel() {
+  const elDate = document.getElementById('dailyDate');
+  if (!elDate) return;
+  elDate.textContent = today.date + ' · ' + today.seed;
+  document.getElementById('dailyMods').innerHTML = today.mods.map(m =>
+    '<div class="dailyMod"><b>▍' + m.name + '</b>' + m.desc + '</div>').join('');
+  const best = dailyBest();
+  document.getElementById('dailyBest').textContent = best
+    ? ('今日最佳 ' + best.score + ' 分 · ' + best.hero)
+    : '今日暂无记录 · 虚位以待';
+}
+
 /* 英雄选择卡片 */
 function buildHeroCards() {
   const row = document.getElementById('heroRow');
@@ -60,6 +94,7 @@ function buildHeroCards() {
 }
 buildHeroCards();
 showRecords();
+buildDailyPanel();
 
 /* ---------- 缩放 ---------- */
 function fit() {
@@ -100,7 +135,7 @@ window.addEventListener('keydown', (e) => {
       break;
     case 'Enter':
       if (G.state === 'title') startRun(false);
-      else if (G.state === 'victory' || G.state === 'defeat') startRun(botOn);
+      else if (G.state === 'victory' || G.state === 'defeat') startRun(botOn, runDaily);
       break;
   }
 });
@@ -155,11 +190,14 @@ const ui = {
   helpBox: document.querySelector('#helpBox'),
 };
 
-function startRun(withBot) {
+let runDaily = false;
+function startRun(withBot, dailyRun) {
   AUDIO.init(); AUDIO.resume();
   if (MUSIC) MUSIC.init();
   botOn = !!withBot;
-  G.startRun(selHero);
+  runDaily = !!dailyRun;
+  G.startRun(selHero, runDaily ? today : null);
+  if (runDaily) G.banner = { text: '每日挑战 · ' + G.daily.name, sub: today.mods.map(m => m.desc).join('　'), color: '#ffb84d', life: 3.4, max: 3.4 };
   ui.screenTitle.classList.remove('show');
   ui.screenEnd.classList.remove('show');
   if (jumpZone) G.debugJump(jumpZone, jumpRoom || 1);
@@ -175,16 +213,18 @@ function startRun(withBot) {
 }
 ui.btnStart.addEventListener('click', () => { AUDIO.play('ui'); startRun(false); });
 ui.btnBot.addEventListener('click', () => { AUDIO.play('ui'); startRun(true); });
+const btnDaily = el('btnDaily');
+if (btnDaily) btnDaily.addEventListener('click', () => { AUDIO.play('ui'); startRun(false, true); });
 ui.btnHelp.addEventListener('click', () => {
   AUDIO.play('ui');
   ui.helpBox.style.display = ui.helpBox.style.display === 'none' ? 'block' : 'none';
 });
-ui.btnRetry.addEventListener('click', () => { AUDIO.play('ui'); startRun(botOn); });
+ui.btnRetry.addEventListener('click', () => { AUDIO.play('ui'); startRun(botOn, runDaily); });
 function showPause(on) { ui.screenPause.classList.toggle('show', on); }
 
 if (q.get('dmg')) G.debugDmg = parseFloat(q.get('dmg')) || 1;
 if (q.get('bosshp')) G.debugBossHp = parseFloat(q.get('bosshp')) || null;
-if (autostart) startRun(botParam);
+if (autostart) startRun(botParam, dailyParam);
 if (fpsParam) ui.fps.style.display = 'block';
 
 /* ---------- 晶片卡片 ---------- */
@@ -262,7 +302,7 @@ function updateHUD(dt) {
   ui.dashFill.style.width = ((1 - P.dashCd / (0.9 * G.stats.dashCd)) * 100) + '%';
   // 关卡
   const zone = C.ZONES[G.zoneIdx];
-  ui.zoneLabel.textContent = G.state === 'title' ? '待命' : zone.name;
+  ui.zoneLabel.textContent = G.state === 'title' ? '待命' : (G.daily ? '每日 · ' : '') + zone.name;
   ui.roomLabel.textContent = G.state === 'title' ? '' : (G.roomLabel || '');
   // 金币
   ui.coins.textContent = '金币 ' + G.coins;
@@ -394,10 +434,19 @@ function showEnd(es) {
     '<span>最高连击</span><b>×' + es.stats.maxCombo + '</b>' +
     '<span>受击次数</span><b>' + es.stats.damageTaken + '</b>' +
     '<span>得分</span><b>' + es.stats.score + '</b>';
+  if (G.daily) {
+    const rank = recordDaily(es);
+    const best = dailyBest();
+    ui.endStats.innerHTML +=
+      '<span>每日挑战</span><b>' + G.daily.name + '</b>' +
+      '<span>每日排行</span><b>' + (rank ? '第 ' + rank + ' 名' : '未上榜') + '</b>' +
+      '<span>今日最佳</span><b>' + (best ? best.score : '—') + '</b>';
+  }
   ui.endChips.textContent =
     (es.stats.chips.length ? '晶片：' + es.stats.chips.join('、') : '晶片：无') +
     (es.stats.syn.length ? '　|　羁绊：' + es.stats.syn.join('、') : '');
   ui.screenEnd.classList.add('show');
+  if (G.daily) buildDailyPanel();
 }
 
 requestAnimationFrame(frame);

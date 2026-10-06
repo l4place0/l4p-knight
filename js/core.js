@@ -187,6 +187,28 @@ const SYNERGIES = [
     desc: '冲刺回响提升至 +60% 且持续 2 秒', apply: s => { s.dashEcho = Math.max(s.dashEcho, 0.6); } },
 ];
 
+/* ---------------- 每日挑战 ----------------
+ * 修改器按日期确定性轮换（每日两枚，去重）；seed = YYYYMMDD。
+ * flags 由 game.startRun 应用到 G.daily.flag，效果落点见各挂点（掉落/金币/精英/商店/开局晶片）。
+ * ------------------------------------------------ */
+const DAILY_MODIFIERS = [
+  { id: 'coinOnly', name: '通货紧缩', desc: '补给只掉金币——心与电池绝迹', flag: { coinOnly: true } },
+  { id: 'coinRain', name: '金币雨', desc: '敌人与守卫的金币掉落翻倍', flag: { coinRain: true } },
+  { id: 'eliteUp', name: '精英横行', desc: '第 2 区起精英出现率约 3 倍', flag: { eliteUp: true } },
+  { id: 'shopSale', name: '补给日', desc: '补给站全品 7 折（可与幸运之手叠加）', flag: { shopSale: true } },
+  { id: 'glassStart', name: '玻璃开局', desc: '开局免费装备「玻璃大炮」：伤害 +60%，生命上限 -1', flag: { glassStart: true } },
+];
+
+// 由日期字符串（'YYYY-MM-DD'）确定性得出当日挑战：固定种子 + 两枚去重修改器
+function dailyForDate(dateStr) {
+  let h = 2166136261;
+  for (let i = 0; i < dateStr.length; i++) { h ^= dateStr.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  const h2 = Math.imul(h, 2654435761) >>> 0;
+  const a = DAILY_MODIFIERS[h % DAILY_MODIFIERS.length];
+  const b = DAILY_MODIFIERS[h2 % DAILY_MODIFIERS.length];
+  return { date: dateStr, seed: parseInt(dateStr.replace(/-/g, ''), 10), mods: a === b ? [a] : [a, b] };
+}
+
 /* ---------------- 地图（30 x 17，# = 墙） ---------------- */
 const MAPS = {
   z1a: [
@@ -630,6 +652,7 @@ const CORE = {
   TAU, clamp, lerp, dist, angDiff, RNG,
   VIEW_W, VIEW_H, TILE, PAL,
   WEAPONS, ENEMY_DEFS, CHIPS, SYNERGIES, HEROES,
+  DAILY_MODIFIERS, dailyForDate,
   MAPS, ZONES, BOSS_PHASES, BOSS2_PHASES, FONT35, SPRITES,
 };
 root.ZERO_CORE = CORE;

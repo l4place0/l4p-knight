@@ -43,8 +43,8 @@ function simulateRun(seed, opts) {
   };
   let t = 0, lastZone = -1, lastPhase = 0, victoryAt = -1;
 
-  G.startRun(opts.hero);
-  while (t < MAX_SIM_SECONDS) {
+  G.startRun(opts.hero, opts.daily || null);
+  while (t < (opts.maxSeconds || MAX_SIM_SECONDS)) {
     const w0 = process.hrtime.bigint();
     bot.update(G, DT, G.input);
     try {
@@ -108,6 +108,7 @@ function simulateRun(seed, opts) {
       if (!opts.quiet) log('→ 进入 ' + (boss && !boss.dead && G.isBossRoom ? 'Boss 房间' : '第 ' + (G.zoneIdx + 1) + ' 区') + ' @ ' + t.toFixed(1) + 's');
     }
 
+    if (opts.onFrame) opts.onFrame(G, t);
     if (G.state === 'victory') { victoryAt = t; break; }
     if (G.state === 'defeat') {
       errors.push('玩家在第 ' + (G.zoneIdx + 1) + ' 区阵亡 @' + t.toFixed(1) + 's（HP=' + G.player.hp + '，敌人=' + G.enemies.length + '）');
@@ -115,7 +116,7 @@ function simulateRun(seed, opts) {
     }
   }
 
-  if (t >= MAX_SIM_SECONDS && G.state !== 'victory') {
+  if (!opts.maxSeconds && t >= MAX_SIM_SECONDS && G.state !== 'victory') {
     const boss = G.bossRef;
     errors.push('超过 ' + MAX_SIM_SECONDS + 's 仍未通关（死锁/停滞），state=' + G.state + '，区域=' + (G.zoneIdx + 1) + '，BossHP=' + (boss ? (boss.hp + '/' + boss.maxHp + ' st=' + boss.st + ' ph=' + boss.phase) : '-'));
     errors.push('快照: 玩家(' + G.player.x.toFixed(0) + ',' + G.player.y.toFixed(0) + ') portal=' + (G.portal ? '开' : '无')
@@ -173,6 +174,39 @@ for (const hero of ['bulwark', 'stalker']) {
   check(r.ok, '英雄 ' + hero + ' 未达成 VICTORY');
   check(s.boundsViolations === 0 && s.wallClipViolations === 0 && s.nanViolations === 0, '英雄 ' + hero + ' 存在越界/嵌墙/NaN');
   check(s.bossPhasesSeen.includes(3), '英雄 ' + hero + ' Boss 阶段未完整推进');
+  console.log('');
+}
+
+/* --- 1c. 每日挑战：固定种子 + 修改器钩路回归 --- */
+console.log('【每日挑战】seed = 20261006 · 通货紧缩 + 金币雨 · 60 游戏秒冒烟');
+{
+  const CORE = require('../js/core.js');
+  const daily = { date: '2026-10-06', seed: 20261006,
+    mods: [CORE.DAILY_MODIFIERS[0], CORE.DAILY_MODIFIERS[1]] };
+  const seenKinds = new Set();
+  const r = simulateRun(daily.seed, {
+    quiet: true, maxSeconds: 60, daily,
+    onFrame: (g) => { for (const p of g.pickups) seenKinds.add(p.kind); },
+  });
+  log('结果: 击杀 ' + r.G.kills + ' · 拾取金币 ' + r.G.coinsCollected + ' · 出现过的掉落 ' + ([...seenKinds].join('/') || '无'));
+  check(r.errors.length === 0, '每日局存在异常: ' + r.errors[0]);
+  check(r.stats.boundsViolations === 0 && r.stats.wallClipViolations === 0 && r.stats.nanViolations === 0, '每日局越界/嵌墙/NaN');
+  check(r.G.daily && r.G.daily.flag.coinOnly && r.G.daily.flag.coinRain, '每日修改器未生效: ' + JSON.stringify(r.G.daily));
+  check(r.G.kills >= 5, '每日局击杀异常偏低: ' + r.G.kills);
+  check(r.G.coinsCollected > 0, '每日局（金币雨）未产出金币');
+  check(seenKinds.has('coin') && !seenKinds.has('heart') && !seenKinds.has('battery'),
+    '通货紧缩未拦截心/电池掉落: ' + [...seenKinds].join('/'));
+  console.log('');
+}
+console.log('【每日挑战】玻璃开局 · 结构断言');
+{
+  const CORE = require('../js/core.js');
+  const G2 = GAME.createGame({ seed: 42, headless: true });
+  G2.startRun('vanguard', { date: '2026-10-06', mods: [CORE.DAILY_MODIFIERS[4]] });
+  check(G2.daily && G2.daily.flag.glassStart, '玻璃开局标志未生效');
+  check(G2.chips.includes('glass'), '玻璃开局未装备玻璃大炮');
+  check(G2.player.maxHp === 5, '玻璃开局生命上限应 6→5，实际 ' + G2.player.maxHp);
+  log('✓ 玻璃开局生效（maxHp=' + G2.player.maxHp + ' · 晶片 ' + G2.chips.join(',') + '）');
   console.log('');
 }
 
