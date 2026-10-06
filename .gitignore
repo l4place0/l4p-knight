@@ -8,3 +8,6 @@ desktop.ini
 .vscode/
 .idea/
 *.log
+
+# 消融实验产物（结果目录，实验后聚合入库或删除）
+test/abl-results/
