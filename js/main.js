@@ -5,6 +5,7 @@
 (function () {
 'use strict';
 const C = window.ZERO_CORE, GAME = window.ZERO_GAME, AUDIO = window.ZERO_AUDIO, BOT = window.ZERO_BOT;
+const MUSIC = window.ZERO_MUSIC || null; // 缺省可删（音乐层与渲染层同级，可随时移除）
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -90,7 +91,7 @@ window.addEventListener('keydown', (e) => {
       break;
     case 'KeyM': {
       const m = AUDIO.toggleMute();
-      G.toast && G.toast(m ? '音效：关' : '音效：开', '#8b8b98');
+      G.toast && G.toast(m ? '声音：关' : '声音：开', '#8b8b98');
       break;
     }
     case 'KeyP': case 'Escape':
@@ -156,6 +157,7 @@ const ui = {
 
 function startRun(withBot) {
   AUDIO.init(); AUDIO.resume();
+  if (MUSIC) MUSIC.init();
   botOn = !!withBot;
   G.startRun(selHero);
   ui.screenTitle.classList.remove('show');
@@ -341,6 +343,7 @@ function frame(now) {
   while (acc >= STEP && n < 6) { tick(STEP); acc -= STEP; n++; }
   if (n === 6) acc = 0;
   drawFrame(dt);
+  if (MUSIC) MUSIC.update(G); // BGM：探索/Boss 按战况自动切换
   // FPS
   fpsN++; fpsT += dt;
   if (fpsT >= 0.5) { fpsV = Math.round(fpsN / fpsT); fpsN = 0; fpsT = 0; ui.fps.textContent = fpsV + ' FPS'; }
