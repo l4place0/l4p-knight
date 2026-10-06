@@ -162,8 +162,8 @@ for (const seed of SEEDS) {
   console.log('');
 }
 
-/* --- 1b. 英雄全量可通关（重装员 / 猎手） --- */
-for (const hero of ['bulwark', 'stalker']) {
+/* --- 1b. 英雄全量可通关（重装员 / 猎手 / 零·原型机） --- */
+for (const hero of ['bulwark', 'stalker', 'prototype']) {
   console.log('【英雄仿真】' + hero + ' · seed 7');
   const r = simulateRun(7, { hero, quiet: true });
   const s = r.stats;

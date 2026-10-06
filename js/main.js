@@ -49,6 +49,45 @@ const dStore = {
   get() { try { return JSON.parse(localStorage.getItem('zp_daily') || '{}'); } catch (e) { return {}; } },
   set(v) { try { localStorage.setItem('zp_daily', JSON.stringify(v)); } catch (e) {} },
 };
+
+/* 元进度：初始晶片槽选择（localStorage zp_meta；解锁条件读 zp_records.clears） */
+const meta = {
+  get() { try { return JSON.parse(localStorage.getItem('zp_meta') || '{}'); } catch (e) { return {}; } },
+  set(v) { try { localStorage.setItem('zp_meta', JSON.stringify(v)); } catch (e) {} },
+};
+function startChipId() {
+  if (!unlocks().chipSlot) return '';
+  const sc = meta.get().startChip || '';
+  return C.CHIPS.some(c => c.id === sc) ? sc : '';
+}
+function buildChipSlot() {
+  const row = document.getElementById('chipSlot');
+  const label = document.getElementById('chipSlotLabel');
+  if (!row || !label) return;
+  if (!unlocks().chipSlot) {
+    label.textContent = '初始晶片槽 · 累计通关 3 次解锁';
+    row.innerHTML = '';
+    row.classList.add('lockedSlot');
+    return;
+  }
+  label.textContent = '初始晶片槽（点选起手晶片 · 再点取消）';
+  row.classList.remove('lockedSlot');
+  const cur = meta.get().startChip || '';
+  row.innerHTML = '';
+  for (const c of C.CHIPS) {
+    const t = document.createElement('span');
+    t.className = 'chipTag r' + c.rarity + (cur === c.id ? ' sel' : '');
+    t.textContent = c.name;
+    t.addEventListener('click', () => {
+      const m = meta.get();
+      m.startChip = (m.startChip === c.id) ? '' : c.id;
+      meta.set(m);
+      AUDIO.play('ui');
+      buildChipSlot();
+    });
+    row.appendChild(t);
+  }
+}
 function dailyBest() { const l = dStore.get()[today.date]; return l && l.length ? l[0] : null; }
 function recordDaily(es) {
   const b = dStore.get();
@@ -74,17 +113,29 @@ function buildDailyPanel() {
     : '今日暂无记录 · 虚位以待';
 }
 
-/* 英雄选择卡片 */
+/* 英雄选择卡片（含元进度锁定：仅 UI 门控，无头仿真/URL 回放不受影响） */
+function unlocks() {
+  const r = store.get() || {};
+  const clears = r.clears || 0;
+  return {
+    heroZero: clears >= 1,   // 零·原型机：累计通关 1 次
+    chipSlot: clears >= 3,   // 初始晶片槽：累计通关 3 次
+  };
+}
 function buildHeroCards() {
   const row = document.getElementById('heroRow');
   if (!row) return;
   row.innerHTML = '';
+  const un = unlocks();
   for (const hid of Object.keys(C.HEROES)) {
     const h = C.HEROES[hid];
+    const locked = hid === 'prototype' && !un.heroZero;
     const d = document.createElement('div');
-    d.className = 'heroCard' + (hid === selHero ? ' sel' : '');
-    d.innerHTML = '<div class="hName">' + h.name + '</div><div class="hDesc">' + h.desc + '</div>';
+    d.className = 'heroCard' + (hid === selHero ? ' sel' : '') + (locked ? ' locked' : '');
+    d.innerHTML = '<div class="hName">' + (locked ? '🔒 ' : '') + h.name + '</div>' +
+      '<div class="hDesc">' + (locked ? '<span class="lockedTag">累计通关 1 次解锁</span>' : h.desc) + '</div>';
     d.addEventListener('click', () => {
+      if (locked) { AUDIO.play('clink'); G.toast && G.toast('未解锁：累计通关 1 次以启动零号原型机', '#8b8b98'); return; }
       selHero = hid; AUDIO.play('ui');
       row.querySelectorAll('.heroCard').forEach(x => x.classList.remove('sel'));
       d.classList.add('sel');
@@ -95,6 +146,7 @@ function buildHeroCards() {
 buildHeroCards();
 showRecords();
 buildDailyPanel();
+buildChipSlot();
 
 /* ---------- 缩放 ---------- */
 function fit() {
@@ -203,7 +255,10 @@ function startRun(withBot, dailyRun) {
   if (jumpZone) G.debugJump(jumpZone, jumpRoom || 1);
   if (q.get('boss') === '1') G.loadBossRoom((C.ZONES[G.zoneIdx] && C.ZONES[G.zoneIdx].bossId) || 'boss');
   // 场景矩阵回放：构筑注入（与无头矩阵 setup 顺序一致：起跑 → 定场景 → 注入 → 一次性 computeStats）
+  // 元进度初始晶片槽：解锁后每次开局固定携带所选晶片（与每日修改器、URL 注入共存，去重）
   const chipIds = (q.get('chips') || '').split(',').filter(x => x && C.CHIPS.some(c => c.id === x));
+  const sc = startChipId();
+  if (sc) chipIds.push(sc);
   if (chipIds.length || q.get('power') || q.get('shield')) {
     for (const id of chipIds) if (!G.chips.includes(id)) G.chips.push(id);
     if (q.get('power')) G.powerBonus = parseFloat(q.get('power')) || 0;
@@ -447,6 +502,8 @@ function showEnd(es) {
     (es.stats.syn.length ? '　|　羁绊：' + es.stats.syn.join('、') : '');
   ui.screenEnd.classList.add('show');
   if (G.daily) buildDailyPanel();
+  buildHeroCards();       // 通关后解锁态即时刷新（新英雄/晶片槽可能解锁）
+  buildChipSlot();
 }
 
 requestAnimationFrame(frame);

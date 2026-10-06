@@ -136,6 +136,18 @@ canvas {
 #dailyBest { font-size: calc(6px * var(--s)); color: #8b8b98; margin-top: calc(2px * var(--s)); }
 .btn.amber { border-color: rgba(255,184,77,.6); color: var(--amber); }
 .btn.amber:hover { box-shadow: 0 0 calc(8px * var(--s)) rgba(255,184,77,.45); }
+#chipSlotPanel { box-sizing: border-box; width: calc(324px * var(--s)); margin-top: calc(4px * var(--s));
+  padding: calc(4px * var(--s)) calc(8px * var(--s)); text-align: left;
+  border: 1px solid #3a3a44; background: rgba(69,240,226,.04); }
+#chipSlotLabel { font-size: calc(6px * var(--s)); color: var(--accent); letter-spacing: calc(1px * var(--s)); }
+#chipSlot { display: flex; flex-wrap: wrap; gap: calc(2px * var(--s)); margin-top: calc(3px * var(--s)); }
+#chipSlot .chipTag { cursor: pointer; pointer-events: auto; opacity: .55; }
+#chipSlot .chipTag:hover { opacity: .9; }
+#chipSlot .chipTag.sel { opacity: 1; box-shadow: 0 0 calc(5px * var(--s)) rgba(69,240,226,.6); }
+#chipSlotPanel .lockedSlot { display: none; }
+.heroCard.locked { opacity: .45; filter: grayscale(1); cursor: not-allowed; }
+.heroCard.locked:hover { transform: none; box-shadow: none; border-color: #3a3a44; }
+.lockedTag { color: #8b8b98; }
 #shopOverlay { position: absolute; inset: 0; z-index: 50; display: none;
   background: rgba(5,5,8,.86); align-items: center; justify-content: center; flex-direction: column; gap: calc(6px * var(--s)); }
 #shopOverlay.show { display: flex; }
@@ -236,6 +248,10 @@ canvas {
       <div id="dailyHead">每日挑战 · <span id="dailyDate"></span></div>
       <div id="dailyMods"></div>
       <div id="dailyBest"></div>
+    </div>
+    <div id="chipSlotPanel">
+      <div id="chipSlotLabel">初始晶片槽</div>
+      <div id="chipSlot"></div>
     </div>
     <div id="records"></div>
     <div style="display:flex; gap:calc(6px*var(--s)); margin-top:calc(6px*var(--s));">
