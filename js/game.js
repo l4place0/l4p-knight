@@ -177,27 +177,108 @@ function createGame(opts) {
   }
   G.pointSegDist = pointSegDist;
 
+  /* ---------------- 对象池（freelist 复用，仅消除对象分配；行为逐位不变） ----------------
+   * 铁律：push/splice/shift 的调用位置与顺序、数组遍历顺序、RNG 消费顺序一律不动。
+   * acquire 从空闲链取对象并逐一重新初始化全部字段（字段集合与赋值顺序同原字面量
+   * 完全一致，杜绝上一任对象的字段/嵌套引用泄漏），release 仅在对象出数组时归还。
+   * 计数统计（整数自增）常开；peakLive 追踪经 G.__poolStats() 首次调用后开启。 */
+  let poolStatsOn = false;
+  function makePool(name) {
+    const free = [];
+    const st = { created: 0, reused: 0, released: 0, liveNow: 0, peakLive: 0 };
+    return {
+      name, free, st,
+      acquire() {
+        let o;
+        if (free.length) { o = free.pop(); st.reused++; }
+        else { o = {}; st.created++; }
+        if (poolStatsOn) { st.liveNow++; if (st.liveNow > st.peakLive) st.peakLive = st.liveNow; }
+        return o;
+      },
+      release(o) {
+        st.released++;
+        if (poolStatsOn) st.liveNow--;
+        free.push(o);
+      },
+    };
+  }
+  const poolBullets = makePool('bullets');
+  const poolParticles = makePool('particles');
+  const poolFloaters = makePool('floaters');
+  const poolRings = makePool('rings');
+  /* 整表清空（原「length = 0」语义）：逐个归还回池后清零，数组对象与外部可见行为不变 */
+  function pooledClear(arr, pool) {
+    for (let i = 0; i < arr.length; i++) pool.release(arr[i]);
+    arr.length = 0;
+  }
+  /* 各池 init：逐一重初始化全部字段（与原对象字面量逐字段等价） */
+  function initBullet(b, x, y, ang, speed, dmg, friendly, o) {
+    b.x = x; b.y = y;
+    b.vx = Math.cos(ang) * speed; b.vy = Math.sin(ang) * speed;
+    b.r = o.r || 2.5; b.dmg = dmg; b.friendly = friendly; b.color = o.color || '#ffffff';
+    b.knock = o.knock || 0; b.pierce = o.pierce || 0; b.bounces = o.bounces || 0;
+    b.life = o.life || 3; b.t = 0; b.hitIds = o.hitIds || null; b.bounced = false;
+    b.core = o.core || '#ffffff'; b.glow = o.glow !== false;
+  }
+  function initParticle(p, x, y, vx, vy, life, color, size, drag, grav) {
+    p.x = x; p.y = y; p.vx = vx; p.vy = vy;
+    p.life = life; p.max = 1; p.color = color; p.size = size;
+    p.drag = drag; p.grav = grav;
+  }
+  function initFloater(f, x, y, txt, color, big) {
+    f.x = x + rng.range(-4, 4); f.y = y - 6; f.vy = -34;
+    f.life = 0.75; f.max = 0.75; f.txt = '' + txt;
+    f.color = color || '#ffffff'; f.big = !!big;
+  }
+  function initRing(r, x, y, color, o) {
+    r.x = x; r.y = y; r.r = o.r0 || 2; r.vr = o.vr || 160;
+    r.life = o.life || 0.35; r.max = o.life || 0.35;
+    r.color = color; r.width = o.width || 2;
+  }
+  G.__poolStats = function () {
+    poolStatsOn = true;   // 首次调用后额外开启 peakLive 追踪（计数始终可用，此处之外零开销）
+    const out = {};
+    for (const pool of [poolBullets, poolParticles, poolFloaters, poolRings]) {
+      const s = pool.st;
+      const live = s.created - s.released + s.reused;   // 派生：在场对象数
+      out[pool.name] = {
+        created: s.created,           // 累计新建对象数
+        reused: s.reused,             // 累计 freelist 复用次数
+        released: s.released,         // 累计归还次数
+        free: pool.free.length,       // 当前空闲链长度
+        live,                         // 当前在场对象数（created - released + reused）
+        peakLive: Math.max(s.peakLive, live),  // 在场峰值（池自然上界 = 历史峰值，无新增语义）
+      };
+    }
+    return out;
+  };
+
   /* ---------------- 特效数据 ---------------- */
   function addFloater(x, y, txt, color, big) {
-    if (G.floaters.length > 90) G.floaters.shift();
-    G.floaters.push({ x: x + rng.range(-4, 4), y: y - 6, vy: -34, life: 0.75, max: 0.75, txt: '' + txt, color: color || '#ffffff', big: !!big });
+    if (G.floaters.length > 90) poolFloaters.release(G.floaters.shift());
+    const f = poolFloaters.acquire();
+    initFloater(f, x, y, txt, color, big);
+    G.floaters.push(f);
   }
   function addParts(x, y, n, color, o) {
     o = o || {};
     for (let i = 0; i < n; i++) {
       if (G.particles.length > 420) break;
       const a = rng.range(0, TAU), sp = rng.range(0.3, 1) * (o.spd || 90);
-      G.particles.push({
-        x, y, vx: Math.cos(a) * sp + (o.vx || 0), vy: Math.sin(a) * sp + (o.vy || 0),
-        life: rng.range(0.6, 1) * (o.life || 0.5), max: 1,
-        color: Array.isArray(color) ? rng.pick(color) : color,
-        size: o.size || rng.range(1, 2.4), drag: o.drag || 4, grav: o.grav || 0,
-      });
+      const p = poolParticles.acquire();
+      initParticle(p, x, y,
+        Math.cos(a) * sp + (o.vx || 0), Math.sin(a) * sp + (o.vy || 0),
+        rng.range(0.6, 1) * (o.life || 0.5),
+        Array.isArray(color) ? rng.pick(color) : color,
+        o.size || rng.range(1, 2.4), o.drag || 4, o.grav || 0);
+      G.particles.push(p);
     }
   }
   function addRing(x, y, color, o) {
     o = o || {};
-    G.rings.push({ x, y, r: o.r0 || 2, vr: o.vr || 160, life: o.life || 0.35, max: o.life || 0.35, color, width: o.width || 2 });
+    const r = poolRings.acquire();
+    initRing(r, x, y, color, o);
+    G.rings.push(r);
   }
   function shake(a) { G.shake = Math.min(9, G.shake + a); }
   function flash(color, a) { G.flashFx = Math.max(G.flashFx, a); G.flashColor = color; }
@@ -257,14 +338,10 @@ function createGame(opts) {
 
   function spawnBullet(x, y, ang, speed, dmg, friendly, o) {
     o = o || {};
-    if (G.bullets.length > 420) G.bullets.shift();
-    G.bullets.push({
-      x, y, vx: Math.cos(ang) * speed, vy: Math.sin(ang) * speed,
-      r: o.r || 2.5, dmg, friendly, color: o.color || '#ffffff',
-      knock: o.knock || 0, pierce: o.pierce || 0, bounces: o.bounces || 0,
-      life: o.life || 3, t: 0, hitIds: o.hitIds || null, bounced: false,
-      core: o.core || '#ffffff', glow: o.glow !== false,
-    });
+    if (G.bullets.length > 420) poolBullets.release(G.bullets.shift());
+    const b = poolBullets.acquire();
+    initBullet(b, x, y, ang, speed, dmg, friendly, o);
+    G.bullets.push(b);
   }
 
   function fireGun(w, pellets, spread, dmgMul) {
@@ -1108,7 +1185,7 @@ function createGame(opts) {
       b.t += dt; b.life -= dt;
       if (b.life <= 0) {
         if (b.kind === 'grenade') grenadeBoom(b);
-        G.bullets.splice(i, 1); continue;
+        G.bullets.splice(i, 1); poolBullets.release(b); continue;
       }
       // 游隼导弹：转向最近敌人
       if (b.kind === 'homing' && b.friendly) {
@@ -1143,7 +1220,7 @@ function createGame(opts) {
           else { if (b.kind === 'grenade') grenadeBoom(b); addParts(b.x, b.y, 3, b.color, { spd: 70, life: 0.22 }); dead = true; }
         }
       }
-      if (dead) { G.bullets.splice(i, 1); continue; }
+      if (dead) { G.bullets.splice(i, 1); poolBullets.release(b); continue; }
       // 命中判定
       if (b.friendly) {
         for (const e of G.enemies) {
@@ -1174,7 +1251,7 @@ function createGame(opts) {
           dead = true;
         }
       }
-      if (dead) G.bullets.splice(i, 1);
+      if (dead) { G.bullets.splice(i, 1); poolBullets.release(b); }
     }
   }
 
@@ -1208,11 +1285,12 @@ function createGame(opts) {
         P.vy += (w.y - P.y) / d * k * dt;
         if (G.particles.length < 400 && rng.chance(0.35)) {
           const a = rng.range(0, TAU), rr = rng.range(w.r * 0.5, w.r);
-          G.particles.push({
-            x: w.x + Math.cos(a) * rr, y: w.y + Math.sin(a) * rr,
-            vx: -Math.cos(a) * 130, vy: -Math.sin(a) * 130,
-            life: 0.4, max: 1, color: '#ffb84d', size: 1.4, drag: 0.5, grav: 0,
-          });
+          const p = poolParticles.acquire();
+          initParticle(p,
+            w.x + Math.cos(a) * rr, w.y + Math.sin(a) * rr,
+            -Math.cos(a) * 130, -Math.sin(a) * 130,
+            0.4, '#ffb84d', 1.4, 0.5, 0);
+          G.particles.push(p);
         }
       }
     }
@@ -1262,11 +1340,11 @@ function createGame(opts) {
   G.loadRoom = function () {
     const zone = ZONES[G.zoneIdx];
     loadMap(zone.maps[G.roomIdx]);
-    G.enemies.length = 0; G.bullets.length = 0; G.pickups.length = 0;
+    G.enemies.length = 0; pooledClear(G.bullets, poolBullets); G.pickups.length = 0;
     G.mines.length = 0; G.lasers.length = 0; G.beams.length = 0;
     G.bossLaser = null; G.wells.length = 0;
-    G.particles.length = 0; G.rings.length = 0; G.ghosts.length = 0;
-    G.floaters.length = 0; timers.length = 0;
+    pooledClear(G.particles, poolParticles); pooledClear(G.rings, poolRings); G.ghosts.length = 0;
+    pooledClear(G.floaters, poolFloaters); timers.length = 0;
     G.isBossRoom = false; G.portal = null; G.roomClearT = 0;
     G.chipOffered = false;
     G.fade = 1;
@@ -1299,11 +1377,11 @@ function createGame(opts) {
   G.loadBossRoom = function (bossId) {
     bossId = bossId || 'boss';
     loadMap('boss');
-    G.enemies.length = 0; G.bullets.length = 0; G.pickups.length = 0;
+    G.enemies.length = 0; pooledClear(G.bullets, poolBullets); G.pickups.length = 0;
     G.mines.length = 0; G.lasers.length = 0; G.beams.length = 0;
     G.bossLaser = null; G.wells.length = 0;
-    G.particles.length = 0; G.rings.length = 0; G.ghosts.length = 0;
-    G.floaters.length = 0; timers.length = 0;
+    pooledClear(G.particles, poolParticles); pooledClear(G.rings, poolRings); G.ghosts.length = 0;
+    pooledClear(G.floaters, poolFloaters); timers.length = 0;
     G.isBossRoom = true; G.portal = null; G.roomClearT = 0; G.fade = 1;
     const P = G.player;
     P.x = (G.mw * TILE) / 2; P.y = (G.mh - 2.5) * TILE;
@@ -1734,7 +1812,7 @@ function createGame(opts) {
     for (let i = G.particles.length - 1; i >= 0; i--) {
       const p = G.particles[i];
       p.life -= dt;
-      if (p.life <= 0) { G.particles.splice(i, 1); continue; }
+      if (p.life <= 0) { G.particles.splice(i, 1); poolParticles.release(p); continue; }
       p.x += p.vx * dt; p.y += p.vy * dt;
       const dg = Math.exp(-(p.drag || 4) * dt);
       p.vx *= dg; p.vy *= dg;
@@ -1743,13 +1821,13 @@ function createGame(opts) {
     for (let i = G.floaters.length - 1; i >= 0; i--) {
       const f = G.floaters[i];
       f.life -= dt;
-      if (f.life <= 0) { G.floaters.splice(i, 1); continue; }
+      if (f.life <= 0) { G.floaters.splice(i, 1); poolFloaters.release(f); continue; }
       f.y += f.vy * dt; f.vy *= Math.exp(-2.5 * dt);
     }
     for (let i = G.rings.length - 1; i >= 0; i--) {
       const r = G.rings[i];
       r.life -= dt;
-      if (r.life <= 0) { G.rings.splice(i, 1); continue; }
+      if (r.life <= 0) { G.rings.splice(i, 1); poolRings.release(r); continue; }
       r.r += r.vr * dt;
     }
     for (let i = G.ghosts.length - 1; i >= 0; i--) {
@@ -1783,7 +1861,7 @@ function createGame(opts) {
     G.score = 0; G.kills = 0; G.damageTaken = 0; G.combo = 0; G.maxCombo = 0;
     G.runTime = 0; G.timeScale = 1; G.hitstop = 0;
     G.vengeanceT = 0; G.killSpeedT = 0; G.bossRef = null;
-    G.endScreen = null; G.chipOffer = null; G.toasts = [];
+    G.endScreen = null; G.chipOffer = null; G.toasts = []; G.banner = null;
     G.computeStats();
     G.loadRoom();
     G.state = 'playing';
@@ -1801,8 +1879,8 @@ function createGame(opts) {
     }
   };
   G.debugClear = function () {
-    G.enemies.length = 0; G.bullets.length = 0; G.mines.length = 0;
-    G.lasers.length = 0; G.bossLaser = null; G.wells.length = 0; G.particles.length = 0;
+    G.enemies.length = 0; pooledClear(G.bullets, poolBullets); G.mines.length = 0;
+    G.lasers.length = 0; G.bossLaser = null; G.wells.length = 0; pooledClear(G.particles, poolParticles);
   };
   G.debugSpawn = function (type, x, y) {
     const e = spawnEnemy(type, x, y);
