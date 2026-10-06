@@ -1,0 +1,10 @@
+# 临时运行产物：场景矩阵报告（--out 可随时重建，不入库）
+test/.matrix-report-*.json
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.log

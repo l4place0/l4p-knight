@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>零号协议 ZERO PROTOCOL</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root { --s: 2; --accent: #45f0e2; --amber: #ffb84d; --red: #ff4757; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+body {
+  background: radial-gradient(ellipse at 50% 40%, #0d0d12 0%, #060608 70%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  color: #e8e8ee; user-select: none;
+}
+#stage {
+  position: relative;
+  width: calc(480px * var(--s)); height: calc(272px * var(--s));
+  box-shadow: 0 0 calc(60px * var(--s)) rgba(69,240,226,0.07), 0 0 calc(8px * var(--s)) #000;
+  border: 1px solid #222229;
+}
+canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  image-rendering: pixelated; image-rendering: crisp-edges;
+  background: #0b0b0f; cursor: none;
+}
+/* 扫描线 + 暗角 */
+#scan { position: absolute; inset: 0; pointer-events: none; z-index: 40; opacity: .5;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0, rgba(0,0,0,.16) 1px, transparent 1px, transparent 3px); }
+#vig { position: absolute; inset: 0; pointer-events: none; z-index: 41;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.5) 100%); }
+#fxHurt { position: absolute; inset: 0; pointer-events: none; z-index: 42; opacity: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(255,71,87,.55) 100%); transition: opacity .08s; }
+#fxLow { position: absolute; inset: 0; pointer-events: none; z-index: 42; opacity: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(255,71,87,.3) 100%); }
+#fxLow.on { animation: lowpulse 1s ease-in-out infinite; }
+@keyframes lowpulse { 0%,100% { opacity: .15; } 50% { opacity: .55; } }
+
+/* ---------- HUD ---------- */
+#hud { position: absolute; inset: 0; pointer-events: none; z-index: 30;
+  font-size: calc(7px * var(--s)); line-height: 1.35; }
+.panel { background: rgba(8,8,12,.78); border: 1px solid #26262e; padding: calc(3px * var(--s)) calc(5px * var(--s)); }
+#hudTL { position: absolute; top: calc(4px * var(--s)); left: calc(4px * var(--s)); display: flex; flex-direction: column; gap: calc(2px * var(--s)); }
+#hpPips { display: flex; gap: calc(1.5px * var(--s)); }
+.pip { width: calc(6px * var(--s)); height: calc(6px * var(--s)); background: #26262e; border: 1px solid #3a3a44; }
+.pip.on { background: #ff4757; border-color: #ff8a95; box-shadow: 0 0 calc(3px * var(--s)) rgba(255,71,87,.8); }
+#shieldBar { width: calc(88px * var(--s)); height: calc(4px * var(--s)); background: #12121a; border: 1px solid #26262e; }
+#shieldFill { height: 100%; background: linear-gradient(90deg,#1fb9ad,#45f0e2); box-shadow: 0 0 calc(3px * var(--s)) rgba(69,240,226,.7); width: 100%; transition: width .1s; }
+#wpnRow { display: flex; gap: calc(3px * var(--s)); }
+.wslot { padding: calc(1px * var(--s)) calc(4px * var(--s)); border: 1px solid #26262e; background: rgba(8,8,12,.78); color: #6a6a76; }
+.wslot.cur { color: #e8e8ee; border-color: var(--accent); box-shadow: 0 0 calc(3px * var(--s)) rgba(69,240,226,.35); }
+#dashRow { display: flex; align-items: center; gap: calc(3px * var(--s)); color: #8b8b98; }
+#dashBar { width: calc(60px * var(--s)); height: calc(3px * var(--s)); background: #12121a; border: 1px solid #26262e; }
+#dashFill { height: 100%; background: #a9a9b4; width: 100%; }
+#hudTC { position: absolute; top: calc(4px * var(--s)); left: 50%; transform: translateX(-50%); text-align: center; }
+#zoneLabel { letter-spacing: calc(1px * var(--s)); color: #c7c7d1; }
+#roomLabel { color: #6a6a76; font-size: calc(6px * var(--s)); }
+#toasts { position: absolute; top: calc(22px * var(--s)); left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: calc(2px * var(--s)); }
+.toast { color: #e8e8ee; text-shadow: 0 0 calc(4px * var(--s)) currentColor; animation: toastIn .18s ease-out; white-space: nowrap; }
+@keyframes toastIn { from { opacity: 0; transform: translateY(calc(-4px * var(--s))); } }
+#hudTR { position: absolute; top: calc(4px * var(--s)); right: calc(4px * var(--s)); text-align: right; }
+#score { color: #8b8b98; letter-spacing: calc(0.5px * var(--s)); }
+#combo { color: var(--amber); font-weight: bold; text-shadow: 0 0 calc(4px * var(--s)) rgba(255,184,77,.9);
+  transition: transform .06s; }
+#combo.hot { color: #fff; text-shadow: 0 0 calc(6px * var(--s)) var(--amber); }
+#combo.pop { transform: scale(1.35); }
+#hudBL { position: absolute; bottom: calc(4px * var(--s)); left: calc(4px * var(--s));
+  display: flex; flex-direction: column; gap: calc(2px * var(--s)); max-width: calc(180px * var(--s)); }
+.chipTag { display: inline-block; margin: calc(1px * var(--s)) calc(2px * var(--s)) 0 0;
+  padding: 0 calc(3px * var(--s)); border: 1px solid #3a3a44; color: #a9a9b4; font-size: calc(6px * var(--s)); }
+.chipTag.r2 { border-color: var(--accent); color: var(--accent); }
+.chipTag.r3 { border-color: var(--amber); color: var(--amber); }
+.synTag { color: var(--amber); border-color: var(--amber); text-shadow: 0 0 calc(3px * var(--s)) rgba(255,184,77,.6); }
+/* ---------- Boss 条 ---------- */
+#bossBar { position: absolute; bottom: calc(10px * var(--s)); left: 50%; transform: translateX(-50%);
+  width: calc(260px * var(--s)); display: none; z-index: 30; pointer-events: none; }
+#bossBar.show { display: block; }
+#bossName { text-align: center; color: #ff8a95; letter-spacing: calc(1.5px * var(--s));
+  text-shadow: 0 0 calc(5px * var(--s)) rgba(255,71,87,.8); margin-bottom: calc(2px * var(--s)); font-size: calc(7px * var(--s)); }
+#bossTrack { position: relative; height: calc(6px * var(--s)); background: #12121a; border: 1px solid #3a3a44; }
+#bossGhost { position: absolute; inset: 0; background: rgba(232,232,238,.55); width: 100%; }
+#bossFill { position: absolute; inset: 0; background: linear-gradient(90deg,#c22433,#ff4757); width: 100%;
+  box-shadow: 0 0 calc(4px * var(--s)) rgba(255,71,87,.7); }
+#bossPhases { display: flex; gap: calc(2px * var(--s)); margin-top: calc(2px * var(--s)); justify-content: center; }
+.bphase { width: calc(26px * var(--s)); height: calc(3px * var(--s)); background: #1a1a20; border: 1px solid #26262e; }
+.bphase.cur { background: var(--amber); box-shadow: 0 0 calc(3px * var(--s)) var(--amber); }
+#prompt { position: absolute; bottom: calc(30px * var(--s)); left: 50%; transform: translateX(-50%);
+  color: #e8e8ee; background: rgba(8,8,12,.85); border: 1px solid #3a3a44;
+  padding: calc(2px * var(--s)) calc(6px * var(--s)); display: none; z-index: 31; white-space: nowrap; }
+/* ---------- 横幅 ---------- */
+#banner { position: absolute; top: 30%; left: 50%; transform: translate(-50%,-50%);
+  text-align: center; z-index: 32; pointer-events: none; opacity: 0; transition: opacity .15s; }
+#banner.show { opacity: 1; }
+#bannerText { font-size: calc(13px * var(--s)); font-weight: bold; letter-spacing: calc(2px * var(--s));
+  text-shadow: 0 0 calc(10px * var(--s)) currentColor; }
+#bannerSub { font-size: calc(6px * var(--s)); color: #8b8b98; letter-spacing: calc(2px * var(--s)); margin-top: calc(2px * var(--s)); }
+/* ---------- 晶片选择 ---------- */
+#chipOverlay { position: absolute; inset: 0; z-index: 50; display: none;
+  background: rgba(5,5,8,.82); align-items: center; justify-content: center; flex-direction: column; gap: calc(8px * var(--s)); }
+#chipOverlay.show { display: flex; }
+#chipTitle { font-size: calc(11px * var(--s)); letter-spacing: calc(2px * var(--s)); color: var(--accent);
+  text-shadow: 0 0 calc(8px * var(--s)) rgba(69,240,226,.7); }
+#chipTitleSub { font-size: calc(6px * var(--s)); color: #6a6a76; letter-spacing: calc(1.5px * var(--s)); }
+#chipCards { display: flex; gap: calc(8px * var(--s)); }
+.chipCard { width: calc(96px * var(--s)); padding: calc(7px * var(--s)); cursor: pointer; pointer-events: auto;
+  background: rgba(12,12,18,.95); border: 1px solid #3a3a44; transition: transform .08s, box-shadow .08s, border-color .08s; }
+.chipCard:hover { transform: translateY(calc(-3px * var(--s))); }
+.chipCard.r1 { border-color: #6a6a76; } .chipCard.r1:hover { box-shadow: 0 0 calc(8px * var(--s)) rgba(170,170,180,.4); }
+.chipCard.r2 { border-color: var(--accent); } .chipCard.r2:hover { box-shadow: 0 0 calc(10px * var(--s)) rgba(69,240,226,.55); }
+.chipCard.r3 { border-color: var(--amber); } .chipCard.r3:hover { box-shadow: 0 0 calc(10px * var(--s)) rgba(255,184,77,.55); }
+.ccRarity { font-size: calc(5px * var(--s)); letter-spacing: calc(1px * var(--s)); color: #6a6a76; }
+.r2 .ccRarity { color: var(--accent); } .r3 .ccRarity { color: var(--amber); }
+.ccName { font-size: calc(9px * var(--s)); font-weight: bold; margin: calc(2px * var(--s)) 0; }
+.ccDesc { font-size: calc(6px * var(--s)); color: #a9a9b4; min-height: calc(20px * var(--s)); }
+.ccSyn { font-size: calc(6px * var(--s)); color: var(--amber); margin-top: calc(2px * var(--s)); }
+.ccSyn::before { content: "◆ "; }
+#coins { color: var(--amber); font-size: calc(6px * var(--s)); }
+#heroRow { display: flex; gap: calc(6px * var(--s)); margin-top: calc(4px * var(--s)); }
+.heroCard { width: calc(104px * var(--s)); padding: calc(5px * var(--s)); cursor: pointer; pointer-events: auto;
+  background: rgba(12,12,18,.95); border: 1px solid #3a3a44; transition: all .08s; }
+.heroCard:hover { border-color: #8b8b98; }
+.heroCard.sel { border-color: var(--accent); box-shadow: 0 0 calc(8px * var(--s)) rgba(69,240,226,.45); }
+.heroCard .hName { font-size: calc(8px * var(--s)); font-weight: bold; }
+.heroCard .hDesc { font-size: calc(6px * var(--s)); color: #a9a9b4; margin-top: calc(2px * var(--s)); }
+#records { font-size: calc(6px * var(--s)); color: #8b8b98; letter-spacing: calc(1px * var(--s)); margin-top: calc(4px * var(--s)); }
+#shopOverlay { position: absolute; inset: 0; z-index: 50; display: none;
+  background: rgba(5,5,8,.86); align-items: center; justify-content: center; flex-direction: column; gap: calc(6px * var(--s)); }
+#shopOverlay.show { display: flex; }
+#shopTitle { font-size: calc(11px * var(--s)); letter-spacing: calc(2px * var(--s)); color: var(--amber);
+  text-shadow: 0 0 calc(8px * var(--s)) rgba(255,184,77,.7); }
+#shopTitleSub { font-size: calc(6px * var(--s)); color: #6a6a76; letter-spacing: calc(1.5px * var(--s)); }
+#shopCards { display: flex; gap: calc(8px * var(--s)); }
+.shopCard { width: calc(96px * var(--s)); padding: calc(6px * var(--s)); cursor: pointer; pointer-events: auto;
+  background: rgba(12,12,18,.95); border: 1px solid #3a3a44; transition: transform .08s, box-shadow .08s; }
+.shopCard:hover { transform: translateY(calc(-3px * var(--s))); }
+.shopCard.sold { opacity: .35; cursor: default; }
+.shopCard.sold:hover { transform: none; }
+.shopCard .sName { font-size: calc(8px * var(--s)); font-weight: bold; }
+.shopCard .sDesc { font-size: calc(6px * var(--s)); color: #a9a9b4; min-height: calc(18px * var(--s)); margin: calc(2px * var(--s)) 0; }
+.shopCard .sPrice { font-size: calc(7px * var(--s)); color: var(--amber); }
+
+/* ---------- 全屏界面 ---------- */
+.screen { position: absolute; inset: 0; z-index: 60; display: none;
+  align-items: center; justify-content: center; flex-direction: column; gap: calc(8px * var(--s));
+  background: rgba(5,5,8,.88); }
+.screen.show { display: flex; }
+.bigLogo { font-size: calc(26px * var(--s)); font-weight: bold; letter-spacing: calc(6px * var(--s));
+  color: #f2f2f6; text-shadow: calc(2px * var(--s)) calc(2px * var(--s)) 0 #1a1a20, 0 0 calc(18px * var(--s)) rgba(69,240,226,.5); }
+.subLogo { font-size: calc(8px * var(--s)); color: var(--accent); letter-spacing: calc(4px * var(--s)); }
+.btn { pointer-events: auto; cursor: pointer; background: rgba(12,12,18,.9); border: 1px solid #3a3a44;
+  color: #e8e8ee; padding: calc(4px * var(--s)) calc(14px * var(--s)); font-size: calc(8px * var(--s));
+  letter-spacing: calc(1.5px * var(--s)); transition: all .08s; font-family: inherit; }
+.btn:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 calc(8px * var(--s)) rgba(69,240,226,.4); }
+.btn.primary { border-color: var(--accent); color: var(--accent); }
+#endTitle { font-size: calc(22px * var(--s)); font-weight: bold; letter-spacing: calc(4px * var(--s)); }
+#endTitle.win { color: #ffb84d; text-shadow: 0 0 calc(16px * var(--s)) rgba(255,184,77,.8); }
+#endTitle.lose { color: #ff4757; text-shadow: 0 0 calc(16px * var(--s)) rgba(255,71,87,.7); }
+#endEn { font-size: calc(10px * var(--s)); color: #6a6a76; letter-spacing: calc(6px * var(--s)); }
+#endStats { display: grid; grid-template-columns: auto auto; gap: calc(2px * var(--s)) calc(14px * var(--s));
+  font-size: calc(7px * var(--s)); color: #a9a9b4; }
+#endStats b { color: #f2f2f6; font-weight: normal; }
+#endChips { font-size: calc(6px * var(--s)); color: #8b8b98; max-width: calc(300px * var(--s)); text-align: center; }
+#endRating { font-size: calc(20px * var(--s)); color: var(--amber); text-shadow: 0 0 calc(12px * var(--s)) rgba(255,184,77,.9); }
+#helpBox { font-size: calc(7px * var(--s)); color: #a9a9b4; line-height: 1.9; }
+#helpBox b { color: var(--accent); font-weight: normal; display: inline-block; min-width: calc(70px * var(--s)); }
+#pauseHint { font-size: calc(9px * var(--s)); color: #8b8b98; letter-spacing: calc(3px * var(--s)); }
+#fps { position: absolute; top: calc(4px * var(--s)); left: 50%; transform: translateX(-50%) translateY(calc(14px * var(--s)));
+  color: #45f0e2; font-size: calc(6px * var(--s)); z-index: 45; display: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="game" width="480" height="272"></canvas>
+
+  <div id="hud">
+    <div id="hudTL">
+      <div id="hpPips" class="panel"></div>
+      <div id="shieldBar"><div id="shieldFill"></div></div>
+      <div id="wpnRow"></div>
+      <div id="dashRow"><span>冲刺</span><div id="dashBar"><div id="dashFill"></div></div></div>
+    </div>
+    <div id="hudTC">
+      <div id="zoneLabel">待命</div>
+      <div id="roomLabel"></div>
+    </div>
+    <div id="hudTR">
+      <div id="score">得分 0</div>
+      <div id="coins">金币 0</div>
+      <div id="combo"></div>
+    </div>
+    <div id="hudBL"></div>
+    <div id="toasts"></div>
+  </div>
+
+  <div id="bossBar">
+    <div id="bossName">零号 · 处刑者</div>
+    <div id="bossTrack"><div id="bossGhost"></div><div id="bossFill"></div></div>
+    <div id="bossPhases"><div class="bphase"></div><div class="bphase"></div><div class="bphase"></div></div>
+  </div>
+  <div id="prompt"></div>
+  <div id="banner"><div id="bannerText"></div><div id="bannerSub"></div></div>
+  <div id="fps"></div>
+
+  <div id="chipOverlay">
+    <div id="chipTitle">战 术 晶 片</div>
+    <div id="chipTitleSub">SELECT · 选择一枚装入协议核心</div>
+    <div id="chipCards"></div>
+  </div>
+
+  <div id="shopOverlay">
+    <div id="shopTitle">补 给 站</div>
+    <div id="shopTitleSub">SUPPLY · 金币采购（区域间补给）</div>
+    <div id="shopCards"></div>
+    <button class="btn" id="btnShopLeave">离开补给站</button>
+  </div>
+
+  <div id="screenTitle" class="screen show">
+    <div class="bigLogo">零号协议</div>
+    <div class="subLogo">ZERO PROTOCOL</div>
+    <div style="color:#6a6a76; font-size:calc(6px*var(--s)); letter-spacing:calc(1px*var(--s));">黑白灰废土 · 高强度肉鸽弹幕射击</div>
+    <div id="heroRow"></div>
+    <div id="records"></div>
+    <div style="display:flex; gap:calc(6px*var(--s)); margin-top:calc(6px*var(--s));">
+      <button class="btn primary" id="btnStart">开始游戏</button>
+      <button class="btn" id="btnBot">AI 代打演示</button>
+      <button class="btn" id="btnHelp">操作说明</button>
+    </div>
+    <div id="helpBox" style="display:none; margin-top:calc(4px*var(--s));">
+      <div><b>WASD / 方向键</b> 移动　<b style="min-width:auto">鼠标</b> 瞄准 · 左键射击</div>
+      <div><b>Shift / 右键</b> 相位冲刺（无敌帧）　<b style="min-width:auto">F</b> 相位刃格挡斩（弹反弹幕）</div>
+      <div><b>E</b> 拾取武器 / 进入传送门　<b style="min-width:auto">Q / 1 / 2</b> 切换武器</div>
+      <div><b>B</b> AI 代打　<b style="min-width:auto">M</b> 静音　<b style="min-width:auto">P</b> 暂停</div>
+    </div>
+  </div>
+
+  <div id="screenEnd" class="screen">
+    <div id="endTitle"></div>
+    <div id="endEn"></div>
+    <div id="endRating"></div>
+    <div id="endStats"></div>
+    <div id="endChips"></div>
+    <div style="display:flex; gap:calc(6px*var(--s)); margin-top:calc(4px*var(--s));">
+      <button class="btn primary" id="btnRetry">再来一局</button>
+    </div>
+  </div>
+
+  <div id="screenPause" class="screen">
+    <div style="font-size:calc(14px*var(--s)); letter-spacing:calc(4px*var(--s));">已暂停</div>
+    <div id="pauseHint">按 P 继续</div>
+  </div>
+
+  <div id="vig"></div>
+  <div id="fxLow"></div>
+  <div id="fxHurt"></div>
+  <div id="scan"></div>
+</div>
+
+<script src="js/core.js"></script>
+<script src="js/render.js"></script>
+<script src="js/game.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/bot.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

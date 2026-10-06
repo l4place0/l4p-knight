@@ -1,0 +1,12 @@
+{
+  "name": "zero-protocol",
+  "version": "1.2.0",
+  "description": "零号协议 ZERO PROTOCOL —— 黑白灰像素风肉鸽弹幕射击游戏（类似《元气骑士》），内置 AI 代打与全自动仿真自检",
+  "private": true,
+  "scripts": {
+    "start": "node test/serve.js 8941",
+    "test": "node test/sim.test.js",
+    "matrix": "node test/matrix.js --seeds 1-200",
+    "diag": "node test/diag.js 1"
+  }
+}
