@@ -119,9 +119,13 @@ PARTS.bosses = function (ctx) {
     const atk = e.atk;
     if (!atk) return;
     atk.t += dt;
+    // 弹幕密度注入钩：G.bossTuning.densityMul（难度标定用，默认空 = 行为不变）
+    const dm = (G.bossTuning && G.bossTuning.densityMul) || 1;
 
     function bossBullet(ang, speed) {
-      ctx.spawnBullet(e.x, e.y, ang, speed, 1, false, {
+      // Boss 弹速注入钩：G.bossTuning.bulletMul（难度标定用，默认空 = 行为不变）
+      const bt = G.bossTuning || {};
+      ctx.spawnBullet(e.x, e.y, ang, speed * (bt.bulletMul || 1), 1, false, {
         color: '#ff4757', core: '#ffd9dd', r: 3, knock: 0, life: 6,
       });
     }
@@ -129,13 +133,13 @@ PARTS.bosses = function (ctx) {
     if (atk.kind === 'ring') {
       if (!atk.fired && atk.t > 0.35) {
         atk.fired = true;
-        const n = 20 + e.phase * 4;
+        const n = Math.round((20 + e.phase * 4) * dm);
         e.ringOff = (e.ringOff || 0) + 0.37;
         for (let i = 0; i < n; i++) bossBullet(e.ringOff + i / n * TAU, 92 + e.phase * 8);
         if (e.phase >= 2) {
           ctx.setTimeoutLike(0.25, () => {
             if (!e.dead && e.st !== 'dying') {
-              const n2 = 18; e.ringOff += 0.19;
+              const n2 = Math.round(18 * dm); e.ringOff += 0.19;
               for (let i = 0; i < n2; i++) bossBullet(e.ringOff + i / n2 * TAU + 0.17, 105);
               G.sfx('shoot');
             }
@@ -147,7 +151,8 @@ PARTS.bosses = function (ctx) {
     } else if (atk.kind === 'fan') {
       if (atk.t > atk.step * 0.2) {
         const base = Math.atan2(P.y - e.y, P.x - e.x);
-        for (let i = -2; i <= 2; i++) bossBullet(base + i * 0.16, 150 + e.phase * 8);
+        const cnt = Math.max(3, Math.round(5 * dm));
+        for (let i = 0; i < cnt; i++) bossBullet(base + (i - (cnt - 1) / 2) * 0.16, 150 + e.phase * 8);
         G.sfx('shoot');
         atk.step++;
         if (atk.step > 3) { e.st = 'idle'; e.atkT = bossAtkInterval(e); e.atk = null; }
@@ -159,7 +164,7 @@ PARTS.bosses = function (ctx) {
         const dir = rng.chance(0.5) ? 1 : -1;
         G.bossLaser = {
           x0: e.x, y0: e.y, a0: base - dir * 0.5, a1: base + dir * 0.5,
-          count: 5, spread: 1.25, t: 0, charge: 0.8, active: 1.2,
+          count: Math.max(3, Math.round(5 * dm)), spread: 1.25, t: 0, charge: 0.8, active: 1.2,
           color: '#ff4757', dmg: 1,
         };
         G.sfx('laserCharge');
@@ -180,9 +185,10 @@ PARTS.bosses = function (ctx) {
       if (atk.step >= 3 && atk.t > 2.0) { e.st = 'idle'; e.atkT = bossAtkInterval(e); e.atk = null; }
     } else if (atk.kind === 'spiral') {
       if (atk.t < 1.6) {
+        const stepIv = 0.09 / dm;
         atk.acc = (atk.acc || 0) + dt;
-        while (atk.acc > 0.09) {
-          atk.acc -= 0.09;
+        while (atk.acc > stepIv) {
+          atk.acc -= stepIv;
           atk.a = (atk.a || 0) + 0.30;
           bossBullet(atk.a, 118); bossBullet(atk.a + Math.PI, 118);
         }
@@ -207,7 +213,8 @@ PARTS.bosses = function (ctx) {
           if (++spawned >= want) break;
         }
         const base = Math.atan2(P.y - e.y, P.x - e.x);
-        for (let i = -1; i <= 1; i++) bossBullet(base + i * 0.22, 165);
+        const cnt = Math.max(3, Math.round(3 * dm));
+        for (let i = 0; i < cnt; i++) bossBullet(base + (i - (cnt - 1) / 2) * 0.22, 165);
         G.sfx('shoot');
         e.st = 'idle'; e.atkT = bossAtkInterval(e); e.atk = null;
       }
@@ -230,7 +237,7 @@ PARTS.bosses = function (ctx) {
             G.sfx('minePlace');
           }
         }
-        const n2 = 14;
+        const n2 = Math.max(6, Math.round(14 * dm));
         for (let i = 0; i < n2; i++) bossBullet(i / n2 * TAU + rng.range(0, 0.3), 85);
         G.sfx('shoot');
         e.st = 'idle'; e.atkT = bossAtkInterval(e); e.atk = null;
@@ -240,14 +247,15 @@ PARTS.bosses = function (ctx) {
       if (!atk.st1 && atk.t > 0.35) {
         atk.st1 = true;
         bossBlink(e);
-        for (let arm = 0; arm < 4; arm++)
-          for (let i = 0; i < 4; i++) bossBullet(atk.a0 + arm * Math.PI / 2 + i * 0.055, 118 + i * 9);
+        const arms = Math.max(4, Math.round(4 * dm));
+        for (let arm = 0; arm < arms; arm++)
+          for (let i = 0; i < 4; i++) bossBullet(atk.a0 + arm / arms * TAU + i * 0.055, 118 + i * 9);
         G.sfx('enemyDash'); ctx.shake(2);
       }
       if (!atk.st2 && atk.t > 1.15) {
         atk.st2 = true;
         bossBlink(e);
-        const n = 18;
+        const n = Math.round(18 * dm);
         for (let i = 0; i < n; i++) bossBullet(i / n * TAU, 100);
         G.sfx('shoot');
       }
@@ -273,7 +281,9 @@ PARTS.bosses = function (ctx) {
   }
 
   function bossAtkInterval(e) {
-    return (e.phase === 1 ? 1.7 : e.phase === 2 ? 1.4 : 1.1) * rng.range(0.85, 1.15);
+    // 攻击欲望注入钩：G.bossTuning.aggression > 1 缩短攻击间隔（难度标定用，默认空 = 行为不变）
+    const aggr = (G.bossTuning && G.bossTuning.aggression) || 1;
+    return (e.phase === 1 ? 1.7 : e.phase === 2 ? 1.4 : 1.1) * rng.range(0.85, 1.15) / aggr;
   }
   function startBossAttack(e) {
     const pools = e.pools || {
@@ -304,10 +314,12 @@ PARTS.bosses = function (ctx) {
     ctx.computeReachable(P.x, P.y);
     let d = ENEMY_DEFS[bossId];
     if (G.debugBossHp) d = Object.assign({}, d, { hp: G.debugBossHp });
+    // Boss 数值注入钩：G.bossTuning.hpMul/speedMul（难度标定用，默认空 = 行为不变）
+    const bt = G.bossTuning || {};
     const boss = {
       id: ++G.eid, type: bossId, isBoss: true, x: (G.mw * TILE) / 2, y: TILE * 4,
-      vx: 0, vy: 0, kx: 0, ky: 0, r: d.r, mass: d.mass, speed: d.speed,
-      hp: d.hp, maxHp: d.hp, contact: d.contact, name: d.name,
+      vx: 0, vy: 0, kx: 0, ky: 0, r: d.r, mass: d.mass, speed: d.speed * (bt.speedMul || 1),
+      hp: d.hp * (bt.hpMul || 1), maxHp: d.hp * (bt.hpMul || 1), contact: d.contact, name: d.name,
       phases: d.phases, pools: d.pools, final: !!d.final,
       flash: 0, hitCd: 0, spawning: 0, dead: false,
       st: 'intro', t: 1.8, phase: 1, invuln: 0.8, atk: null, atkT: 1.2,
