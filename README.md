@@ -207,6 +207,13 @@ node test/matrix.js --run z4b/stalker         # 单场景复跑
 node test/matrix.js --seeds 1-5 --baseline test/matrix.baseline.json   # 与基线对比劣化
 ```
 
+**随机变异测试**（SQLite 思想 · 测试系统本身也要被测试）：随机注入小变异（改常量/翻转比较符/
+删语句等 8 种算子）→ 快速探针 + 全量验收两层检测，幸存变异即测试盲区：
+
+```bash
+node test/mutation.js --count 30 --seed 42 --json   # 可复现；--strict 为可选达标门
+```
+
 失败场景自动分类（超时/停滞/阵亡/越界嵌墙NaN/异常）并倾倒最近 32 游戏秒实体轨迹，
 附 `replayUrl`（URL 即场景编码，浏览器打开即定向回放，可截图观测）。
 

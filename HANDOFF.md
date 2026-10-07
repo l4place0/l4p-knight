@@ -46,6 +46,7 @@ node test/matrix.js --seeds 1-5 --baseline test/matrix.baseline.json       # 与
 node test/diag.js <seed>       # 卡点诊断：逐秒打印玩家/敌人/输入微观状态
 node test/serve.js 8941        # 本地服务器 → http://127.0.0.1:8941/
 node test/structure.check.js   # 结构守护：脚本编排顺序/模块导出面/逐文件语法（patch 后必做）
+node test/mutation.js --count 30   # 随机变异测试（SQLite 思想：注入变异验证测试系统，详见 test/mutation.js 头注）
 node --check js/<file>.js      # 语法检查（patch 后必做）
 ```
 
@@ -208,6 +209,9 @@ debugClear 清场、debugSpawn 摆怪、限时断言）。诊断卡点用 `test/
 - [ ] 若改了玩法/内容：更新 README 的内容清单与自检结果数字
 - [ ] 若发现新 bug：先写复现测试（diag.js 或 sim.test.js 场景），修复后保留为回归
 - [ ] 逻辑层改动若涉及时序/RNG 顺序：跑逐帧状态哈希黄金对比（对照 `git show HEAD:js/game.js`）
+- [ ] （可选门）`node test/mutation.js --count 30 --strict`：随机变异杀率达标且逻辑层无幸存者——
+      当前杀率 ~40% 未达标（盲区图谱见 .agents/notes/2026-10-07-line-ablation-experiment.md），
+      补测落地后再把此门转为必选
 
 ---
 
