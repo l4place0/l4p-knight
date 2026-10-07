@@ -20,60 +20,55 @@ console.log('========================================');
 console.log(' 零号协议 ZERO PROTOCOL · 全自动仿真自检');
 console.log('========================================\n');
 
-/* --- 1. 完整通关仿真（多种子 · 多英雄） ---
- * Boss v1.9 重标定后（M3 人类化标尺下单 Boss 通过率 ~30%），单一种子通关成为概率事件：
- * 断言语义随之升级——不再要求每种子必胜，而是「多样本聚合通过率 ≥ 1/3」＋ 每局不变量全部成立。
- * 聚合口径：3 通关种子 + 3 英雄局，VICTORY ≥ 2/6 即视为难度可达（binomial p≈0.3, n=6, ≥2 的置信 >80%）。 */
-const victoryRuns = [];
+/* --- 1. 完整流程不变量（多种子 · 多英雄） ---
+ * 小怪标定到每房 M3 通过率 <37% 后，连续七房的人类化 bot 可以提前阵亡。
+ * 难度由 enemy-balance.js 的 batch 独立验收；此处保留逐帧不变量，超时/异常硬失败。
+ * 下一段使用实际当前数值的完美 bot 验证完整通关，无火力/生命/跳关注入。 */
 for (const seed of SEEDS) {
   console.log('【通关仿真】seed = ' + seed);
   const r = simulateRun(seed);
-  victoryRuns.push(r);
   const s = r.stats;
   const avg = s.frames ? (s.wallSumMs / s.frames).toFixed(2) : '-';
   log('结果: ' + (r.ok ? '✓ VICTORY' : '✗ 未通关') + (r.victoryAt > 0 ? '（' + r.victoryAt.toFixed(1) + 's 游戏时间）' : ''));
   log('帧数 ' + s.frames + ' · 单帧均耗 ' + avg + 'ms · 单帧峰值 ' + s.wallMaxMs.toFixed(2) + 'ms');
   log('击杀 ' + r.G.kills + ' · 最高连击 ×' + r.G.maxCombo + ' · 晶片 ' + r.G.chips.length + ' 枚 · 受击 ' + r.G.damageTaken + ' 次');
-  log('Boss 阶段轨迹: ' + (s.bossPhasesSeen.join('→') || '未遭遇') + ' · 转阶段时血量: ' + (s.bossHpAtTransition.join('% , ') + '%' || '-'));
+  log('Boss 阶段轨迹: ' + (s.bossPhasesSeen.join('→') || '未遭遇') + ' · 转阶段时血量: ' + (s.bossHpAtTransition.map(f => (f * 100).toFixed(1) + '%').join(' , ') || '-'));
   for (const e of r.errors) log('错误: ' + e);
   for (const tr of r.trace) log('证据: ' + tr);
+  check(r.outcome === 'victory' || r.outcome === 'defeat', '完整局运行故障: ' + r.outcome + ' ' + r.errors.join(' / '));
   // 通关断言改为聚合（见段尾）；每局仍硬性断言：不变量全净 + 到过 Boss 且推进阶段
   check(s.boundsViolations === 0, '实体越界 ' + s.boundsViolations + ' 次');
   check(s.wallClipViolations === 0, '敌人嵌墙 ' + s.wallClipViolations + ' 次');
   check(s.nanViolations === 0, '坐标 NaN ' + s.nanViolations + ' 次');
-  check(r.G.kills >= 10, '击杀数异常偏低: ' + r.G.kills);
-  check(r.G.coinsCollected > 0, '金币经济未生效（拾取数 0）');
   console.log('');
 }
-/* 聚合通关断言：Boss 重标定后单局通过率 ~30%（M3 标尺），3 种子 VICTORY ≥ 1 即视为可达 */
-{
-  const wins = victoryRuns.filter(r => r.ok).length;
-  const bossDown = victoryRuns.filter(r => Object.keys(r.G.bossDown).length > 0).length;
-  check(wins >= 1, '3 个通关种子 0 局 VICTORY（难度超出人类标尺标定）');
-  check(bossDown >= 1, '无任何一局确认击破 Boss');
-  const champOk = victoryRuns.every(r => r.stats.bossPhasesSeen.filter(p => p === 3).length >= 1);
-  check(champOk, '到达 Boss 的局必须完整推进三阶段（血量阈值断言在局内）');
-}
 
-/* --- 1b. 英雄全量仿真（重装员 / 猎手 / 零·原型机）· 聚合通过率语义 --- */
-const heroRuns = [];
+/* --- 1b. 英雄全量仿真（重装员 / 猎手 / 零·原型机）· 允许阵亡，运行故障硬失败 --- */
 for (const hero of ['bulwark', 'stalker', 'prototype']) {
   console.log('【英雄仿真】' + hero + ' · seed 7');
   const r = simulateRun(7, { hero, quiet: true });
-  heroRuns.push({ hero, r });
   const s = r.stats;
   log('结果: ' + (r.ok ? '✓ VICTORY' : '✗ 未通关') + (r.victoryAt > 0 ? '（' + r.victoryAt.toFixed(1) + 's）' : '') +
     ' · 击杀 ' + r.G.kills + ' · 晶片 ' + r.G.chips.length + ' · 补给站 ' + r.G.shopVisits + ' 次');
   for (const e of r.errors) log('错误: ' + e);
   for (const tr of r.trace) log('证据: ' + tr);
+  check(r.outcome === 'victory' || r.outcome === 'defeat', '英雄 ' + hero + ' 运行故障: ' + r.outcome);
   check(s.boundsViolations === 0 && s.wallClipViolations === 0 && s.nanViolations === 0, '英雄 ' + hero + ' 存在越界/嵌墙/NaN');
   console.log('');
 }
-{
-  const wins = heroRuns.filter(h => h.r.ok).length;
-  const atBoss = heroRuns.filter(h => h.r.stats.bossPhasesSeen.length > 0).length;
-  check(wins + atBoss >= 3, '三英雄无一到达 Boss（构筑/推进异常）');
-  check(wins >= 1, '三英雄 0 局 VICTORY（难度超出人类标尺标定）');
+// 正常数值的固定通关见证；全英雄平衡由 hero-balance 的独立 batch 验收。
+for (const [hero,seed] of [['prototype',1979]]) {
+  console.log('【流程可达性】'+hero+' · seed '+seed+' · 完美 bot（正常输入，无数值注入）');
+  const r = simulateRun(seed, { hero, perfectBot: true });
+  log('结果: ' + r.outcome + ' · 用时 ' + r.victoryAt.toFixed(1) + 's · 补给站 ' + r.G.shopVisits + ' 次');
+  check(r.ok, '当前小怪/Boss 数值下完整流程不可达: ' + r.errors.join(' / '));
+  check(r.stats.boundsViolations === 0 && r.stats.wallClipViolations === 0 && r.stats.nanViolations === 0, '流程存在越界/嵌墙/NaN');
+  check(r.stats.bossPhasesSeen.join(',') === '1,2,3,1,2,3', '双 Boss 三阶段流程不完整');
+  check(r.G.shopVisits === CORE.ZONES.length, '区域补给站流程不完整');
+  check(r.G.kills >= 10, '击杀数异常偏低: ' + r.G.kills);
+  check(r.G.coinsCollected > 0, '金币经济未生效');
+  check(Object.keys(r.G.bossDown).length === 2, '双 Boss 击破记录不完整');
+  console.log('');
 }
 
 /* --- 1c. 每日挑战：固定种子 + 修改器钩路回归 --- */
@@ -83,7 +78,7 @@ console.log('【每日挑战】seed = 20261006 · 通货紧缩 + 金币雨 · 60
     mods: [CORE.DAILY_MODIFIERS[0], CORE.DAILY_MODIFIERS[1]] };
   const seenKinds = new Set();
   const r = simulateRun(daily.seed, {
-    quiet: true, maxSeconds: 60, daily,
+    quiet: true, maxSeconds: 60, daily, perfectBot: true,
     onFrame: (g) => { for (const p of g.pickups) seenKinds.add(p.kind); },
   });
   log('结果: 击杀 ' + r.G.kills + ' · 拾取金币 ' + r.G.coinsCollected + ' · 出现过的掉落 ' + ([...seenKinds].join('/') || '无'));
@@ -181,14 +176,17 @@ console.log('【双 Boss 区分】boss2 专属攻击回归');
 
 /* --- 4 & 5. 回归场景（用例即模块：test/cases/regression.js，顺序调用） --- */
 for (const caseFn of require('./cases/regression.js')) caseFn(LIB);
+console.log('【机制契约】真实开火/承伤/Boss 攻击效果/商店/跨局重置');
+require('./mechanics.test.js').runMechanics();
 
 console.log('========================================');
 if (failureCount() === 0) {
-  console.log(' ✓ 全部自检通过 — 硬性验收标准满足（v1.9 聚合语义）');
+  console.log(' ✓ 全部自检通过 — 真实数值流程与逐帧不变量满足');
   console.log('   [1] 战斗高压主循环无卡死、无未捕获异常');
   console.log('   [2] 敌军受击击退不穿墙、不越界（逐帧断言）');
   console.log('   [3] Boss 三阶段血量阈值精确、无死锁');
-  console.log('   [4] 多局聚合 VICTORY ≥ 1（Boss 难度按 M3 人类标尺标定至单局 ~30%）');
+  console.log('   [4] 当前难度完整流程 VICTORY（完美 bot）；人类化阵亡允许，超时/异常硬失败');
+  console.log('   难度另验：node test/enemy-balance.js --verify（每房 M3 batch <37%）');
 } else {
   console.log(' ✗ 自检未通过，失败断言 ' + failureCount() + ' 项');
 }

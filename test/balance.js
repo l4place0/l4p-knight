@@ -17,6 +17,7 @@ const path = require('path');
 const os = require('os');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
 const fs = require('fs');
+const {spatialViolations}=require('./invariants.js');
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -27,7 +28,7 @@ const DT = 1 / 60;
 const BOSS_CAP = 150;          // 与 matrix 一致：Boss 战游戏秒硬上限
 const STALL_SECONDS = 20;
 
-function buildScenarios(bossId, size) {
+function buildScenarios(bossId, size, seedStart = 1) {
   const zone = bossId === 'boss2' ? 4 : 3;
   // 区域构筑：模拟玩家打到该深度时的期望成长（与 matrix.js 同表）
   const BUILDS = {
@@ -37,7 +38,7 @@ function buildScenarios(bossId, size) {
   const build = BUILDS[zone];
   const specs = [];
   const nSeeds = Math.ceil(size / HEROES.length);
-  for (let s = 1; s <= nSeeds; s++) {
+  for (let s = seedStart; s < seedStart + nSeeds; s++) {
     for (const hero of HEROES) {
       if (specs.length >= size) break;
       specs.push({ bossId, zone, hero, seed: s, build });
@@ -75,18 +76,12 @@ function runScenario(spec) {
   let hpStart = G.player.hp + G.player.shield;
 
   for (frames = 0; frames < maxFrames; frames++) {
-    bot.update(G, DT, G.input);
-    try { G.update(DT); } catch (e) { return { outcome: 'error', seconds: +(frames * DT).toFixed(1), reason: String(e.message) }; }
+    try { bot.update(G, DT, G.input); G.update(DT); } catch (e) { return { outcome: 'error', hero:spec.hero, seed:spec.seed, seconds: +(frames * DT).toFixed(1), reason: String(e.message) }; }
     const t = frames * DT;
     if (G.bossDown[spec.zone - 1]) { outcome = 'bossDown'; break; }
     if (G.state === 'defeat') { outcome = 'defeat'; break; }
-    // 不变量（与 matrix 同源）：坐标有限 / 不越界 / 敌人不嵌墙
-    const mw = G.mw * 16, mh = G.mh * 16;
-    let bad = null;
-    for (const e of [G.player].concat(G.enemies)) {
-      if (!isFinite(e.x) || !isFinite(e.y)) { bad = 'nan'; break; }
-      if (e.x < -2 || e.x > mw + 2 || e.y < -2 || e.y > mh + 2) { bad = 'bounds:' + e.type; break; }
-    }
+    // 与其他 batch 同用独立地图断言，包含玩家和敌人的嵌墙。
+    const bad = spatialViolations(G)[0];
     if (bad) { outcome = 'violation'; break; }
     // 停滞探测：场上仍有敌军而血量/击杀 20 秒无变化
     if (frames % 60 === 59) {
@@ -112,8 +107,8 @@ function workerMain() {
 }
 
 /* ---------------- batch（1 batch = size 个场景，worker 并行） ---------------- */
-async function runBatch(bossId, tuning, size, workers, playerDmg, genes, fresh) {
-  const specs = buildScenarios(bossId, size);
+async function runBatch(bossId, tuning, size, workers, playerDmg, genes, fresh, seedStart = 1) {
+  const specs = buildScenarios(bossId, size, seedStart);
   const nWorkers = Math.min(workers, specs.length);
   const chunks = [];
   for (let i = 0; i < nWorkers; i++) chunks.push(specs.filter((_, j) => j % nWorkers === i));
@@ -129,7 +124,7 @@ async function runBatch(bossId, tuning, size, workers, playerDmg, genes, fresh) 
 function summarize(results) {
   const n = results.length;
   const count = (o) => results.filter(r => r.outcome === o).length;
-  const passRate = Math.round(count('bossDown') / n * 100);
+  const passRate = +(count('bossDown') / n * 100).toFixed(2);
   const perHero = {};
   for (const h of HEROES) {
     const rs = results.filter(r => r.hero === h);
@@ -156,6 +151,9 @@ function parseKV(s) {
   }
   return o;
 }
+function qualified(s,target=37) {
+  return s.n>0&&s.bossDown+s.defeat===s.n&&s.passRate>0&&s.passRate<target;
+}
 
 async function main() {
   const args = process.argv.slice(2);
@@ -169,6 +167,8 @@ async function main() {
   const tuning = has('--try') ? parseKV(get('--try', '')) : null;
   const genes = has('--human') ? parseKV(get('--human', '')) : null;   // 人类化基因（标尺校准）
   const fresh = has('--fresh');   // 全流程语境开关（默认预扣生命模拟前区消耗）
+  const seedStart=Number(get('--seed-start',1));
+  if(!Number.isSafeInteger(seedStart)||seedStart<1)throw new Error('--seed-start 必须是正整数');
   const auto = has('--auto');
   const label = (t, g) => (t ? Object.entries(t).map(([k, v]) => k + '=' + v).join(',') : 'baseline(当前数值)') +
     (g ? ' · human ' + Object.entries(g).map(([k, v]) => k + '=' + v).join(',') : '');
@@ -206,20 +206,23 @@ async function main() {
   }
 
   console.log('【' + bossId + ' 难度标定】配置: ' + label(cfg, genes) + ' · playerDmg=' + playerDmg + ' · 1 batch = ' + size + ' 场景 × ' + workers + ' workers');
-  const final = await runBatch(bossId, cfg, size, workers, playerDmg, genes, fresh);
+  const final = await runBatch(bossId, cfg, size, workers, playerDmg, genes, fresh, seedStart);
   const s = summarize(final);
   console.log('通过率: ' + s.passRate + '%（目标 < ' + target + '%）');
   console.log('明细: 击破 ' + s.bossDown + ' · 阵亡 ' + s.defeat + ' · 超时 ' + s.timeout + ' · 停滞 ' + s.stall +
     ' · 违规 ' + s.violation + ' · 异常 ' + s.error + ' · 均损血 ' + s.avgHpLost + ' · 受击伤均/p90/max ' + s.avgDmg + '/' + s.p90Dmg + '/' + s.maxDmg + ' · 均耗时 ' + s.avgSecs + 's');
   console.log('分英雄: ' + Object.entries(s.perHero).map(([h, p]) => h + ' ' + p).join(' · '));
   console.log(s.passRate < target ? '✔ 达标：通过率 < ' + target + '%' : '✘ 未达标：通过率 ≥ ' + target + '%');
-  if (has('--json')) {
+  if (has('--json') || has('--out')) {
     const dir = path.join(ROOT, 'test', 'mutation-results');
     fs.mkdirSync(dir, { recursive: true });
-    const f = path.join(dir, 'balance-' + bossId + '-' + Date.now() + '.json');
-    fs.writeFileSync(f, JSON.stringify({ bossId, tuning: cfg, playerDmg, summary: s, results: final }, null, 2));
+    const f = has('--out') ? path.resolve(ROOT,get('--out')) : path.join(dir, 'balance-' + bossId + '-' + Date.now() + '.json');
+    fs.mkdirSync(path.dirname(f),{recursive:true});
+    fs.writeFileSync(f, JSON.stringify({ bossId, tuning: cfg, genes, fresh, seedStart, playerDmg, summary: s, results: final }, null, 2));
     console.log('结果: ' + f);
   }
+  if(has('--verify')&&!qualified(s,target))process.exitCode=1;
 }
 
-if (!isMainThread) { workerMain(); } else { main(); }
+if (!isMainThread) { workerMain(); } else if(require.main===module) { main().catch(e=>{console.error(e.stack);process.exitCode=1;}); }
+module.exports={buildScenarios,summarize,runBatch,qualified};

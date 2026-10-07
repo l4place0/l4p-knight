@@ -153,6 +153,11 @@ function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Mat
 // 前置条件：已跟踪文件必须干净（未跟踪文件不参与变异与恢复，不影响精确恢复现场）
 const pre = require('child_process').execSync('git status --porcelain --untracked-files=no', { cwd: ROOT, encoding: 'utf8' });
 if (pre.trim()) { console.error('拒绝运行：工作树不干净（变异测试需要精确恢复现场）\n' + pre); process.exit(2); }
+// 必须先证明未变异基线是绿的，否则会把既有失败误算为变异被检出。
+for(const entry of ['test/abl/run.js','test/sim.test.js']) {
+  const baseline=spawnSync(process.execPath,[entry],{cwd:ROOT,timeout:300000,encoding:'utf8',env:{...process.env,SEEDS:'1'}});
+  if(baseline.status!==0){console.error('拒绝运行：未变异基线失败 '+entry+'\n'+baseline.stdout+'\n'+baseline.stderr);process.exit(2);}
+}
 
 // 采集候选点
 const allSites = [];

@@ -1,6 +1,6 @@
 # HANDOFF · 零号协议 ZERO PROTOCOL 开发交接文档
 
-> 交接日期：2026-10-07 · 交接版本：v1.9（基于 v1.8，Boss 难度重标定 + 测试标尺语义升级）
+> 交接日期：2026-10-08 · 交接版本：v1.11（小怪同步、英雄／武器平衡、机制契约与变异验证）
 > 项目来源：`ai-benchmark/glm-5,3-flash/zcode/My Soul Knight/shot01`（已完整复制至本目录，逐文件 diff 校验一致）
 > 本文目标：让任何开发者（人或 AI）在不询问原作者的情况下继续开发。
 
@@ -23,12 +23,20 @@
 > **任何代码改动，必须在改动后保持 `node test/sim.test.js` 全绿。**
 
 这不是普通测试，而是本项目的核心验收机制：无头仿真以**真实物理与碰撞**运行游戏本体（零 mock），
-由内置 AI 代打从第 1 区打到击败最终 Boss 触发 VICTORY，并逐帧断言：
+人类化完整局允许阵亡，运行故障必须失败；用实际当前数值的完美 bot 验证从第 1 区
+打到最终 Boss 的 VICTORY（prototype/seed=1979，无火力、不死或跳关注入），并逐帧断言：
 
 1. 主循环高压下不卡死、无未捕获异常（含 30 敌 + 260 弹压力场景、7200 游戏秒稳定性）
-2. 敌军受击击退不穿墙、不越界（逐帧四角采样断言）
+2. 玩家／敌军不穿墙、不越界（独立读取地图定义，不复用被测碰撞助手）
 3. Boss 三阶段血量阈值精确（2/3、1/3）、转阶段无死锁
-4. VICTORY 可触发；另含全英雄通关与"隔墙锁定回归"场景
+4. VICTORY 可触发；另含全英雄不变量与"隔墙锁定回归"场景
+
+**难度独立验收**：`node test/enemy-balance.js --verify`，每个普通房 1 batch=100（4 英雄×25 种子），
+M3 标尺与 Boss 标定一致，满生命/护盾 + 区域期望构筑。单房通过率须 >0 且 <37%，任何超时、停滞、
+异常、坐标违规均失败。种子 1–25 的 7 房通过率为 28/22/30/3/10/30/23%，种子 10001–10025 为 15/10/21/12/23/26/16%。
+`npm run balance:heroes` 另要求每英雄跨七房通过率 ≥10% 且 <37%，两批各自英雄差距 ≤15 个百分点。
+这不是每房每英雄的单独上限，也不等于真人／整局胜率。五种远程主武器必须有真实清房，
+相位刃保留弹反副手定位。完整说明见 [v1.11 标定报告](docs/balance/hero-difficulty-v1.11.md)。
 
 历史上 8 个严重 bug 全部由该机制或其配套诊断脚本抓出（详见 README 评测章节）。
 **如果你改了游戏逻辑而测试没跑，等于没改。**
@@ -44,6 +52,12 @@ node test/matrix.js --run z4b/stalker         # 只跑匹配前缀的场景
 node test/matrix.js --seeds 1-5 --save-baseline test/matrix.baseline.json  # 存基线（p50/p95）
 node test/matrix.js --seeds 1-5 --baseline test/matrix.baseline.json       # 与基线对比劣化
 node test/balance.js --boss boss --baseline   # Boss 难度标定：1 batch=100 场景通过率（--try/--auto/--human/--fresh）
+node test/enemy-balance.js --verify          # 每房 M3 batch 难度硬验收
+node test/enemy-balance.js --seed-start 10001 --verify # 留出种子验证
+node test/hero-balance.js                    # 两批英雄平衡 + 六武器对照
+node test/mechanics.test.js                  # 12 组机制契约
+node test/mechanics-mutation.js              # 44 个定向变异必须检出
+node test/enemy-balance.test.js              # 真实危险源、Boss 隔离及故障负向验证
 node test/diag.js <seed>       # 卡点诊断：逐秒打印玩家/敌人/输入微观状态
 node test/serve.js 8941        # 本地服务器 → http://127.0.0.1:8941/
 node test/structure.check.js   # 结构守护：脚本编排顺序/模块导出面/逐文件语法（patch 后必做）
@@ -58,12 +72,18 @@ node --check js/<file>.js      # 语法检查（patch 后必做）
 `replayUrl`（浏览器定向回放，URL 即场景编码：`?seed&hero&bot&autostart&zone&room|boss&chips&power&shield`）
 与 `rerun` 命令。回放纪律：**每次回放用新建标签页**，不要按 URL 模式匹配旧标签（会绑到陈旧状态）。
 
+矩阵仍将任意阵亡计为失败，因此高难度版本可能返回 1；它用于诊断与耗时基线，不作为难度达标门。
+不要为追求矩阵全绿而降低已标定难度，难度门使用 enemy-balance.js --verify。
+
 直接双击 `index.html` 也能玩（file:// 可用，无 fetch/模块依赖）。
 
 调试 URL 参数：`?seed=1` `?bot=1`（AI 代打） `?autostart=1` `?daily=1`（每日挑战：强制 seed=YYYYMMDD +
 当日修改器 + 结算计入本地排行） `?zone=2&room=1` `?boss=1`
 `?dmg=8` `?bosshp=210`（数值调试）`?fps=1`。页面暴露 `window.__advance(frames)` / `window.__draw()`
 （无头推进 + 重绘，供自动化截图与 QA）。
+`test/browser-smoke.html` 可在浏览器内搜索正常数值的通关种子并回放真实游戏界面。
+v1.11 固定帧浏览器见证为 prototype/seed=1131（367.1 秒）；实时 seed=1979 则阵亡，
+与 Node 结果有差异，详见标定报告，不能将固定帧结果视为实时胜率。
 
 ## 4. 架构与文件地图
 
@@ -124,6 +144,7 @@ test/serve.js       静态服务器
 | 刷怪点 | `computeReachable` / `farSpot` | 只用玩家出生瓦片 BFS 可达点，杜绝封闭凹室死局 |
 | Boss 定义 | core.js `ENEMY_DEFS.boss / .boss2` | `isBoss` 走 Boss 状态机；`phases` 三阶段名/色；`pools` 各阶段攻击池；`final` 标记最终首领（击破 → VICTORY），非 final 击破 → 传送门进下一区 |
 | Boss 难度 | bosses.js `BOSS_DIFF` + core.js hp/speed | v1.9 重标定：M3 人类化标尺（bot 基因 commit30/trackK3/sight100/delay10/dashSkip0.6）下单 Boss 通过率 <37%（boss1 29%/boss2 30%，全流程语境）；`G.bossTuning` 为实验叠加钩（balance.js --try 注入）；数值变动须重跑 test/balance.js 标定 |
+| 小怪难度 | core.js `ENEMY_DIFF` + enemies.js | v1.11：既有区域成长上 HP×3（第 4 区 ×3.2）/speed×1.8/冷却消耗×4.5/弹速×2.4/密度×3/伤害×4；`G.enemyTuning` 覆盖字段用于实验。Boss 房与召唤物排除，预警时间和波次预算保留；改后跑每房 batch 与留出验证 |
 | Boss 死亡 | `bossDying` / `updateBoss` | Boss 死后**滞留** enemies 列表走 dying 演出，完成后置 `dead` 并写 `G.bossDown[zoneIdx]`；提前移除会死锁（历史 bug #2） |
 | 房间流程 | `updateWaves` → `offerChips` → `chooseChip` → 区域末尾 `openShop` → `shopLeave` → `openPortal` → `nextLevel` | `nextLevel`：房内推进 → 区域末尾有 `bossId` 且未击破 → 首领房；首领房传送门 → 下一区。`chipOffered` 一次性标志防重复触发 |
 | 引力井 | game/systems.js `G.wells`·`updateWells`（布设于 game/bosses.js） | Boss2 专属：范围内拉扯玩家（冲刺 `dashT > 0` 时免疫拉扯），到期内爆 `explode`；bot 在 `computeDanger` 规避 |
@@ -162,7 +183,7 @@ test/serve.js       静态服务器
 
 ### 加英雄
 `core.js` HEROES 加条目即可 —— 标题英雄卡由 `main.js buildHeroCards` 自动生成；
-并在 sim.test.js 的英雄仿真循环里加 id（验收要求全英雄可通关）。
+并在 sim.test.js 的英雄仿真循环里加 id（逐帧不变量与正常胜负结局）；难度 batch 按 HEROES 自动枚举。
 元进度锁定的英雄（如 `prototype`）：锁只是 main.js 的 UI 门控（`unlocks()` 读 `zp_records.clears`），
 无头仿真与 URL `?hero=` 回放不受影响；**新英雄会扩大矩阵模板面**（模板按 `Object.keys(HEROES)` 枚举），
 合入后须 `--save-baseline` 重建基线。
@@ -187,9 +208,14 @@ debugClear 清场、debugSpawn 摆怪、限时断言）。诊断卡点用 `test/
 1. **bot 单帧峰值有 JIT 预热尖峰**（首次 BFS/大量分配）：无害（远低于 3s 熔断），
    若扩展弹幕规模建议做对象池。
 2. **纪录仅存 localStorage**：file:// 与 http 的存储隔离，无跨设备。
-3. **bot 高压下仍可能掉血但能通关**：英雄平衡改动后务必重跑全英雄仿真。
+3. **高难度完整局常提前阵亡**：单房 <37% 不保证完整局高胜率；当前全流程胜利证据来自原型机完美 bot，
+   英雄平衡改动后重跑全英雄分房统计与流程样本。
 4. **z2a 地图有 32 格封闭内室**（装饰性，BFS 可达刷怪已规避死局，纯浪费空间）；如改造需重验第 2 区平衡。
 5. **引力井仅拉扯玩家**：如需拉扯敌军，注意与击退衰减、`resolveOutOfWall` 的交互并重跑嵌墙回归。
+6. **人类化 bot 传送门导航停滞**：已记录于 [issue](docs/issue/seed3-portal-navigation-stall.md)，按操作者要求延期修复；
+   `test/diag.portal.js` 从 `458bd1a` 加载历史源码，以保持旧场景可复现。仿真提供结构化 outcome，超时/异常会使验收失败。
+7. **z4b 完美 bot 战斗停滞**：原 seed=21 在 v1.11 可清房，但 seed=9/stalker 与 seed=43/prototype
+   仍出现停滞，见 [issue](docs/issue/z4b-perfect-bot-stall.md)。尚未定位根因，不宣称已修复。
 
 ## 7. 建议开发路线图（按优先级）
 
@@ -207,15 +233,14 @@ debugClear 清场、debugSpawn 摆怪、限时断言）。诊断卡点用 `test/
 - [ ] `node --check js/*.js js/game/*.js` 全部通过
 - [ ] `node test/structure.check.js` 通过（脚本编排顺序 / 模块导出面 / 语法）
 - [ ] `node test/sim.test.js` 全绿（全部种子 + 全英雄 + 压力/稳定性/隔墙回归）
+- [ ] 小怪数值改动：`node test/enemy-balance.test.js` 与 `node test/enemy-balance.js --verify` 通过；留出种子也验一次
+- [ ] 英雄／武器改动：`npm run balance:heroes`、机制契约及定向变异通过；若影响 Boss，按原 M3 口径重验两位 Boss
 - [ ] 浏览器冒烟：标题 → 开一局 → 见到 Boss → VICTORY，控制台零报错
 - [ ] 若改了玩法/内容：更新 README 的内容清单与自检结果数字
 - [ ] 若发现新 bug：先写复现测试（diag.js 或 sim.test.js 场景），修复后保留为回归
 - [ ] 逻辑层改动若涉及时序/RNG 顺序：跑逐帧状态哈希黄金对比（对照 `git show HEAD:js/game.js`）
 - [ ] （可选门）`node test/mutation.js --count 30 --strict`：随机变异杀率达标且逻辑层无幸存者——
-      当前杀率 ~40% 未达标（盲区图谱见 .agents/notes/2026-10-07-line-ablation-experiment.md），
-      补测落地后再把此门转为必选
+      v1.11 已补主要机制盲区，44 个定向变异全检出；随机样本杀率另记于 v1.11 报告，
+      仍有表现层与参数盲区，尚未升级为全仓库必选门
 
 ---
-
-*本目录由评测工作目录完整复制而来，可与原目录独立演进。原目录保留于
-`ai-benchmark/glm-5,3-flash/zcode/My Soul Knight/shot01`（含当时的评测记录）。*

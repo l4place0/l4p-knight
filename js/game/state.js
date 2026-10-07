@@ -141,6 +141,7 @@ PARTS.state = function (ctx) {
     b.r = o.r || 2.5; b.dmg = dmg; b.friendly = friendly; b.color = o.color || '#ffffff';
     b.knock = o.knock || 0; b.pierce = o.pierce || 0; b.bounces = o.bounces || 0;
     b.life = o.life || 3; b.t = 0; b.hitIds = o.hitIds || null; b.bounced = false;
+    b.kind = o.kind || null;
     b.core = o.core || '#ffffff'; b.glow = o.glow !== false;
   }
   function initParticle(p, x, y, vx, vy, life, color, size, drag, grav) {

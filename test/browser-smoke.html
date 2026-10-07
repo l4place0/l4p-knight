@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><title>浏览器固定帧回归</title>
+<style>body{margin:20px;background:#111;color:#eee;font:16px system-ui}button,input{font:inherit;padding:8px;margin:5px}iframe{width:980px;height:580px;border:1px solid #666}pre{white-space:pre-wrap}</style>
+<h1>浏览器固定帧回归</h1>
+<p>运行相同的游戏代码和正常 AI 输入。固定帧快进，不注入生命、火力、构筑或跳关。此页仅供 QA。</p>
+<label>搜索最大种子 <input id="limit" type="number" value="3000" min="1" max="10000"></label>
+<button id="search">寻找浏览器通关见证</button>
+<button id="replay" disabled>回放见证并快进</button>
+<pre id="status">待开始</pre>
+<iframe id="app" src="../index.html?hero=prototype&amp;seed=1979&amp;bot=1" title="实际游戏界面"></iframe>
+<script>
+'use strict';
+const app=document.getElementById('app'),status=document.getElementById('status');let witness=null;
+document.getElementById('search').onclick=async()=>{
+  const w=app.contentWindow,limit=Number(document.getElementById('limit').value);
+  for(let seed=1;seed<=limit;seed++) {
+    const G=w.ZERO_GAME.createGame({seed,headless:true}),bot=w.ZERO_BOT.createBot(seed);G.startRun('prototype');
+    for(let frame=0;frame<660*60;frame++) {
+      bot.update(G,1/60,G.input);G.update(1/60);
+      if(G.state==='victory'||G.state==='defeat')break;
+    }
+    if(G.state==='victory') {witness=seed;status.textContent=JSON.stringify({seed,state:G.state,runTime:G.runTime,kills:G.kills,hits:G.damageTaken,shops:G.shopVisits});document.getElementById('replay').disabled=false;return;}
+    if(seed%50===0){status.textContent='已检查 '+seed+' 个种子';await new Promise(resolve=>setTimeout(resolve,0));}
+  }
+  status.textContent='本次样本未找到胜局';
+};
+document.getElementById('replay').onclick=async()=>{
+  const loaded=new Promise(resolve=>app.onload=resolve);
+  app.src='../index.html?hero=prototype&seed='+witness+'&bot=1';await loaded;
+  const w=app.contentWindow;w.document.getElementById('btnBot').click();
+  for(let frames=0;frames<660*60;frames+=60) {
+    w.__advance(60);w.__draw();
+    if(w.G.state==='victory'||w.G.state==='defeat')break;
+    if(frames%600===0)await new Promise(resolve=>setTimeout(resolve,0));
+  }
+  w.__draw();status.textContent=JSON.stringify({seed:witness,state:w.G.state,runTime:w.G.runTime,kills:w.G.kills,hits:w.G.damageTaken,shops:w.G.shopVisits,mode:'actual app fixed-frame replay'});
+};
+</script></html>

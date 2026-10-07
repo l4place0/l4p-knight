@@ -26,6 +26,7 @@ require('../js/core.js');
 const CORE = require('../js/core.js');
 const GAME = require('../js/game.js');
 const BOT = require('../js/bot.js');
+const { spatialViolations } = require('./invariants.js');
 
 const DT = 1 / 60;
 const STALL_SECONDS = 20;        // 敌方血量/玩家HP/击杀数持续无变化判定为停滞
@@ -97,21 +98,9 @@ function replayUrl(spec, base, dmg) {
 
 /* ---------------- 单场景执行（主线程与 worker 共用） ---------------- */
 function checkInvariants(G) {
-  const mw = G.mw * 16, mh = G.mh * 16;
-  for (const e of [G.player].concat(G.enemies)) {
-    if (!isFinite(e.x) || !isFinite(e.y)) return { kind: 'nan', entity: e.type, x: e.x, y: e.y };
-    if (e.x < -2 || e.x > mw + 2 || e.y < -2 || e.y > mh + 2) {
-      return { kind: 'bounds', entity: e.type, x: +e.x.toFixed(1), y: +e.y.toFixed(1) };
-    }
-  }
-  for (const e of G.enemies) {
-    const r = e.r - 1;
-    if (G.solidAtPx(e.x - r, e.y - r) || G.solidAtPx(e.x + r, e.y - r) ||
-        G.solidAtPx(e.x - r, e.y + r) || G.solidAtPx(e.x + r, e.y + r)) {
-      return { kind: 'wallClip', entity: e.type, x: +e.x.toFixed(1), y: +e.y.toFixed(1) };
-    }
-  }
-  return null;
+  const issue=spatialViolations(G)[0];
+  if(!issue)return null;
+  const [kind,entity]=issue.split(':');return {kind,entity};
 }
 
 function runScenario(spec, opts) {
@@ -190,7 +179,7 @@ function runScenario(spec, opts) {
   if (!ok) {
     r.trace = trace;
     r.replayUrl = replayUrl(spec, opts.url, opts.dmg);
-    r.rerun = `node test/matrix.js --run ${spec.id}` + (opts.dmg ? ` --dmg ${opts.dmg}` : '');
+    r.rerun = `node test/matrix.js --seeds ${spec.seed} --run ${spec.id}` + (opts.dmg ? ` --dmg ${opts.dmg}` : '');
   }
   return r;
 }

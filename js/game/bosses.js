@@ -17,11 +17,11 @@ PARTS.bosses = function (ctx) {
 
   /* Boss 难度表（test/balance.js · M3 标尺 commit30/trackK3/sight100/delay10/dashSkip0.6 标定，
    * 全流程语境=预扣生命；两 Boss 均通过率 < 37%）：
-   * boss1 29%（HP×3.213/speed×3.595 烘进 core.js）· boss2 30%（HP×4.45/speed×3.32 烘进 core.js）。
+   * v1.11 修正武器/护盾结算后重标：boss1 25% · boss2 30%。HP/弹速/单发伤害保留。
    * G.bossTuning（实验注入钩）与之相乘。 */
   const BOSS_DIFF = {
-    boss: { aggression: 1.798, bulletMul: 2.637, densityMul: 2.194, dmgMul: 4.068 },
-    boss2: { aggression: 2.456, bulletMul: 3.869, densityMul: 2.947, dmgMul: 6.14 },
+    boss: { aggression: 2.3374, bulletMul: 2.637, densityMul: 3.291, dmgMul: 4.068 },
+    boss2: { aggression: 4.912, bulletMul: 3.869, densityMul: 7.3675, dmgMul: 6.14 },
   };
 
   function diffOf(e) { return BOSS_DIFF[e.type] || {}; }

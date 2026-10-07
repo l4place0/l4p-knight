@@ -67,6 +67,7 @@ PARTS.rooms = function (ctx) {
       Array.from({ length: budget - w1 }, () => pickType(zone.weights)),
     ];
     G.wavIdx = -1; G.pendSpawns = []; G.waveDelay = 1.0;
+    G.spawnT = 0;
     ctx.banner(zone.name, '区域 ' + (G.roomIdx + 1) + ' / ' + zone.maps.length, zone.accent, 2.2);
     G.roomLabel = '区域 ' + (G.roomIdx + 1) + '/' + zone.maps.length;
     // 晶片箱（第 2 区起 60% 概率）
@@ -318,12 +319,18 @@ PARTS.rooms = function (ctx) {
     const P = G.player;
     P.hp = 6; P.maxHp = 6; P.shield = 3; P.maxShield = 3; P.shieldT = 0;
     P.iframes = 0; P.dashCd = 0; P.dashT = 0; P.undyingUsed = false;
+    P.vx = 0; P.vy = 0; P.kx = 0; P.ky = 0; P.dashA = 0; P.aimA = 0;
+    P.fireT = 0; P.chargeT = 0; P.meleeCd = 0; P.slashT = 0; P.slashA = 0;
+    P.bob = 0; P.recoil = 0; P.muzzleT = 0;
+    Object.assign(G.input, { aimA: null, moveX: 0, moveY: 0, fire: false, dash: false, melee: false, interact: false, slot: -1 });
     G.zoneIdx = 0; G.roomIdx = 0; G.isBossRoom = false; G.bossDown = {};
     G.score = 0; G.kills = 0; G.damageTaken = 0; G.combo = 0; G.maxCombo = 0;
     G.runTime = 0; G.timeScale = 1; G.hitstop = 0;
     G.vengeanceT = 0; G.killSpeedT = 0; G.bossRef = null;
     G.endScreen = null; G.chipOffer = null; G.toasts = []; G.banner = null;
+    G.deathLog = ''; G.prompt = null;
     G.computeStats();
+    P.hp = P.maxHp; P.shield = P.maxShield;
     G.loadRoom();
     G.state = 'playing';
   };

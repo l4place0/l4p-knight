@@ -9,7 +9,7 @@ const PARTS = root.ZERO_GAME_PARTS = root.ZERO_GAME_PARTS || {};
 
 PARTS.systems = function (ctx) {
   const C = ctx.C;
-  const { TAU, clamp, lerp, dist, angDiff, TILE } = C;
+  const { TAU, clamp, lerp, dist, angDiff, TILE, WEAPONS } = C;
   const G = ctx.G;
   const rng = ctx.rng;
 
@@ -107,7 +107,7 @@ PARTS.systems = function (ctx) {
 
   /* ---------------- 子弹 / 地雷 / 激光 ---------------- */
   function grenadeBoom(b) {
-    explode(b.x, b.y, 36, 10 * G.stats.dmg * ctx.comboMul() * ctx.echoMul(), true, '#ff8a3d');
+    explode(b.x, b.y, 36, WEAPONS.grenade.blastDmg * G.stats.dmg * ctx.comboMul() * ctx.echoMul(), true, '#ff8a3d');
   }
   function updateBullets(dt) {
     const P = G.player, s = G.stats;

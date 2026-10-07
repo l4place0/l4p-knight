@@ -103,6 +103,9 @@ PARTS.enemies = function (ctx) {
   function spawnEnemy(type, x, y) {
     const d = ENEMY_DEFS[type];
     const z = G.zoneIdx;
+    const tuned = !d.isBoss && !G.isBossRoom;
+    const diff = Object.assign({ hpMul: 1, speedMul: 1, aggression: 1, bulletMul: 1, densityMul: 1, dmgMul: 1 },
+      tuned ? C.ENEMY_DIFF[z + 1] : null, tuned ? G.enemyTuning : null);
     const e = {
       id: ++G.eid, type, x, y, vx: 0, vy: 0, kx: 0, ky: 0,
       r: d.r, mass: d.mass, speed: d.speed * (1 + 0.06 * z),
@@ -113,7 +116,10 @@ PARTS.enemies = function (ctx) {
       burst: 0, burstT: 0, pat: null, strafe: rng.chance(0.5) ? 1 : -1,
       strafeT: rng.range(1, 2), facing: Math.PI / 2, broken: 0, staggerT: 0,
       dashA: 0, locked: false,
+      diff,
     };
+    e.hp *= diff.hpMul; e.maxHp *= diff.hpMul;
+    e.speed *= diff.speedMul; e.contact *= diff.dmgMul;
     // 精英词条（第 2 区起概率出现，越深入越高；每日「精英横行」约 3 倍）
     if (G.zoneIdx >= 1) {
       const eliteBase = G.zoneIdx >= 2 ? 0.22 : 0.15;
@@ -129,6 +135,10 @@ PARTS.enemies = function (ctx) {
     return e;
   }
 
+  function enemyBullet(e, x, y, angle, speed, damage, opts) {
+    return ctx.spawnBullet(x, y, angle, speed * e.diff.bulletMul, damage * e.diff.dmgMul, false, opts);
+  }
+
   function updateEnemy(e, dt) {
     e.flash = Math.max(0, e.flash - dt * 6);
     e.hitCd -= dt;
@@ -138,7 +148,7 @@ PARTS.enemies = function (ctx) {
     const P = G.player;
     const d = dist(e.x, e.y, P.x, P.y);
     const aTo = Math.atan2(P.y - e.y, P.x - e.x);
-    e.t += dt; e.cd -= dt;
+    e.t += dt; e.cd -= dt * e.diff.aggression;
     e.strafeT -= dt;
     if (e.strafeT <= 0) { e.strafeT = rng.range(1.2, 2.2); if (rng.chance(0.5)) e.strafe = -e.strafe; }
 
@@ -152,7 +162,7 @@ PARTS.enemies = function (ctx) {
         if (e.t < 0.38) { e.dashA = aTo; e.facing = aTo; }
         if (e.t > 0.55) { e.state = 'dash'; e.t = 0; G.sfx('enemyDash'); }
       } else if (e.state === 'dash') {
-        e.vx = Math.cos(e.dashA) * 255; e.vy = Math.sin(e.dashA) * 255;
+        e.vx = Math.cos(e.dashA) * 255 * e.diff.speedMul; e.vy = Math.sin(e.dashA) * 255 * e.diff.speedMul;
         ctx.addParts(e.x, e.y, 1, '#6a6a76', { spd: 20, life: 0.3 });
         if (e.t > 0.42) { e.state = 'rest'; e.t = 0; }
       } else if (e.state === 'stun') {
@@ -171,25 +181,25 @@ PARTS.enemies = function (ctx) {
       e.vx = Math.cos(ma) * e.speed; e.vy = Math.sin(ma) * e.speed;
       e.facing = aTo;
       if (e.burst > 0) {
-        e.burstT -= dt;
+        e.burstT -= dt * e.diff.aggression;
         if (e.burstT <= 0) {
           e.burstT = 0.13; e.burst--;
           const spread = 0.07;
           const a = aTo + rng.range(-spread, spread);
-          ctx.spawnBullet(e.x + Math.cos(a) * 8, e.y + Math.sin(a) * 8, a, 145 + G.zoneIdx * 12, 1, false,
+          enemyBullet(e, e.x + Math.cos(a) * 8, e.y + Math.sin(a) * 8, a, 145 + G.zoneIdx * 12, 1,
             { color: '#ff4757', core: '#ffd9dd', r: 3, life: 5 });
           G.sfx('enemyShoot');
         }
       } else if (e.cd <= 0 && G.losClear(e.x, e.y, P.x, P.y) && d < 300) {
         e.pat = (G.zoneIdx >= 1 && rng.chance(0.4) && d > 130) ? 'ring' : 'aim';
         if (e.pat === 'ring') {
-          const n = 10;
+          const n = Math.max(1, Math.round(10 * e.diff.densityMul));
           for (let i = 0; i < n; i++) {
             const a = i / n * TAU + rng.range(0, 0.2);
-            ctx.spawnBullet(e.x, e.y, a, 95, 1, false, { color: '#ff4757', core: '#ffd9dd', r: 3, life: 5 });
+            enemyBullet(e, e.x, e.y, a, 95, 1, { color: '#ff4757', core: '#ffd9dd', r: 3, life: 5 });
           }
           G.sfx('enemyShoot'); e.cd = rng.range(2.0, 2.6);
-        } else { e.burst = 3; e.burstT = 0.1; e.cd = rng.range(1.9, 2.5); }
+        } else { e.burst = Math.max(1, Math.round(3 * e.diff.densityMul)); e.burstT = 0.1; e.cd = rng.range(1.9, 2.5); }
       }
     } else if (e.type === 'guard') {
       if (e.broken > 0) {
@@ -227,7 +237,7 @@ PARTS.enemies = function (ctx) {
           const aimA = Math.atan2(la.ey - e.y, la.ex - e.x);
           const hitP = G.raycastWall(e.x, e.y, aimA, 500);
           G.beams.push({ x0: e.x, y0: e.y, x1: hitP.x, y1: hitP.y, t: 0.18, max: 0.18, color: '#ff4757', w0: 3 });
-          if (ctx.pointSegDist(P.x, P.y, e.x, e.y, hitP.x, hitP.y) < 6.5) ctx.damagePlayer(2, e.x, e.y);
+          if (ctx.pointSegDist(P.x, P.y, e.x, e.y, hitP.x, hitP.y) < 6.5) ctx.damagePlayer(2 * e.diff.dmgMul, e.x, e.y);
           ctx.addParts(hitP.x, hitP.y, 6, ['#ff4757', '#ffffff'], { spd: 100, life: 0.3 });
           G.sfx('sniperFire');
           if (la) la.dead = true;
@@ -247,7 +257,7 @@ PARTS.enemies = function (ctx) {
         if (e.t > 0.5) {
           // 起爆：不计击杀（无连击/金币）
           e.dead = true;
-          ctx.explode(e.x, e.y, 38, 1, false, '#ff4757');
+          ctx.explode(e.x, e.y, 38, e.diff.dmgMul, false, '#ff4757');
         }
       } else {
         e.vx = Math.cos(aTo) * e.speed; e.vy = Math.sin(aTo) * e.speed;
@@ -265,9 +275,10 @@ PARTS.enemies = function (ctx) {
       e.vx = Math.cos(ma) * e.speed; e.vy = Math.sin(ma) * e.speed;
       e.facing = aTo;
       if (e.cd <= 0 && G.losClear(e.x, e.y, P.x, P.y) && d < 330) {
-        for (let i = -1; i <= 1; i++) {
-          const a = aTo + i * 0.17;
-          ctx.spawnBullet(e.x + Math.cos(a) * 8, e.y + Math.sin(a) * 8, a, 150 + G.zoneIdx * 10, 1, false,
+        const n = Math.max(3, Math.round(3 * e.diff.densityMul));
+        for (let i = 0; i < n; i++) {
+          const a = aTo + (i - (n - 1) / 2) * 0.17;
+          enemyBullet(e, e.x + Math.cos(a) * 8, e.y + Math.sin(a) * 8, a, 150 + G.zoneIdx * 10, 1,
             { color: '#ff4757', core: '#ffd9dd', r: 3, life: 5 });
         }
         G.sfx('enemyShoot');
@@ -289,7 +300,8 @@ PARTS.enemies = function (ctx) {
         e.vx *= Math.exp(-3 * dt); e.vy *= Math.exp(-3 * dt);
         if (e.t > 0.55) {
           e.state = 'stalk'; e.t = 0;
-          ctx.spawnBullet(e.x, e.y, aTo, 150, 1, false,
+          const n = Math.max(1, Math.round(e.diff.densityMul));
+          for (let i = 0; i < n; i++) enemyBullet(e, e.x, e.y, aTo + (i - (n - 1) / 2) * 0.12, 150, 1,
             { color: '#ff4757', core: '#ffffff', r: 3, life: 5 });
           G.sfx('enemyShoot');
           e.cd = rng.range(1.7, 2.4);

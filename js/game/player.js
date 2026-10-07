@@ -179,7 +179,7 @@ PARTS.player = function (ctx) {
     const P = G.player;
     if (P.iframes > 0 || G.state !== 'playing') return;
     const s = G.stats;
-    if (s.undying && !P.undyingUsed && P.hp - n <= 0) {
+    if (s.undying && !P.undyingUsed && P.hp - Math.max(0, n - P.shield) <= 0) {
       P.undyingUsed = true;
       P.hp = 1; P.shield = P.maxShield; P.iframes = 1.6;
       ctx.toast('不灭战意：拒绝倒下！', '#45f0e2');
@@ -278,8 +278,11 @@ PARTS.player = function (ctx) {
       if (w.type === 'melee') {
         if (P.fireT <= 0) { meleeSlash(); P.fireT = w.interval / s.rate; }
       } else if (w.type === 'rail') {
-        P.chargeT += dt;
-        if (P.chargeT >= w.charge) { P.chargeT = 0; fireRail(); P.fireT = w.interval / s.rate; }
+        // 冷却结束后才能蓄力；持续按住也必须遵守射击间隔。
+        if (P.fireT <= 0) {
+          P.chargeT += dt;
+          if (P.chargeT >= w.charge) { P.chargeT = 0; fireRail(); P.fireT = w.interval / s.rate; }
+        }
       } else {
         if (P.fireT <= 0) {
           P.fireT = w.interval / s.rate;

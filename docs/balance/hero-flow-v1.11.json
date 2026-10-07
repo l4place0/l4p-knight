@@ -1,0 +1,218 @@
+{
+  "difficulty": {
+    "1": {
+      "hpMul": 3,
+      "speedMul": 1.8,
+      "aggression": 4.5,
+      "bulletMul": 2.4,
+      "densityMul": 3,
+      "dmgMul": 4
+    },
+    "2": {
+      "hpMul": 3,
+      "speedMul": 1.8,
+      "aggression": 4.5,
+      "bulletMul": 2.4,
+      "densityMul": 3,
+      "dmgMul": 4
+    },
+    "3": {
+      "hpMul": 3,
+      "speedMul": 1.8,
+      "aggression": 4.5,
+      "bulletMul": 2.4,
+      "densityMul": 3,
+      "dmgMul": 4
+    },
+    "4": {
+      "hpMul": 3.2,
+      "speedMul": 1.8,
+      "aggression": 4.5,
+      "bulletMul": 2.4,
+      "densityMul": 3,
+      "dmgMul": 4
+    }
+  },
+  "heroes": {
+    "vanguard": {
+      "id": "vanguard",
+      "name": "游隼 · 突击兵",
+      "weapon": "smg",
+      "maxHp": 6,
+      "shieldMax": 3,
+      "dmg": 1,
+      "speed": 1,
+      "dashCd": 1,
+      "crit": 0,
+      "desc": "均衡开局 · 标准火力"
+    },
+    "bulwark": {
+      "id": "bulwark",
+      "name": "磐石 · 重装员",
+      "weapon": "shotgun",
+      "maxHp": 7,
+      "shieldMax": 4,
+      "dmg": 0.95,
+      "speed": 0.92,
+      "dashCd": 1,
+      "crit": 0,
+      "desc": "霰弹起步 · 高生命高护盾，机动稍缓"
+    },
+    "stalker": {
+      "id": "stalker",
+      "name": "夜隼 · 猎手",
+      "weapon": "smg",
+      "maxHp": 5,
+      "shieldMax": 3,
+      "dmg": 1,
+      "speed": 1.1,
+      "dashCd": 0.7,
+      "crit": 0.12,
+      "desc": "高机动高暴击 · 生命上限 -1"
+    },
+    "prototype": {
+      "id": "prototype",
+      "name": "零 · 原型机",
+      "weapon": "railgun",
+      "maxHp": 5,
+      "shieldMax": 3,
+      "dmg": 1,
+      "speed": 1,
+      "dashCd": 1,
+      "crit": 0.05,
+      "desc": "零号原型验证机 · 电磁炮起步 · 暴击 +5%（通关 1 次解锁）"
+    }
+  },
+  "weapons": {
+    "smg": {
+      "id": "smg",
+      "name": "蜂鸣冲锋枪",
+      "type": "gun",
+      "tier": 1,
+      "interval": 0.105,
+      "dmg": 3.2,
+      "pellets": 1,
+      "spread": 0.085,
+      "speed": 350,
+      "knock": 46,
+      "range": 460,
+      "color": "#7df9ff",
+      "shake": 0.7,
+      "desc": "高射速 · 稳定压制"
+    },
+    "shotgun": {
+      "id": "shotgun",
+      "name": "碎星霰弹枪",
+      "type": "gun",
+      "tier": 2,
+      "interval": 0.88,
+      "dmg": 5.2,
+      "pellets": 6,
+      "spread": 0.46,
+      "speed": 300,
+      "knock": 95,
+      "range": 150,
+      "color": "#ffd166",
+      "shake": 2.4,
+      "desc": "近距离一次 6 弹 · 高爆发"
+    },
+    "railgun": {
+      "id": "railgun",
+      "name": "贯穿电磁炮",
+      "type": "rail",
+      "tier": 3,
+      "interval": 1.15,
+      "dmg": 30,
+      "pellets": 1,
+      "spread": 0,
+      "speed": 0,
+      "knock": 300,
+      "range": 480,
+      "color": "#b9bcff",
+      "shake": 4.5,
+      "charge": 0.3,
+      "desc": "蓄力贯穿射线 · 可破防暴盾"
+    },
+    "blade": {
+      "id": "blade",
+      "name": "相位刃",
+      "type": "melee",
+      "tier": 1,
+      "interval": 0.42,
+      "dmg": 9,
+      "pellets": 1,
+      "spread": 0,
+      "speed": 0,
+      "knock": 220,
+      "range": 26,
+      "arc": 1.95,
+      "color": "#e8e8ee",
+      "shake": 1.6,
+      "desc": "挥砍弧区 · 弹反敌方弹幕"
+    },
+    "homing": {
+      "id": "homing",
+      "name": "游隼导弹",
+      "type": "gun",
+      "tier": 2,
+      "interval": 0.55,
+      "dmg": 12,
+      "pellets": 1,
+      "spread": 0.5,
+      "speed": 250,
+      "knock": 70,
+      "range": 760,
+      "color": "#ffb84d",
+      "shake": 1.4,
+      "kind": "homing",
+      "bulletLife": 3,
+      "bulletR": 3,
+      "desc": "自锁定导弹 · 自动追踪最近敌人"
+    },
+    "grenade": {
+      "id": "grenade",
+      "name": "坍缩榴弹",
+      "type": "gun",
+      "tier": 2,
+      "interval": 1,
+      "dmg": 3,
+      "pellets": 1,
+      "spread": 0.06,
+      "speed": 300,
+      "knock": 140,
+      "range": 160,
+      "color": "#ff8a3d",
+      "shake": 2.6,
+      "kind": "grenade",
+      "bulletLife": 0.55,
+      "bulletR": 3.5,
+      "blastDmg": 18,
+      "desc": "落点重力爆炸 · 溅射成片敌军"
+    }
+  },
+  "sampling": "四英雄并行顺序搜索，发现任一真实首胜就停；只作存在性见证，不能估计整局胜率",
+  "limit": 10000,
+  "results": [
+    {
+      "done": true,
+      "hero": "prototype",
+      "seed": 1979,
+      "seconds": 454.6666666665818,
+      "outcomes": {
+        "defeat": 1978,
+        "victory": 1
+      },
+      "phases": [
+        1,
+        2,
+        3,
+        1,
+        2,
+        3
+      ],
+      "shops": 4,
+      "kills": 70,
+      "violations": 0
+    }
+  ]
+}

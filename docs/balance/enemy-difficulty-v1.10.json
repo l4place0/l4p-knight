@@ -1,0 +1,594 @@
+{
+  "version": "1.10.0",
+  "date": "2026-10-07",
+  "baseCommit": "458bd1a",
+  "criterion": "0 < single-room M3 pass rate < 37%; no runtime faults",
+  "heroes": [
+    "vanguard",
+    "bulwark",
+    "stalker",
+    "prototype"
+  ],
+  "genes": {
+    "commit": 30,
+    "trackK": 3,
+    "sight": 100,
+    "delay": 10,
+    "dashSkip": 0.6
+  },
+  "startingState": "full HP/shield + expected zone build, real two-wave encounter, stop at chipOffered",
+  "difficulty": {
+    "1": {
+      "hpMul": 4.2,
+      "speedMul": 1.8,
+      "aggression": 4.5,
+      "bulletMul": 2.4,
+      "densityMul": 3,
+      "dmgMul": 4
+    },
+    "2": {
+      "hpMul": 4.2,
+      "speedMul": 1.8,
+      "aggression": 4.5,
+      "bulletMul": 2.4,
+      "densityMul": 3,
+      "dmgMul": 4
+    },
+    "3": {
+      "hpMul": 4.2,
+      "speedMul": 1.8,
+      "aggression": 4.5,
+      "bulletMul": 2.4,
+      "densityMul": 3,
+      "dmgMul": 4
+    },
+    "4": {
+      "hpMul": 4.2,
+      "speedMul": 1.8,
+      "aggression": 4.5,
+      "bulletMul": 2.4,
+      "densityMul": 3,
+      "dmgMul": 4
+    }
+  },
+  "baseline": {
+    "seedStart": 1,
+    "sizePerRoom": 100,
+    "rooms": {
+      "z1a": {
+        "n": 100,
+        "passRate": 100,
+        "outcomes": {
+          "clear": 100
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 100,
+          "bulwark": 100,
+          "stalker": 100,
+          "prototype": 100
+        },
+        "avgSeconds": 13.32,
+        "avgHits": 0.16,
+        "qualified": false
+      },
+      "z1b": {
+        "n": 100,
+        "passRate": 100,
+        "outcomes": {
+          "clear": 100
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 100,
+          "bulwark": 100,
+          "stalker": 100,
+          "prototype": 100
+        },
+        "avgSeconds": 18.96,
+        "avgHits": 0.44,
+        "qualified": false
+      },
+      "z2a": {
+        "n": 100,
+        "passRate": 100,
+        "outcomes": {
+          "clear": 100
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 100,
+          "bulwark": 100,
+          "stalker": 100,
+          "prototype": 100
+        },
+        "avgSeconds": 20.11,
+        "avgHits": 0.4,
+        "qualified": false
+      },
+      "z2b": {
+        "n": 100,
+        "passRate": 99,
+        "outcomes": {
+          "clear": 99,
+          "stall": 1
+        },
+        "invalid": 1,
+        "perHero": {
+          "vanguard": 100,
+          "bulwark": 100,
+          "stalker": 96,
+          "prototype": 100
+        },
+        "avgSeconds": 24.81,
+        "avgHits": 0.9,
+        "qualified": false
+      },
+      "z3a": {
+        "n": 100,
+        "passRate": 100,
+        "outcomes": {
+          "clear": 100
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 100,
+          "bulwark": 100,
+          "stalker": 100,
+          "prototype": 100
+        },
+        "avgSeconds": 24.84,
+        "avgHits": 0.91,
+        "qualified": false
+      },
+      "z4a": {
+        "n": 100,
+        "passRate": 100,
+        "outcomes": {
+          "clear": 100
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 100,
+          "bulwark": 100,
+          "stalker": 100,
+          "prototype": 100
+        },
+        "avgSeconds": 24.03,
+        "avgHits": 0.91,
+        "qualified": false
+      },
+      "z4b": {
+        "n": 100,
+        "passRate": 100,
+        "outcomes": {
+          "clear": 100
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 100,
+          "bulwark": 100,
+          "stalker": 100,
+          "prototype": 100
+        },
+        "avgSeconds": 29.25,
+        "avgHits": 1.32,
+        "qualified": false
+      }
+    }
+  },
+  "calibration": {
+    "seedStart": 1,
+    "sizePerRoom": 100,
+    "rooms": {
+      "z1a": {
+        "n": 100,
+        "passRate": 22,
+        "outcomes": {
+          "defeat": 78,
+          "clear": 22
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 12,
+          "bulwark": 8,
+          "stalker": 12,
+          "prototype": 56
+        },
+        "avgSeconds": 12.88,
+        "avgHits": 2.53,
+        "qualified": true
+      },
+      "z1b": {
+        "n": 100,
+        "passRate": 32,
+        "outcomes": {
+          "defeat": 68,
+          "clear": 32
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 16,
+          "bulwark": 24,
+          "stalker": 36,
+          "prototype": 52
+        },
+        "avgSeconds": 15.25,
+        "avgHits": 2.47,
+        "qualified": true
+      },
+      "z2a": {
+        "n": 100,
+        "passRate": 33,
+        "outcomes": {
+          "defeat": 67,
+          "clear": 33
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 16,
+          "bulwark": 24,
+          "stalker": 16,
+          "prototype": 76
+        },
+        "avgSeconds": 16.07,
+        "avgHits": 2.36,
+        "qualified": true
+      },
+      "z2b": {
+        "n": 100,
+        "passRate": 12,
+        "outcomes": {
+          "defeat": 88,
+          "clear": 12
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 4,
+          "bulwark": 4,
+          "stalker": 12,
+          "prototype": 28
+        },
+        "avgSeconds": 12.8,
+        "avgHits": 2.69,
+        "qualified": true
+      },
+      "z3a": {
+        "n": 100,
+        "passRate": 21,
+        "outcomes": {
+          "defeat": 79,
+          "clear": 21
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 8,
+          "bulwark": 12,
+          "stalker": 8,
+          "prototype": 56
+        },
+        "avgSeconds": 17.14,
+        "avgHits": 3.4,
+        "qualified": true
+      },
+      "z4a": {
+        "n": 100,
+        "passRate": 34,
+        "outcomes": {
+          "defeat": 66,
+          "clear": 34
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 20,
+          "bulwark": 4,
+          "stalker": 20,
+          "prototype": 92
+        },
+        "avgSeconds": 21.7,
+        "avgHits": 3.76,
+        "qualified": true
+      },
+      "z4b": {
+        "n": 100,
+        "passRate": 32,
+        "outcomes": {
+          "defeat": 68,
+          "clear": 32
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 8,
+          "bulwark": 12,
+          "stalker": 16,
+          "prototype": 92
+        },
+        "avgSeconds": 27.7,
+        "avgHits": 4.51,
+        "qualified": true
+      }
+    }
+  },
+  "holdout": {
+    "seedStart": 26,
+    "sizePerRoom": 100,
+    "rooms": {
+      "z1a": {
+        "n": 100,
+        "passRate": 28,
+        "outcomes": {
+          "defeat": 72,
+          "clear": 28
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 8,
+          "bulwark": 12,
+          "stalker": 8,
+          "prototype": 84
+        },
+        "avgSeconds": 13.05,
+        "avgHits": 2.35,
+        "qualified": true
+      },
+      "z1b": {
+        "n": 100,
+        "passRate": 17,
+        "outcomes": {
+          "defeat": 83,
+          "clear": 17
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 8,
+          "bulwark": 8,
+          "stalker": 8,
+          "prototype": 44
+        },
+        "avgSeconds": 13.28,
+        "avgHits": 2.59,
+        "qualified": true
+      },
+      "z2a": {
+        "n": 100,
+        "passRate": 30,
+        "outcomes": {
+          "clear": 30,
+          "defeat": 70
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 16,
+          "bulwark": 20,
+          "stalker": 4,
+          "prototype": 80
+        },
+        "avgSeconds": 17.25,
+        "avgHits": 2.4,
+        "qualified": true
+      },
+      "z2b": {
+        "n": 100,
+        "passRate": 24,
+        "outcomes": {
+          "defeat": 76,
+          "clear": 24
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 12,
+          "bulwark": 24,
+          "stalker": 16,
+          "prototype": 44
+        },
+        "avgSeconds": 16.97,
+        "avgHits": 2.64,
+        "qualified": true
+      },
+      "z3a": {
+        "n": 100,
+        "passRate": 36,
+        "outcomes": {
+          "defeat": 64,
+          "clear": 36
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 12,
+          "bulwark": 16,
+          "stalker": 24,
+          "prototype": 92
+        },
+        "avgSeconds": 20.69,
+        "avgHits": 3.35,
+        "qualified": true
+      },
+      "z4a": {
+        "n": 100,
+        "passRate": 24,
+        "outcomes": {
+          "defeat": 76,
+          "clear": 24
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 0,
+          "bulwark": 8,
+          "stalker": 12,
+          "prototype": 76
+        },
+        "avgSeconds": 24.05,
+        "avgHits": 4.37,
+        "qualified": true
+      },
+      "z4b": {
+        "n": 100,
+        "passRate": 27,
+        "outcomes": {
+          "defeat": 73,
+          "clear": 27
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 8,
+          "bulwark": 12,
+          "stalker": 8,
+          "prototype": 80
+        },
+        "avgSeconds": 26.56,
+        "avgHits": 4.76,
+        "qualified": true
+      }
+    }
+  },
+  "perfect": {
+    "seedStart": 1,
+    "sizePerRoom": 100,
+    "rooms": {
+      "z1a": {
+        "n": 100,
+        "passRate": 53,
+        "outcomes": {
+          "defeat": 47,
+          "clear": 53
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 28,
+          "bulwark": 40,
+          "stalker": 44,
+          "prototype": 100
+        },
+        "avgSeconds": 22.49,
+        "avgHits": 2.24,
+        "qualified": false
+      },
+      "z1b": {
+        "n": 100,
+        "passRate": 44,
+        "outcomes": {
+          "defeat": 56,
+          "clear": 44
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 28,
+          "bulwark": 32,
+          "stalker": 36,
+          "prototype": 80
+        },
+        "avgSeconds": 22.15,
+        "avgHits": 2.51,
+        "qualified": false
+      },
+      "z2a": {
+        "n": 100,
+        "passRate": 48,
+        "outcomes": {
+          "defeat": 52,
+          "clear": 48
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 36,
+          "bulwark": 28,
+          "stalker": 28,
+          "prototype": 100
+        },
+        "avgSeconds": 21.84,
+        "avgHits": 2.24,
+        "qualified": false
+      },
+      "z2b": {
+        "n": 100,
+        "passRate": 27,
+        "outcomes": {
+          "defeat": 73,
+          "clear": 27
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 4,
+          "bulwark": 16,
+          "stalker": 16,
+          "prototype": 72
+        },
+        "avgSeconds": 21.62,
+        "avgHits": 2.7,
+        "qualified": true
+      },
+      "z3a": {
+        "n": 100,
+        "passRate": 40,
+        "outcomes": {
+          "defeat": 60,
+          "clear": 40
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 24,
+          "bulwark": 24,
+          "stalker": 20,
+          "prototype": 92
+        },
+        "avgSeconds": 28.28,
+        "avgHits": 3.59,
+        "qualified": false
+      },
+      "z4a": {
+        "n": 100,
+        "passRate": 56,
+        "outcomes": {
+          "defeat": 44,
+          "clear": 56
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 44,
+          "bulwark": 36,
+          "stalker": 44,
+          "prototype": 100
+        },
+        "avgSeconds": 32.17,
+        "avgHits": 3.45,
+        "qualified": false
+      },
+      "z4b": {
+        "n": 100,
+        "passRate": 46,
+        "outcomes": {
+          "defeat": 52,
+          "clear": 46,
+          "stall": 2
+        },
+        "invalid": 2,
+        "perHero": {
+          "vanguard": 36,
+          "bulwark": 20,
+          "stalker": 36,
+          "prototype": 92
+        },
+        "avgSeconds": 41.42,
+        "avgHits": 4.43,
+        "qualified": false
+      }
+    }
+  },
+  "parity": {
+    "baseCommit": "458bd1a",
+    "scenarios": 9,
+    "framesPerScenario": 1800,
+    "totalFrames": 16200,
+    "ignoredNewField": "enemy.diff",
+    "comparison": "every frame serialized full state; laser.owner represented by entity id",
+    "differences": 0
+  },
+  "matrixSmoke": {
+    "scenarios": 108,
+    "outcomes": {
+      "clear": 37,
+      "defeat": 63,
+      "bossDown": 8
+    }
+  }
+}

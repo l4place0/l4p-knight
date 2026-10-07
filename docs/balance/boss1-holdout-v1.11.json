@@ -1,0 +1,836 @@
+{
+  "bossId": "boss",
+  "tuning": {},
+  "genes": {
+    "commit": 30,
+    "trackK": 3,
+    "sight": 100,
+    "delay": 10,
+    "dashSkip": 0.6
+  },
+  "fresh": false,
+  "seedStart": 10001,
+  "playerDmg": 0,
+  "summary": {
+    "n": 100,
+    "bossDown": 26,
+    "defeat": 74,
+    "timeout": 0,
+    "stall": 0,
+    "violation": 0,
+    "error": 0,
+    "passRate": 26,
+    "perHero": {
+      "vanguard": "15%(34)",
+      "bulwark": "48%(33)",
+      "stalker": "15%(33)"
+    },
+    "avgHpLost": 6.7,
+    "avgSecs": 47.2,
+    "avgDmg": 7.7,
+    "maxDmg": 16,
+    "p90Dmg": 12
+  },
+  "results": [
+    {
+      "outcome": "defeat",
+      "seconds": 19.1,
+      "hpLost": 8,
+      "dmgTaken": 4,
+      "hero": "vanguard",
+      "seed": 10001
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 74.5,
+      "hpLost": 4.735499999999994,
+      "dmgTaken": 11,
+      "hero": "bulwark",
+      "seed": 10002
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 18.6,
+      "hpLost": 7,
+      "dmgTaken": 4,
+      "hero": "stalker",
+      "seed": 10003
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 17.8,
+      "hpLost": 7,
+      "dmgTaken": 3,
+      "hero": "vanguard",
+      "seed": 10005
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 55.9,
+      "hpLost": 11,
+      "dmgTaken": 11,
+      "hero": "bulwark",
+      "seed": 10006
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 48.5,
+      "hpLost": 7,
+      "dmgTaken": 9,
+      "hero": "stalker",
+      "seed": 10007
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 25.1,
+      "hpLost": 8,
+      "dmgTaken": 4,
+      "hero": "vanguard",
+      "seed": 10009
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 16.6,
+      "hpLost": 11,
+      "dmgTaken": 5,
+      "hero": "bulwark",
+      "seed": 10010
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 36.9,
+      "hpLost": 6,
+      "dmgTaken": 7,
+      "hero": "stalker",
+      "seed": 10011
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 94.5,
+      "hpLost": 3.9199999999999964,
+      "dmgTaken": 10,
+      "hero": "vanguard",
+      "seed": 10013
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 81.2,
+      "hpLost": 6.433333333333329,
+      "dmgTaken": 14,
+      "hero": "bulwark",
+      "seed": 10014
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 11.9,
+      "hpLost": 7,
+      "dmgTaken": 3,
+      "hero": "stalker",
+      "seed": 10015
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 61.4,
+      "hpLost": 7,
+      "dmgTaken": 10,
+      "hero": "vanguard",
+      "seed": 10017
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 49.4,
+      "hpLost": 11,
+      "dmgTaken": 11,
+      "hero": "bulwark",
+      "seed": 10018
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 17.8,
+      "hpLost": 7,
+      "dmgTaken": 4,
+      "hero": "stalker",
+      "seed": 10019
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 59.9,
+      "hpLost": 8,
+      "dmgTaken": 11,
+      "hero": "vanguard",
+      "seed": 10021
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 81.5,
+      "hpLost": 3.7333333333333183,
+      "dmgTaken": 12,
+      "hero": "bulwark",
+      "seed": 10022
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 11.5,
+      "hpLost": 6,
+      "dmgTaken": 3,
+      "hero": "stalker",
+      "seed": 10023
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 53.8,
+      "hpLost": 8,
+      "dmgTaken": 8,
+      "hero": "vanguard",
+      "seed": 10025
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 75,
+      "hpLost": 2.5466666666666535,
+      "dmgTaken": 9,
+      "hero": "bulwark",
+      "seed": 10026
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 38.8,
+      "hpLost": 7,
+      "dmgTaken": 7,
+      "hero": "stalker",
+      "seed": 10027
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 25.8,
+      "hpLost": 7,
+      "dmgTaken": 4,
+      "hero": "vanguard",
+      "seed": 10029
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 81.6,
+      "hpLost": 4.878833333333239,
+      "dmgTaken": 14,
+      "hero": "bulwark",
+      "seed": 10030
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 53.6,
+      "hpLost": 7,
+      "dmgTaken": 9,
+      "hero": "stalker",
+      "seed": 10031
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 11.9,
+      "hpLost": 8,
+      "dmgTaken": 3,
+      "hero": "vanguard",
+      "seed": 10033
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 48.6,
+      "hpLost": 10,
+      "dmgTaken": 10,
+      "hero": "bulwark",
+      "seed": 10001
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 34.1,
+      "hpLost": 7,
+      "dmgTaken": 5,
+      "hero": "stalker",
+      "seed": 10002
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 84,
+      "hpLost": 3.92883333333325,
+      "dmgTaken": 11,
+      "hero": "vanguard",
+      "seed": 10004
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 73.2,
+      "hpLost": 5.723333333333279,
+      "dmgTaken": 12,
+      "hero": "bulwark",
+      "seed": 10005
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 79.5,
+      "hpLost": 8,
+      "dmgTaken": 13,
+      "hero": "stalker",
+      "seed": 10006
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 26.6,
+      "hpLost": 8,
+      "dmgTaken": 4,
+      "hero": "vanguard",
+      "seed": 10008
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 49.5,
+      "hpLost": 10,
+      "dmgTaken": 10,
+      "hero": "bulwark",
+      "seed": 10009
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 39.9,
+      "hpLost": 8,
+      "dmgTaken": 6,
+      "hero": "stalker",
+      "seed": 10010
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 10.8,
+      "hpLost": 9,
+      "dmgTaken": 3,
+      "hero": "vanguard",
+      "seed": 10012
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 42.7,
+      "hpLost": 10,
+      "dmgTaken": 8,
+      "hero": "bulwark",
+      "seed": 10013
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 12.2,
+      "hpLost": 7,
+      "dmgTaken": 3,
+      "hero": "stalker",
+      "seed": 10014
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 21.4,
+      "hpLost": 9,
+      "dmgTaken": 5,
+      "hero": "vanguard",
+      "seed": 10016
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 38.9,
+      "hpLost": 9,
+      "dmgTaken": 8,
+      "hero": "bulwark",
+      "seed": 10017
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 45.7,
+      "hpLost": 8,
+      "dmgTaken": 9,
+      "hero": "stalker",
+      "seed": 10018
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 19.2,
+      "hpLost": 8,
+      "dmgTaken": 4,
+      "hero": "vanguard",
+      "seed": 10020
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 72.7,
+      "hpLost": 0.9566666666666421,
+      "dmgTaken": 8,
+      "hero": "bulwark",
+      "seed": 10021
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 19.1,
+      "hpLost": 8,
+      "dmgTaken": 4,
+      "hero": "stalker",
+      "seed": 10022
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 24.4,
+      "hpLost": 9,
+      "dmgTaken": 5,
+      "hero": "vanguard",
+      "seed": 10024
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 52.3,
+      "hpLost": 10,
+      "dmgTaken": 11,
+      "hero": "bulwark",
+      "seed": 10025
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 80.8,
+      "hpLost": 7,
+      "dmgTaken": 11,
+      "hero": "stalker",
+      "seed": 10026
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 13.8,
+      "hpLost": 9,
+      "dmgTaken": 4,
+      "hero": "vanguard",
+      "seed": 10028
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 83,
+      "hpLost": 1.2233333333333007,
+      "dmgTaken": 9,
+      "hero": "bulwark",
+      "seed": 10029
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 12.4,
+      "hpLost": 8,
+      "dmgTaken": 3,
+      "hero": "stalker",
+      "seed": 10030
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 42.6,
+      "hpLost": 8,
+      "dmgTaken": 8,
+      "hero": "vanguard",
+      "seed": 10032
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 81.2,
+      "hpLost": 10,
+      "dmgTaken": 16,
+      "hero": "bulwark",
+      "seed": 10033
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 18.7,
+      "hpLost": 7,
+      "dmgTaken": 4,
+      "hero": "stalker",
+      "seed": 10001
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 82.9,
+      "hpLost": 1.8966666666666576,
+      "dmgTaken": 12,
+      "hero": "vanguard",
+      "seed": 10003
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 46.8,
+      "hpLost": 11,
+      "dmgTaken": 10,
+      "hero": "bulwark",
+      "seed": 10004
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 83.1,
+      "hpLost": 3.8521666666666627,
+      "dmgTaken": 8,
+      "hero": "stalker",
+      "seed": 10005
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 12.2,
+      "hpLost": 8,
+      "dmgTaken": 3,
+      "hero": "vanguard",
+      "seed": 10007
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 78.8,
+      "hpLost": 5.169999999999986,
+      "dmgTaken": 11,
+      "hero": "bulwark",
+      "seed": 10008
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 17.8,
+      "hpLost": 7,
+      "dmgTaken": 3,
+      "hero": "stalker",
+      "seed": 10009
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 51.1,
+      "hpLost": 7,
+      "dmgTaken": 9,
+      "hero": "vanguard",
+      "seed": 10011
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 85.1,
+      "hpLost": 5.013333333333322,
+      "dmgTaken": 14,
+      "hero": "bulwark",
+      "seed": 10012
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 63.9,
+      "hpLost": 7,
+      "dmgTaken": 10,
+      "hero": "stalker",
+      "seed": 10013
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 64.2,
+      "hpLost": 8,
+      "dmgTaken": 11,
+      "hero": "vanguard",
+      "seed": 10015
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 74.6,
+      "hpLost": -1.3300000000000054,
+      "dmgTaken": 11,
+      "hero": "bulwark",
+      "seed": 10016
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 33.1,
+      "hpLost": 6,
+      "dmgTaken": 6,
+      "hero": "stalker",
+      "seed": 10017
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 84.3,
+      "hpLost": 2.7266666666666275,
+      "dmgTaken": 10,
+      "hero": "vanguard",
+      "seed": 10019
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 16.9,
+      "hpLost": 10,
+      "dmgTaken": 4,
+      "hero": "bulwark",
+      "seed": 10020
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 39.7,
+      "hpLost": 7,
+      "dmgTaken": 7,
+      "hero": "stalker",
+      "seed": 10021
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 21.2,
+      "hpLost": 7,
+      "dmgTaken": 4,
+      "hero": "vanguard",
+      "seed": 10023
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 74.6,
+      "hpLost": 3.0433333333333294,
+      "dmgTaken": 9,
+      "hero": "bulwark",
+      "seed": 10024
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 43.1,
+      "hpLost": 7,
+      "dmgTaken": 6,
+      "hero": "stalker",
+      "seed": 10025
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 51.8,
+      "hpLost": 8,
+      "dmgTaken": 9,
+      "hero": "vanguard",
+      "seed": 10027
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 80,
+      "hpLost": 0.2278333333332867,
+      "dmgTaken": 8,
+      "hero": "bulwark",
+      "seed": 10028
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 15.5,
+      "hpLost": 6,
+      "dmgTaken": 3,
+      "hero": "stalker",
+      "seed": 10029
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 17.9,
+      "hpLost": 8,
+      "dmgTaken": 4,
+      "hero": "vanguard",
+      "seed": 10031
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 33.1,
+      "hpLost": 10,
+      "dmgTaken": 6,
+      "hero": "bulwark",
+      "seed": 10032
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 58.2,
+      "hpLost": 7,
+      "dmgTaken": 10,
+      "hero": "stalker",
+      "seed": 10033
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 59.1,
+      "hpLost": 8,
+      "dmgTaken": 10,
+      "hero": "vanguard",
+      "seed": 10002
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 49,
+      "hpLost": 10,
+      "dmgTaken": 10,
+      "hero": "bulwark",
+      "seed": 10003
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 87.3,
+      "hpLost": -1.3133333333333468,
+      "dmgTaken": 8,
+      "hero": "stalker",
+      "seed": 10004
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 89.3,
+      "hpLost": 1.743333333333311,
+      "dmgTaken": 10,
+      "hero": "vanguard",
+      "seed": 10006
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 32.7,
+      "hpLost": 10,
+      "dmgTaken": 8,
+      "hero": "bulwark",
+      "seed": 10007
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 10.5,
+      "hpLost": 7,
+      "dmgTaken": 3,
+      "hero": "stalker",
+      "seed": 10008
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 15.2,
+      "hpLost": 9,
+      "dmgTaken": 4,
+      "hero": "vanguard",
+      "seed": 10010
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 60.9,
+      "hpLost": 9,
+      "dmgTaken": 12,
+      "hero": "bulwark",
+      "seed": 10011
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 39,
+      "hpLost": 8,
+      "dmgTaken": 6,
+      "hero": "stalker",
+      "seed": 10012
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 12.2,
+      "hpLost": 8,
+      "dmgTaken": 3,
+      "hero": "vanguard",
+      "seed": 10014
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 72.5,
+      "hpLost": 0.716666666666617,
+      "dmgTaken": 11,
+      "hero": "bulwark",
+      "seed": 10015
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 81.4,
+      "hpLost": 2.726666666666656,
+      "dmgTaken": 10,
+      "hero": "stalker",
+      "seed": 10016
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 52.5,
+      "hpLost": 9,
+      "dmgTaken": 9,
+      "hero": "vanguard",
+      "seed": 10018
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 76.9,
+      "hpLost": 1.3154999999999504,
+      "dmgTaken": 10,
+      "hero": "bulwark",
+      "seed": 10019
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 22.6,
+      "hpLost": 7,
+      "dmgTaken": 4,
+      "hero": "stalker",
+      "seed": 10020
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 42.8,
+      "hpLost": 9,
+      "dmgTaken": 8,
+      "hero": "vanguard",
+      "seed": 10022
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 18,
+      "hpLost": 9,
+      "dmgTaken": 5,
+      "hero": "bulwark",
+      "seed": 10023
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 72.2,
+      "hpLost": 1.0799999999999894,
+      "dmgTaken": 9,
+      "hero": "stalker",
+      "seed": 10024
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 43.9,
+      "hpLost": 8,
+      "dmgTaken": 7,
+      "hero": "vanguard",
+      "seed": 10026
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 70.5,
+      "hpLost": -2,
+      "dmgTaken": 9,
+      "hero": "bulwark",
+      "seed": 10027
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 44.6,
+      "hpLost": 8,
+      "dmgTaken": 7,
+      "hero": "stalker",
+      "seed": 10028
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 11.3,
+      "hpLost": 9,
+      "dmgTaken": 3,
+      "hero": "vanguard",
+      "seed": 10030
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 56.2,
+      "hpLost": 10,
+      "dmgTaken": 12,
+      "hero": "bulwark",
+      "seed": 10031
+    },
+    {
+      "outcome": "bossDown",
+      "seconds": 81.8,
+      "hpLost": 1.9533333333333331,
+      "dmgTaken": 12,
+      "hero": "stalker",
+      "seed": 10032
+    },
+    {
+      "outcome": "defeat",
+      "seconds": 39.8,
+      "hpLost": 9,
+      "dmgTaken": 7,
+      "hero": "vanguard",
+      "seed": 10034
+    }
+  ]
+}

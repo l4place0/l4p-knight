@@ -1,0 +1,227 @@
+{
+  "scope": "定向机制变异，不代表全仓库随机变异杀率",
+  "count": 44,
+  "killed": 44,
+  "results": [
+    {
+      "name": "rail-cooldown",
+      "outcome": "killed",
+      "assertion": "railgun 冷却被绕过"
+    },
+    {
+      "name": "hero-full-start",
+      "outcome": "killed",
+      "assertion": "bulwark 满生命开局"
+    },
+    {
+      "name": "bullet-kind",
+      "outcome": "killed",
+      "assertion": "导弹实际转向目标"
+    },
+    {
+      "name": "shield-absorb",
+      "outcome": "killed",
+      "assertion": "bullet 护盾吸收"
+    },
+    {
+      "name": "hp-damage",
+      "outcome": "killed",
+      "assertion": "bullet 溢出生命伤害"
+    },
+    {
+      "name": "undying-shield",
+      "outcome": "killed",
+      "assertion": "护盾能吸收时不能误触发不灭战意"
+    },
+    {
+      "name": "enemy-bullet-hit",
+      "outcome": "killed",
+      "assertion": "bullet 护盾吸收"
+    },
+    {
+      "name": "explosion-hit",
+      "outcome": "killed",
+      "assertion": "explosion 护盾吸收"
+    },
+    {
+      "name": "mine-update",
+      "outcome": "killed",
+      "assertion": "mine 护盾吸收"
+    },
+    {
+      "name": "well-update",
+      "outcome": "killed",
+      "assertion": "well 护盾吸收"
+    },
+    {
+      "name": "contact-hit",
+      "outcome": "killed",
+      "assertion": "contact 护盾吸收"
+    },
+    {
+      "name": "well-pull",
+      "outcome": "killed",
+      "assertion": "引力井实际拉扯"
+    },
+    {
+      "name": "laser-hit",
+      "outcome": "killed",
+      "assertion": "laser 护盾吸收"
+    },
+    {
+      "name": "collision-rollback",
+      "outcome": "killed",
+      "assertion": "碰撞不能在解析之前先写入墙内位置"
+    },
+    {
+      "name": "player-knock-direction",
+      "outcome": "killed",
+      "assertion": "击退必须沿外力方向位移"
+    },
+    {
+      "name": "ray-wall-step",
+      "outcome": "killed",
+      "assertion": "近墙射线必须停在墙面外侧"
+    },
+    {
+      "name": "homing-steer",
+      "outcome": "killed",
+      "assertion": "导弹实际转向目标"
+    },
+    {
+      "name": "grenade-detonation",
+      "outcome": "killed",
+      "assertion": "榴弹到期爆炸"
+    },
+    {
+      "name": "rail-pierce",
+      "outcome": "killed",
+      "assertion": "贯穿晶片击中后方"
+    },
+    {
+      "name": "melee-hit",
+      "outcome": "killed",
+      "assertion": "挥砍独立造成真实伤害"
+    },
+    {
+      "name": "deflect",
+      "outcome": "killed",
+      "assertion": "弧区弹反"
+    },
+    {
+      "name": "guard-block",
+      "outcome": "killed",
+      "assertion": "格挡必须消除子弹"
+    },
+    {
+      "name": "shop-coins",
+      "outcome": "killed",
+      "assertion": "heal 扣金币"
+    },
+    {
+      "name": "shop-heal",
+      "outcome": "killed",
+      "assertion": "Expected values to be strictly equal:"
+    },
+    {
+      "name": "shop-shield",
+      "outcome": "killed",
+      "assertion": "Expected values to be strictly equal:"
+    },
+    {
+      "name": "shop-weapon",
+      "outcome": "killed",
+      "assertion": "Expected values to be strictly equal:"
+    },
+    {
+      "name": "shop-power",
+      "outcome": "killed",
+      "assertion": "Expected values to be strictly equal:"
+    },
+    {
+      "name": "shop-chip",
+      "outcome": "killed",
+      "assertion": "The expression evaluated to a falsy value:"
+    },
+    {
+      "name": "rating",
+      "outcome": "killed",
+      "assertion": "Expected values to be strictly equal:"
+    },
+    {
+      "name": "score",
+      "outcome": "killed",
+      "assertion": "Expected values to be strictly equal:"
+    },
+    {
+      "name": "chip-name",
+      "outcome": "killed",
+      "assertion": "The expression evaluated to a falsy value:"
+    },
+    {
+      "name": "restart-charge",
+      "outcome": "killed",
+      "assertion": "fireT 跨局重置"
+    },
+    {
+      "name": "restart-coins",
+      "outcome": "killed",
+      "assertion": "coins 跨局重置"
+    },
+    {
+      "name": "boss-projectiles",
+      "outcome": "killed",
+      "assertion": "boss/ring 必须产生足够弹幕（0）"
+    },
+    {
+      "name": "boss-laser",
+      "outcome": "killed",
+      "assertion": "激光束实际生成"
+    },
+    {
+      "name": "boss-mines",
+      "outcome": "killed",
+      "assertion": "地雷实际落场"
+    },
+    {
+      "name": "boss-clones",
+      "outcome": "killed",
+      "assertion": "三只残影实际落场"
+    },
+    {
+      "name": "boss-wells",
+      "outcome": "killed",
+      "assertion": "两口引力井实际落场"
+    },
+    {
+      "name": "boss-blink",
+      "outcome": "killed",
+      "assertion": "两次相位跃迁"
+    },
+    {
+      "name": "boss-aggression",
+      "outcome": "killed",
+      "assertion": "boss/1 攻击欲望实际缩短间隔"
+    },
+    {
+      "name": "charger-dash",
+      "outcome": "killed",
+      "assertion": "突击机兵实际冲锋"
+    },
+    {
+      "name": "wraith-blink",
+      "outcome": "killed",
+      "assertion": "徘徊者隔墙实际闪现"
+    },
+    {
+      "name": "frost-speed",
+      "outcome": "killed",
+      "assertion": "冰霜必须实际减速"
+    },
+    {
+      "name": "sniper-aim",
+      "outcome": "killed",
+      "assertion": "狙击 AI 真实瞄准并命中玩家"
+    }
+  ]
+}

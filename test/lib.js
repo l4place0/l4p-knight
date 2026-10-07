@@ -4,7 +4,7 @@
  *   - 常量：DT / MAX_SIM_SECONDS / HANG_SECONDS / SEEDS（env 覆盖）
  *   - 断言基建：log / check / failureCount（failures 汇总计数）
  *   - simulateRun(seed, opts)：一局完整通关无头仿真
- *     opts: hero / daily / maxSeconds / quiet / onFrame
+ *     opts: hero / daily / maxSeconds / quiet / onFrame / perfectBot / enemyTuning
  *   - 模块引用：CORE / GAME / BOT（装载顺序固定：core → game → bot）
  * 场景用例不要复制粘贴本文件；用例即模块，见 test/cases/ 范式：
  *   每个用例文件导出 function(ctx) 形式的用例数组（ctx = 本模块的导出），
@@ -15,6 +15,7 @@ require('../js/core.js');
 const CORE = require('../js/core.js');
 const GAME = require('../js/game.js');
 const BOT = require('../js/bot.js');
+const { spatialViolations } = require('./invariants.js');
 
 /* ---------------- 常量 ---------------- */
 const DT = 1 / 60;
@@ -37,13 +38,14 @@ function check(cond, msg, ctx) {
 function failureCount() { return failures; }
 
 /* ---------------- 一局完整通关仿真 ---------------- */
-/* 验收标尺：标准人类化基因（与 test/balance.js 的 M2 标尺同源——Boss 难度就是在这套
- * 标尺下标定到通过率 <37% 的；验收断言的是「人类水平玩家可以通关」，不是 superhuman） */
+/* 历史全流程 M2 标尺；单房难度标定在 enemy-balance.js 使用与 Boss 相同的 M3。
+ * 高难度下这些完整局可以阵亡；流程可达性另用 perfectBot 验证，不注入火力或不死。 */
 const YARDSTICK_GENES = { commit: 45, trackK: 2, sight: 85, delay: 15, dashSkip: 0.85 };
 
 function simulateRun(seed, opts) {
   opts = opts || {};
   const G = GAME.createGame({ seed, headless: true });
+  if (opts.enemyTuning) G.enemyTuning = opts.enemyTuning;
   const bot = BOT.createBot(seed, opts.perfectBot ? null : YARDSTICK_GENES);
   const errors = [];
   const trace = [];
@@ -52,51 +54,31 @@ function simulateRun(seed, opts) {
     boundsViolations: 0, wallClipViolations: 0, nanViolations: 0,
     bossPhasesSeen: [], bossTransitions: 0, bossHpAtTransition: [],
   };
-  let t = 0, lastZone = -1, lastPhase = 0, victoryAt = -1;
+  let t = 0, lastZone = -1, lastPhase = 0, victoryAt = -1, outcome = null;
 
   G.startRun(opts.hero, opts.daily || null);
   while (t < (opts.maxSeconds || MAX_SIM_SECONDS)) {
     const w0 = process.hrtime.bigint();
-    bot.update(G, DT, G.input);
     try {
+      bot.update(G, DT, G.input);
       G.update(DT);
     } catch (e) {
+      outcome = 'error';
       errors.push('帧 ' + stats.frames + ' 未捕获异常: ' + e.stack);
       break;
     }
     const ms = Number(process.hrtime.bigint() - w0) / 1e6;
     stats.wallSumMs += ms;
     stats.wallMaxMs = Math.max(stats.wallMaxMs, ms);
-    if (ms > HANG_SECONDS * 1000) { errors.push('帧 ' + stats.frames + ' 卡死（单帧 ' + ms.toFixed(0) + 'ms）'); break; }
+    if (ms > HANG_SECONDS * 1000) { outcome = 'hang'; errors.push('帧 ' + stats.frames + ' 卡死（单帧 ' + ms.toFixed(0) + 'ms）'); break; }
     stats.frames++;
     t += DT;
 
-    const mw = G.mw * 16, mh = G.mh * 16;
-
-    /* ---- 不变量 1：所有实体不出地图边界 ---- */
-    const allEnts = [G.player].concat(G.enemies);
-    for (const e of allEnts) {
-      if (e.x < -2 || e.x > mw + 2 || e.y < -2 || e.y > mh + 2) {
-        stats.boundsViolations++;
-        if (stats.boundsViolations < 4) trace.push('越界: ' + e.type + ' (' + e.x.toFixed(1) + ',' + e.y.toFixed(1) + ') @' + t.toFixed(1) + 's');
-      }
-    }
-    /* ---- 不变量 2：敌人不嵌墙（击退/挤压后仍被推出） ---- */
-    for (const e of G.enemies) {
-      const r = e.r - 1;
-      if (G.solidAtPx(e.x - r, e.y - r) || G.solidAtPx(e.x + r, e.y - r) ||
-          G.solidAtPx(e.x - r, e.y + r) || G.solidAtPx(e.x + r, e.y + r)) {
-        stats.wallClipViolations++;
-        if (stats.wallClipViolations < 4) trace.push('嵌墙: ' + e.type + ' (' + e.x.toFixed(1) + ',' + e.y.toFixed(1) + ') @' + t.toFixed(1) + 's');
-      }
-    }
-    /* ---- 不变量 3：无 NaN 传染 ---- */
-    if (!isFinite(G.player.x) || !isFinite(G.player.y)) {
-      stats.nanViolations++;
-      if (stats.nanViolations < 3) trace.push('玩家 NaN @' + t.toFixed(1) + 's');
-    }
-    for (const e of G.enemies) {
-      if (!isFinite(e.x) || !isFinite(e.y)) { stats.nanViolations++; break; }
+    /* 玩家与敌人同验；地图读取独立于被测 solidAt/solidAtPx。 */
+    for (const issue of spatialViolations(G)) {
+      const kind=issue.split(':')[0], key={bounds:'boundsViolations',wallClip:'wallClipViolations',nan:'nanViolations'}[kind];
+      stats[key]++;
+      if(stats[key]<4)trace.push(issue+' @'+t.toFixed(1)+'s');
     }
 
     /* ---- Boss 阶段血量逻辑 ---- */
@@ -120,14 +102,16 @@ function simulateRun(seed, opts) {
     }
 
     if (opts.onFrame) opts.onFrame(G, t);
-    if (G.state === 'victory') { victoryAt = t; break; }
+    if (G.state === 'victory') { outcome = 'victory'; victoryAt = t; break; }
     if (G.state === 'defeat') {
+      outcome = 'defeat';
       errors.push('玩家在第 ' + (G.zoneIdx + 1) + ' 区阵亡 @' + t.toFixed(1) + 's（HP=' + G.player.hp + '，敌人=' + G.enemies.length + '）');
       break;
     }
   }
 
   if (!opts.maxSeconds && t >= MAX_SIM_SECONDS && G.state !== 'victory') {
+    outcome = 'timeout';
     const boss = G.bossRef;
     errors.push('超过 ' + MAX_SIM_SECONDS + 's 仍未通关（死锁/停滞），state=' + G.state + '，区域=' + (G.zoneIdx + 1) + '，BossHP=' + (boss ? (boss.hp + '/' + boss.maxHp + ' st=' + boss.st + ' ph=' + boss.phase) : '-'));
     errors.push('快照: 玩家(' + G.player.x.toFixed(0) + ',' + G.player.y.toFixed(0) + ') portal=' + (G.portal ? '开' : '无')
@@ -137,6 +121,7 @@ function simulateRun(seed, opts) {
 
   return {
     ok: G.state === 'victory' && errors.length === 0,
+    outcome: outcome || (opts.maxSeconds ? 'limit' : 'timeout'),
     errors, trace, stats, G, victoryAt,
   };
 }

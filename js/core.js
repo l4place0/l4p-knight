@@ -46,12 +46,12 @@ const PAL = {
 const WEAPONS = {
   smg: {
     id: 'smg', name: '蜂鸣冲锋枪', type: 'gun', tier: 1,
-    interval: 0.105, dmg: 2.4, pellets: 1, spread: 0.085, speed: 350,
+    interval: 0.105, dmg: 3.2, pellets: 1, spread: 0.085, speed: 350,
     knock: 46, range: 460, color: '#7df9ff', shake: 0.7, desc: '高射速 · 稳定压制',
   },
   shotgun: {
     id: 'shotgun', name: '碎星霰弹枪', type: 'gun', tier: 2,
-    interval: 0.88, dmg: 4.2, pellets: 6, spread: 0.46, speed: 300,
+    interval: 0.88, dmg: 5.2, pellets: 6, spread: 0.46, speed: 300,
     knock: 95, range: 150, color: '#ffd166', shake: 2.4, desc: '近距离一次 6 弹 · 高爆发',
   },
   railgun: {
@@ -68,7 +68,7 @@ const WEAPONS = {
   },
   homing: {
     id: 'homing', name: '游隼导弹', type: 'gun', tier: 2,
-    interval: 0.7, dmg: 6, pellets: 1, spread: 0.5, speed: 250,
+    interval: 0.55, dmg: 12, pellets: 1, spread: 0.5, speed: 250,
     knock: 70, range: 760, color: '#ffb84d', shake: 1.4,
     kind: 'homing', bulletLife: 3, bulletR: 3,
     desc: '自锁定导弹 · 自动追踪最近敌人',
@@ -77,7 +77,7 @@ const WEAPONS = {
     id: 'grenade', name: '坍缩榴弹', type: 'gun', tier: 2,
     interval: 1.0, dmg: 3, pellets: 1, spread: 0.06, speed: 300,
     knock: 140, range: 160, color: '#ff8a3d', shake: 2.6,
-    kind: 'grenade', bulletLife: 0.55, bulletR: 3.5,
+    kind: 'grenade', bulletLife: 0.55, bulletR: 3.5, blastDmg: 18,
     desc: '落点重力爆炸 · 溅射成片敌军',
   },
 };
@@ -140,6 +140,15 @@ const ENEMY_DEFS = {
       3: ['clones', 'blinkstorm', 'gravity', 'mines', 'blinkstorm'],
     },
   },
+};
+
+/* 普通战斗房小怪难度（区域序号）；Boss 房及其召唤物使用原数值。
+ * test/enemy-balance.js 标定；G.enemyTuning 可覆盖各字段做确定性对照实验。 */
+const ENEMY_DIFF = {
+  1: { hpMul: 3, speedMul: 1.8, aggression: 4.5, bulletMul: 2.4, densityMul: 3, dmgMul: 4 },
+  2: { hpMul: 3, speedMul: 1.8, aggression: 4.5, bulletMul: 2.4, densityMul: 3, dmgMul: 4 },
+  3: { hpMul: 3, speedMul: 1.8, aggression: 4.5, bulletMul: 2.4, densityMul: 3, dmgMul: 4 },
+  4: { hpMul: 3.2, speedMul: 1.8, aggression: 4.5, bulletMul: 2.4, densityMul: 3, dmgMul: 4 },
 };
 
 /* ---------------- 战术晶片 ----------------
@@ -660,7 +669,7 @@ const SPRITES = {
 const CORE = {
   TAU, clamp, lerp, dist, angDiff, RNG,
   VIEW_W, VIEW_H, TILE, PAL,
-  WEAPONS, ENEMY_DEFS, CHIPS, SYNERGIES, HEROES,
+  WEAPONS, ENEMY_DEFS, ENEMY_DIFF, CHIPS, SYNERGIES, HEROES,
   DAILY_MODIFIERS, dailyForDate,
   MAPS, ZONES, BOSS_PHASES, BOSS2_PHASES, FONT35, SPRITES,
 };

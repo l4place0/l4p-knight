@@ -18,22 +18,10 @@ try {
   process.exit(1);
 }
 const DT = 1 / 60;
+const { spatialViolations } = require('../invariants.js');
 
 function invariants(G, t) {
-  const mw = G.mw * 16, mh = G.mh * 16;
-  const all = [G.player].concat(G.enemies);
-  for (const e of all) {
-    if (!isFinite(e.x) || !isFinite(e.y)) return 'NaN@' + t.toFixed(1);
-    if (e.x < -2 || e.x > mw + 2 || e.y < -2 || e.y > mh + 2) return '越界:' + e.type + '@' + t.toFixed(1);
-  }
-  for (const e of G.enemies) {
-    const r = e.r - 1;
-    if (G.solidAtPx(e.x - r, e.y - r) || G.solidAtPx(e.x + r, e.y - r) ||
-        G.solidAtPx(e.x - r, e.y + r) || G.solidAtPx(e.x + r, e.y + r)) {
-      return '嵌墙:' + e.type + '@' + t.toFixed(1);
-    }
-  }
-  return null;
+  const issue=spatialViolations(G)[0];return issue?issue+'@'+t.toFixed(1):null;
 }
 
 function scenario(name, seed, hero, dmg, frames, setup, judge) {
@@ -70,7 +58,10 @@ function record(r) {
 
 // S1 通关流：dmg=20 快速击杀，150 游戏秒内应 VICTORY（覆盖房间/敌人/晶片/商店/传送门全链路）
 // （boss 重标定后血量大涨，dmg=8 已不够在时限内击破最终 Boss——探测目标是链路推进而非数值）
-record(scenario('S1 通关流', 1, 'vanguard', 20, 60 * 150, null, {
+// 流程探针使用原始小怪与高火力；难度由 M3 batch 独立验收。
+record(scenario('S1 通关流', 1, 'vanguard', 20, 60 * 150, G => {
+  G.enemyTuning={hpMul:1,speedMul:1,aggression:1,bulletMul:1,densityMul:1,dmgMul:1};
+}, {
   tick: (G) => G.state === 'victory',
   judge: (G, t) => G.state === 'victory'
     ? { ok: true, note: 'S1 VICTORY@' + t.toFixed(1) + 's' }

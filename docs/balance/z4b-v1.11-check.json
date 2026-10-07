@@ -1,0 +1,56 @@
+{
+ "config": {
+  "seeds": "21",
+  "heroes": "all",
+  "workers": 1,
+  "dmg": null
+ },
+ "wallMs": 261,
+ "count": 1,
+ "passed": 1,
+ "failed": 0,
+ "byOutcome": {
+  "clear": 1
+ },
+ "slowest": [
+  {
+   "idx": 27,
+   "id": "z4b/prototype/s21",
+   "kind": "room",
+   "mapId": "z4b",
+   "hero": "prototype",
+   "seed": 21,
+   "ok": true,
+   "outcome": "clear",
+   "seconds": 51.5,
+   "kills": 13,
+   "damageTaken": 4,
+   "hpEnd": 5,
+   "chips": 6,
+   "wallAvgMs": 0.04,
+   "wallMaxMs": 4.1,
+   "wallTotalMs": 253
+  }
+ ],
+ "baseline": null,
+ "results": [
+  {
+   "idx": 27,
+   "id": "z4b/prototype/s21",
+   "kind": "room",
+   "mapId": "z4b",
+   "hero": "prototype",
+   "seed": 21,
+   "ok": true,
+   "outcome": "clear",
+   "seconds": 51.5,
+   "kills": 13,
+   "damageTaken": 4,
+   "hpEnd": 5,
+   "chips": 6,
+   "wallAvgMs": 0.04,
+   "wallMaxMs": 4.1,
+   "wallTotalMs": 253
+  }
+ ]
+}
