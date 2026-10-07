@@ -11,3 +11,9 @@ desktop.ini
 
 # 消融实验产物（结果目录，实验后聚合入库或删除）
 test/abl-results/
+
+# 随机变异测试结果（--json 产物）
+test/mutation-results/
+
+# ZCode 会话目录
+.zcode/
