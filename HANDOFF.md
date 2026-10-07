@@ -1,6 +1,6 @@
 # HANDOFF · 零号协议 ZERO PROTOCOL 开发交接文档
 
-> 交接日期：2026-10-06 · 交接版本：v1.7（基于 v1.6.1，按路线图第 6、7 项扩展）
+> 交接日期：2026-10-07 · 交接版本：v1.9（基于 v1.8，Boss 难度重标定 + 测试标尺语义升级）
 > 项目来源：`ai-benchmark/glm-5,3-flash/zcode/My Soul Knight/shot01`（已完整复制至本目录，逐文件 diff 校验一致）
 > 本文目标：让任何开发者（人或 AI）在不询问原作者的情况下继续开发。
 
@@ -43,6 +43,7 @@ node test/matrix.js --list                    # 枚举全部场景（JSON）
 node test/matrix.js --run z4b/stalker         # 只跑匹配前缀的场景
 node test/matrix.js --seeds 1-5 --save-baseline test/matrix.baseline.json  # 存基线（p50/p95）
 node test/matrix.js --seeds 1-5 --baseline test/matrix.baseline.json       # 与基线对比劣化
+node test/balance.js --boss boss --baseline   # Boss 难度标定：1 batch=100 场景通过率（--try/--auto/--human/--fresh）
 node test/diag.js <seed>       # 卡点诊断：逐秒打印玩家/敌人/输入微观状态
 node test/serve.js 8941        # 本地服务器 → http://127.0.0.1:8941/
 node test/structure.check.js   # 结构守护：脚本编排顺序/模块导出面/逐文件语法（patch 后必做）
@@ -122,6 +123,7 @@ test/serve.js       静态服务器
 | 碰撞 | game/systems.js `moveAxis` / `resolveOutOfWall` | 逐轴回退式（位移 < 9px < 墙厚 16px 防隧穿）+ 中心在墙内时最小面推出 + **箱体角嵌入墙角时最小穿透轴兜底推出**（历史 bug #4、#9）。**不要改回钳位式** |
 | 刷怪点 | `computeReachable` / `farSpot` | 只用玩家出生瓦片 BFS 可达点，杜绝封闭凹室死局 |
 | Boss 定义 | core.js `ENEMY_DEFS.boss / .boss2` | `isBoss` 走 Boss 状态机；`phases` 三阶段名/色；`pools` 各阶段攻击池；`final` 标记最终首领（击破 → VICTORY），非 final 击破 → 传送门进下一区 |
+| Boss 难度 | bosses.js `BOSS_DIFF` + core.js hp/speed | v1.9 重标定：M3 人类化标尺（bot 基因 commit30/trackK3/sight100/delay10/dashSkip0.6）下单 Boss 通过率 <37%（boss1 29%/boss2 30%，全流程语境）；`G.bossTuning` 为实验叠加钩（balance.js --try 注入）；数值变动须重跑 test/balance.js 标定 |
 | Boss 死亡 | `bossDying` / `updateBoss` | Boss 死后**滞留** enemies 列表走 dying 演出，完成后置 `dead` 并写 `G.bossDown[zoneIdx]`；提前移除会死锁（历史 bug #2） |
 | 房间流程 | `updateWaves` → `offerChips` → `chooseChip` → 区域末尾 `openShop` → `shopLeave` → `openPortal` → `nextLevel` | `nextLevel`：房内推进 → 区域末尾有 `bossId` 且未击破 → 首领房；首领房传送门 → 下一区。`chipOffered` 一次性标志防重复触发 |
 | 引力井 | game/systems.js `G.wells`·`updateWells`（布设于 game/bosses.js） | Boss2 专属：范围内拉扯玩家（冲刺 `dashT > 0` 时免疫拉扯），到期内爆 `explode`；bot 在 `computeDanger` 规避 |

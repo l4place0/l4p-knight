@@ -178,7 +178,7 @@ PARTS.systems = function (ctx) {
         }
       } else {
         if (P.iframes <= 0 && P.dashT <= 0 && dist(b.x, b.y, P.x, P.y) < b.r + P.r) {
-          ctx.damagePlayer(1, b.x, b.y);
+          ctx.damagePlayer(b.dmg || 1, b.x, b.y);   // 弹体伤害生效（此前硬编码 1，b.dmg 对玩家从不生效）
           dead = true;
         }
       }

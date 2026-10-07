@@ -18,7 +18,7 @@ const BOT = require('../js/bot.js');
 
 /* ---------------- 常量 ---------------- */
 const DT = 1 / 60;
-const MAX_SIM_SECONDS = 60 * 8;      // 单局最长模拟 8 游戏分钟
+const MAX_SIM_SECONDS = 60 * 11;     // 单局最长模拟 11 游戏分钟（Boss 重标定后全通关需更久）
 const HANG_SECONDS = 3.0;            // 单帧逻辑耗时超过 3 秒视为卡死
 const SEEDS = process.env.SEEDS ? process.env.SEEDS.split(',').map(Number) : [1, 2, 3];
 
@@ -37,10 +37,14 @@ function check(cond, msg, ctx) {
 function failureCount() { return failures; }
 
 /* ---------------- 一局完整通关仿真 ---------------- */
+/* 验收标尺：标准人类化基因（与 test/balance.js 的 M2 标尺同源——Boss 难度就是在这套
+ * 标尺下标定到通过率 <37% 的；验收断言的是「人类水平玩家可以通关」，不是 superhuman） */
+const YARDSTICK_GENES = { commit: 45, trackK: 2, sight: 85, delay: 15, dashSkip: 0.85 };
+
 function simulateRun(seed, opts) {
   opts = opts || {};
   const G = GAME.createGame({ seed, headless: true });
-  const bot = BOT.createBot(seed);
+  const bot = BOT.createBot(seed, opts.perfectBot ? null : YARDSTICK_GENES);
   const errors = [];
   const trace = [];
   const stats = {

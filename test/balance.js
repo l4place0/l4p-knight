@@ -51,8 +51,8 @@ function runScenario(spec) {
   const GAME = require(path.join(ROOT, 'js', 'game.js'));
   const BOT = require(path.join(ROOT, 'js', 'bot.js'));
   const G = GAME.createGame({ seed: spec.seed, headless: true });
-  const bot = BOT.createBot(spec.seed);
   const wd = workerData;
+  const bot = BOT.createBot(spec.seed, wd.genes);   // 人类化基因（可选，默认 undefined = 完美 bot）
   G.debugDmg = wd.playerDmg || 0;
   G.startRun(spec.hero);
   if (wd.tuning) G.bossTuning = wd.tuning;
@@ -62,6 +62,12 @@ function runScenario(spec) {
   G.powerBonus = spec.build.power;
   G.bonusShield = spec.build.shield;
   G.computeStats();
+  /* 全流程语境：玩家打到 3/4 区时不会满血满状态——按种子确定性预扣生命（模拟前两区的消耗），
+   * 使单 Boss 局的通过率贴近真实全程通过率（--fresh 可关闭回满血行为） */
+  if (!wd.fresh) {
+    const burden = spec.zone === 4 ? 4 : 2;          // 4 区 Boss 前累积消耗更深
+    G.player.hp = Math.max(2, G.player.hp - (spec.seed % burden) - (spec.seed % 3 === 0 ? 1 : 0));
+  }
 
   let frames = 0, stallSecs = 0, lastHpSum = null, lastKills = -1;
   let outcome = 'timeout';
@@ -95,7 +101,7 @@ function runScenario(spec) {
   const hpLost = hpStart - (G.player.hp + G.player.shield);
   return {
     outcome, seconds: +(frames * DT).toFixed(1),
-    hpLost, hero: spec.hero, seed: spec.seed,
+    hpLost, dmgTaken: G.damageTaken, hero: spec.hero, seed: spec.seed,
   };
 }
 
@@ -106,13 +112,13 @@ function workerMain() {
 }
 
 /* ---------------- batch（1 batch = size 个场景，worker 并行） ---------------- */
-async function runBatch(bossId, tuning, size, workers, playerDmg) {
+async function runBatch(bossId, tuning, size, workers, playerDmg, genes, fresh) {
   const specs = buildScenarios(bossId, size);
   const nWorkers = Math.min(workers, specs.length);
   const chunks = [];
   for (let i = 0; i < nWorkers; i++) chunks.push(specs.filter((_, j) => j % nWorkers === i));
   const all = await Promise.all(chunks.map(chunk => new Promise((resolve, reject) => {
-    const w = new Worker(__filename, { workerData: { specs: chunk, tuning, playerDmg } });
+    const w = new Worker(__filename, { workerData: { specs: chunk, tuning, playerDmg, genes, fresh } });
     w.on('message', resolve);
     w.on('error', reject);
     w.on('exit', (c) => { if (c !== 0) reject(new Error('worker exit ' + c)); });
@@ -130,10 +136,15 @@ function summarize(results) {
     perHero[h] = Math.round(rs.filter(r => r.outcome === 'bossDown').length / rs.length * 100) + '%(' + rs.length + ')';
   }
   const avgHpLost = Math.round(results.reduce((a, r) => a + r.hpLost, 0) / n * 10) / 10;
+  // 受击伤统计：hpLost 会被 Boss 死亡掉落（心/电池）掩盖，damageTaken 才是真实的威胁信号
+  const dmgs = results.map(r => r.dmgTaken).sort((a, b) => a - b);
+  const avgDmg = Math.round(results.reduce((a, r) => a + r.dmgTaken, 0) / n * 10) / 10;
+  const maxDmg = dmgs[dmgs.length - 1];
+  const p90Dmg = dmgs[Math.min(dmgs.length - 1, Math.floor(n * 0.9))];
   const avgSecs = Math.round(results.reduce((a, r) => a + r.seconds, 0) / n * 10) / 10;
   return { n, bossDown: count('bossDown'), defeat: count('defeat'), timeout: count('timeout'),
     stall: count('stall'), violation: count('violation'), error: count('error'),
-    passRate, perHero, avgHpLost, avgSecs };
+    passRate, perHero, avgHpLost, avgSecs, avgDmg, maxDmg, p90Dmg };
 }
 
 /* ---------------- CLI ---------------- */
@@ -156,8 +167,11 @@ async function main() {
   const playerDmg = parseFloat(get('--playerDmg', 0)) || 0;
   const target = parseInt(get('--target', 37), 10);
   const tuning = has('--try') ? parseKV(get('--try', '')) : null;
+  const genes = has('--human') ? parseKV(get('--human', '')) : null;   // 人类化基因（标尺校准）
+  const fresh = has('--fresh');   // 全流程语境开关（默认预扣生命模拟前区消耗）
   const auto = has('--auto');
-  const label = (t) => t ? Object.entries(t).map(([k, v]) => k + '=' + v).join(',') : 'baseline(当前数值)';
+  const label = (t, g) => (t ? Object.entries(t).map(([k, v]) => k + '=' + v).join(',') : 'baseline(当前数值)') +
+    (g ? ' · human ' + Object.entries(g).map(([k, v]) => k + '=' + v).join(',') : '');
 
   let cfg = tuning || {};
   if (auto) {
@@ -172,15 +186,15 @@ async function main() {
     let d = 1, prev = null;
     for (d = 1.15; d <= 4.01; d = Math.round((d + 0.15) * 100) / 100) {
       cfg = map(d);
-      const s = summarize(await runBatch(bossId, cfg, size, workers, playerDmg));
-      console.log('[auto d=' + d.toFixed(2) + '] ' + label(cfg) + ' → 通过率 ' + s.passRate + '%（击破 ' + s.bossDown + '/' + s.n +
+      const s = summarize(await runBatch(bossId, cfg, size, workers, playerDmg, genes, fresh));
+      console.log('[auto d=' + d.toFixed(2) + '] ' + label(cfg, genes) + ' → 通过率 ' + s.passRate + '%（击破 ' + s.bossDown + '/' + s.n +
         ' · 阵亡 ' + s.defeat + ' · 超时 ' + s.timeout + ' · 停滞 ' + s.stall + ' · 均损血 ' + s.avgHpLost + ' · 均时 ' + s.avgSecs + 's）');
       if (s.passRate < target) {
         // 二分收敛到最小满足配置
         let lo = prev === null ? d - 0.15 : prev.d, hi = d;
         for (let k = 0; k < 5 && hi - lo > 0.05; k++) {
           const mid = Math.round((lo + hi) / 2 * 100) / 100;
-          const ms = summarize(await runBatch(bossId, map(mid), size, workers, playerDmg));
+          const ms = summarize(await runBatch(bossId, map(mid), size, workers, playerDmg, genes, fresh));
           console.log('[bisect d=' + mid.toFixed(2) + '] 通过率 ' + ms.passRate + '%');
           if (ms.passRate < target) hi = mid; else lo = mid;
         }
@@ -191,12 +205,12 @@ async function main() {
     }
   }
 
-  console.log('【' + bossId + ' 难度标定】配置: ' + label(cfg) + ' · playerDmg=' + playerDmg + ' · 1 batch = ' + size + ' 场景 × ' + workers + ' workers');
-  const final = await runBatch(bossId, cfg, size, workers, playerDmg);
+  console.log('【' + bossId + ' 难度标定】配置: ' + label(cfg, genes) + ' · playerDmg=' + playerDmg + ' · 1 batch = ' + size + ' 场景 × ' + workers + ' workers');
+  const final = await runBatch(bossId, cfg, size, workers, playerDmg, genes, fresh);
   const s = summarize(final);
   console.log('通过率: ' + s.passRate + '%（目标 < ' + target + '%）');
   console.log('明细: 击破 ' + s.bossDown + ' · 阵亡 ' + s.defeat + ' · 超时 ' + s.timeout + ' · 停滞 ' + s.stall +
-    ' · 违规 ' + s.violation + ' · 异常 ' + s.error + ' · 均损血 ' + s.avgHpLost + ' · 均耗时 ' + s.avgSecs + 's');
+    ' · 违规 ' + s.violation + ' · 异常 ' + s.error + ' · 均损血 ' + s.avgHpLost + ' · 受击伤均/p90/max ' + s.avgDmg + '/' + s.p90Dmg + '/' + s.maxDmg + ' · 均耗时 ' + s.avgSecs + 's');
   console.log('分英雄: ' + Object.entries(s.perHero).map(([h, p]) => h + ' ' + p).join(' · '));
   console.log(s.passRate < target ? '✔ 达标：通过率 < ' + target + '%' : '✘ 未达标：通过率 ≥ ' + target + '%');
   if (has('--json')) {

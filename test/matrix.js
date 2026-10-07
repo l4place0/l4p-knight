@@ -116,7 +116,9 @@ function checkInvariants(G) {
 
 function runScenario(spec, opts) {
   const G = GAME.createGame({ seed: spec.seed, headless: true });
-  const bot = BOT.createBot(spec.seed);
+  // Boss 场景用 M3 人类化标尺（与 test/balance.js 标定口径一致），房间场景保持完美 bot
+  const bot = BOT.createBot(spec.seed, spec.kind === 'boss'
+    ? { commit: 30, trackK: 3, sight: 100, delay: 10, dashSkip: 0.6 } : undefined);
   G.startRun(spec.hero);
   G.debugJump(spec.zone, spec.kind === 'boss' ? 1 : spec.room);
   if (spec.kind === 'boss') G.loadBossRoom(spec.bossId);

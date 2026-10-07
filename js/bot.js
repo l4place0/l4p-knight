@@ -17,8 +17,27 @@ const WEAPON_TIER = { smg: 1, shotgun: 2, homing: 2, grenade: 2, railgun: 3 };
 const BAND = { smg: [110, 170], shotgun: [55, 105], railgun: [150, 230], blade: [16, 26], homing: [120, 190], grenade: [100, 160] };
 const CONE = { smg: 0.11, shotgun: 0.32, railgun: 0.06, blade: 0.5, homing: 0.6, grenade: 0.22 };
 
-function createBot(seed) {
+function createBot(seed, genes) {
   const rng = RNG(((seed || 1) * 2654435761) >>> 0 || 7);
+  /* 人类化基因（可选，默认不传 = 行为与原版逐位一致；噪声走独立 RNG 流，不扰动主序列）
+   * sight：感知半径（默认 130——人类只看视野内威胁）
+ * commit：决策惯性帧数（承诺方向后不逐帧微调——人类的移动惯性)
+   * trackK：同时追踪的弹幕数（默认全部——人类只盯最近几颗，未注意的弹才是杀招）
+   * delay：危险场反应延迟帧数（使用 delay 帧前的危险数据）
+   * dashSkip：冲刺触发时以此概率放弃（冲刺保守度） */
+  const humanRng = genes ? RNG((((seed || 1) * 2654435761) ^ 0x9e3779b9) >>> 0 || 7) : null;
+  const dangerHist = genes && genes.delay ? [] : null;
+  let commitT = 0, commitX = 0, commitY = 0;   // 决策惯性：承诺方向与剩余帧数
+  function humanizedDanger(D) {
+    if (dangerHist) {
+      dangerHist.push(D);
+      if (dangerHist.length > genes.delay) return dangerHist.shift();
+    }
+    return D;
+  }
+  function wantDash() {
+    return !genes || !genes.dashSkip || humanRng() >= genes.dashSkip;
+  }
   let strafeDir = 1, strafeT = 0, stuckT = 0, lx = 0, ly = 0;
   let stuckReps = 0, escapeT = 0, escapeA = 0, lmx = 0, lmy = 0;
   let path = [], pathT = 0, pathI = 0, pathTargetKey = '';
@@ -50,27 +69,34 @@ function createBot(seed) {
   }
 
   /* 危险场计算：返回躲避向量与危险度（ignoreBomber: 僵局升级时压制自爆蜂规避——
-   * 冻结/不可及的自爆蜂只有贴近才能逼爆，规避力 ×2.1 缩放会在 ~73px 形成不可突破的力平衡） */
-  function computeDanger(G, P, ignoreBomber) {
+   * 冻结/不可及的自爆蜂只有贴近才能逼爆，规避力 ×2.1 缩放会在 ~73px 形成不可突破的力平衡）
+   * 人类化基因 genes（可选）：sight 感知半径（默认 130）/ trackK 只盯最近 K 颗弹（默认全部）——
+   * 人类不会同时追踪全屏弹幕，未注意的弹才是杀招；无 genes 时走原路径逐位不变 */
+  function computeDanger(G, P, ignoreBomber, genes) {
     let dx = 0, dy = 0, danger = 0;
-    // 敌方子弹
+    const sight = (genes && genes.sight) || 130;
+    const trackK = (genes && genes.trackK) || 99;
+    // 敌方子弹：先收集「已被注意到」的候选，再按距离取最近 trackK 颗
+    const noticed = [];
     for (const b of G.bullets) {
       if (b.friendly) continue;
       const rx = P.x - b.x, ry = P.y - b.y;
       const d = Math.hypot(rx, ry);
-      if (d > 130 || d < 0.01) continue;
+      if (d > sight || d < 0.01) continue;
       const vl = Math.hypot(b.vx, b.vy) || 1;
       const bx = b.vx / vl, by = b.vy / vl;
       const along = rx * bx + ry * by;
       if (along < -6) continue;
       const px = rx - bx * along, py = ry - by * along;
       const pd = Math.hypot(px, py);
-      if (pd < 16) {
-        const wgt = (1 - d / 130) * 6.5;
-        const pl = Math.hypot(px, py) || 1;
-        dx += px / pl * wgt; dy += py / pl * wgt;
-        danger += wgt;
-      }
+      if (pd < 16) noticed.push({ d, px, py, pd });
+    }
+    if (genes) noticed.sort((a, b) => a.d - b.d);
+    for (const s of genes ? noticed.slice(0, trackK) : noticed) {
+      const wgt = (1 - s.d / sight) * 6.5;
+      const pl = s.pd || 1;
+      dx += s.px / pl * wgt; dy += s.py / pl * wgt;
+      danger += wgt;
     }
     // 地雷
     for (const m of G.mines) {
@@ -283,7 +309,7 @@ function createBot(seed) {
       && w.type !== 'rail');
 
     /* ---- 危险规避 ---- */
-    const D = computeDanger(G, P, botStalled);
+    const D = genes ? humanizedDanger(computeDanger(G, P, botStalled, genes)) : computeDanger(G, P, botStalled);
     let wx = D.dx * 2.1, wy = D.dy * 2.1;
     // 脱困脉冲生效中
     if (escapeT > 0) { escapeT -= dt; wx += Math.cos(escapeA) * 2.4; wy += Math.sin(escapeA) * 2.4; }
@@ -373,6 +399,12 @@ function createBot(seed) {
     }
 
     /* ---- 16 向评分移动（模拟真实箱体位移，墙敏感） ---- */
+    /* 决策惯性基因 commit：人类承诺一个移动方向后 200-400ms 内不逐帧微调——
+     * 承诺期内沿用已定方向（无法逐帧穿针，环弹间隙的精确走位消失） */
+    if (genes && genes.commit && commitT > 0) {
+      commitT--;
+      input.moveX = commitX; input.moveY = commitY;
+    } else {
     let bestA = null, bestScore = -1e9;
     for (let i = 0; i < 16; i++) {
       const a = i / 16 * TAU;
@@ -390,10 +422,12 @@ function createBot(seed) {
     if (bestA != null && bestScore > -3.0) {
       input.moveX = Math.cos(bestA);
       input.moveY = Math.sin(bestA);
+      if (genes && genes.commit) { commitT = genes.commit; commitX = input.moveX; commitY = input.moveY; }
+    }
     }
 
     /* ---- 冲刺 ---- */
-    if (D.danger > 6.0 && P.dashCd <= 0) {
+    if (D.danger > 6.0 && P.dashCd <= 0 && wantDash()) {
       input.dash = true;
     }
 
@@ -450,7 +484,7 @@ function createBot(seed) {
     }
 
     /* ---- 记录本帧输出，供下帧卡死检测 ---- */
-    if (P.dashCd <= 0 && stuckT > 0.9 && (D.danger > 1.5 || !target || !canSeeTarget)) input.dash = true;
+    if (P.dashCd <= 0 && stuckT > 0.9 && (D.danger > 1.5 || !target || !canSeeTarget) && wantDash()) input.dash = true;
     if (G.__botdbg) G.__botdbg.push({ wx: +wx.toFixed(2), wy: +wy.toFixed(2), nav: navX != null, canSee: canSeeTarget, mb: meleeBreaker, bs: botStalled, stuckT: +stuckT.toFixed(2), danger: +D.danger.toFixed(1), d: +((target && dist(P.x, P.y, target.x, target.y)) || 0).toFixed(0), mx: +input.moveX.toFixed(2), my: +input.moveY.toFixed(2), wp: path[pathI] ? ((path[pathI].x / 16) | 0) + ',' + ((path[pathI].y / 16) | 0) : (navX != null ? '直行' : '-'), pi: pathI, pl: path.length });
     lmx = input.moveX; lmy = input.moveY;
   }

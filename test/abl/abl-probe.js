@@ -68,8 +68,9 @@ function record(r) {
   else console.log('ALIVE ' + r.note);
 }
 
-// S1 通关流：dmg=8 快速击杀，150 游戏秒内应 VICTORY（覆盖房间/敌人/晶片/商店/传送门全链路）
-record(scenario('S1 通关流', 1, 'vanguard', 8, 60 * 150, null, {
+// S1 通关流：dmg=20 快速击杀，150 游戏秒内应 VICTORY（覆盖房间/敌人/晶片/商店/传送门全链路）
+// （boss 重标定后血量大涨，dmg=8 已不够在时限内击破最终 Boss——探测目标是链路推进而非数值）
+record(scenario('S1 通关流', 1, 'vanguard', 20, 60 * 150, null, {
   tick: (G) => G.state === 'victory',
   judge: (G, t) => G.state === 'victory'
     ? { ok: true, note: 'S1 VICTORY@' + t.toFixed(1) + 's' }

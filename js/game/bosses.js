@@ -15,6 +15,17 @@ PARTS.bosses = function (ctx) {
   const G = ctx.G;
   const rng = ctx.rng;
 
+  /* Boss 难度表（test/balance.js · M3 标尺 commit30/trackK3/sight100/delay10/dashSkip0.6 标定，
+   * 全流程语境=预扣生命；两 Boss 均通过率 < 37%）：
+   * boss1 29%（HP×3.213/speed×3.595 烘进 core.js）· boss2 30%（HP×4.45/speed×3.32 烘进 core.js）。
+   * G.bossTuning（实验注入钩）与之相乘。 */
+  const BOSS_DIFF = {
+    boss: { aggression: 1.798, bulletMul: 2.637, densityMul: 2.194, dmgMul: 4.068 },
+    boss2: { aggression: 2.456, bulletMul: 3.869, densityMul: 2.947, dmgMul: 6.14 },
+  };
+
+  function diffOf(e) { return BOSS_DIFF[e.type] || {}; }
+
   /* ---------------- Boss ---------------- */
   function bossTransition(e, ph) {
     e.st = 'transition'; e.t = 1.5; e.phase = ph; e.invuln = 1.6;
@@ -119,13 +130,15 @@ PARTS.bosses = function (ctx) {
     const atk = e.atk;
     if (!atk) return;
     atk.t += dt;
-    // 弹幕密度注入钩：G.bossTuning.densityMul（难度标定用，默认空 = 行为不变）
-    const dm = (G.bossTuning && G.bossTuning.densityMul) || 1;
+    // 弹幕密度：BOSS_DIFF 难度表 × G.bossTuning 实验注入钩（默认空 = 仅难度表生效）
+    const dm = (diffOf(e).densityMul || 1) * ((G.bossTuning && G.bossTuning.densityMul) || 1);
 
     function bossBullet(ang, speed) {
-      // Boss 弹速注入钩：G.bossTuning.bulletMul（难度标定用，默认空 = 行为不变）
+      // 弹速/单发伤害：BOSS_DIFF 难度表 × G.bossTuning 实验注入钩
       const bt = G.bossTuning || {};
-      ctx.spawnBullet(e.x, e.y, ang, speed * (bt.bulletMul || 1), 1, false, {
+      const df = diffOf(e);
+      ctx.spawnBullet(e.x, e.y, ang, speed * (df.bulletMul || 1) * (bt.bulletMul || 1),
+        Math.max(1, Math.round(1 * (df.dmgMul || 1) * (bt.dmgMul || 1))), false, {
         color: '#ff4757', core: '#ffd9dd', r: 3, knock: 0, life: 6,
       });
     }
@@ -223,7 +236,11 @@ PARTS.bosses = function (ctx) {
       if (!atk.fired && atk.t > 0.5) {
         atk.fired = true;
         if (G.wells.length < 4) {
-          const n = 2;
+          // 引力井注入钩：wellCount（数量）/ pullMul（拉力）——难度标定用，默认 2 井 × 820
+          const bt2 = G.bossTuning || {};
+          const df2 = diffOf(e);
+          const n = Math.min(4, Math.max(1, Math.round(2 * (df2.wellCount || bt2.wellCount || 1))));
+          const pull = 820 * (df2.pullMul || 1) * (bt2.pullMul || 1);
           for (let i = 0; i < n; i++) {
             const ox = rng.range(-75, 75), oy = rng.range(-55, 55);
             let wx = clamp(P.x + ox, TILE * 2, (G.mw - 2) * TILE);
@@ -231,7 +248,7 @@ PARTS.bosses = function (ctx) {
             if (G.solidAtPx(wx, wy)) { wx = P.x; wy = P.y; }
             G.wells.push({
               x: wx, y: wy, t: 0, fuse: e.phase >= 3 ? 2.6 : 3.2,
-              r: 92, pull: 820, dmg: 2,
+              r: 92, pull, dmg: 2 * (df2.dmgMul || 1) * (bt2.dmgMul || 1),
             });
             ctx.addRing(wx, wy, '#ffb84d', { r0: 4, vr: 220, life: 0.4 });
             G.sfx('minePlace');
@@ -281,8 +298,8 @@ PARTS.bosses = function (ctx) {
   }
 
   function bossAtkInterval(e) {
-    // 攻击欲望注入钩：G.bossTuning.aggression > 1 缩短攻击间隔（难度标定用，默认空 = 行为不变）
-    const aggr = (G.bossTuning && G.bossTuning.aggression) || 1;
+    // 攻击欲望：BOSS_DIFF 难度表 × G.bossTuning 实验注入钩（>1 缩短攻击间隔）
+    const aggr = (diffOf(e).aggression || 1) * ((G.bossTuning && G.bossTuning.aggression) || 1);
     return (e.phase === 1 ? 1.7 : e.phase === 2 ? 1.4 : 1.1) * rng.range(0.85, 1.15) / aggr;
   }
   function startBossAttack(e) {

@@ -115,7 +115,10 @@ const ENEMY_DEFS = {
   wraith:  { name: '虚空徘徊者', hp: 13, r: 6, speed: 40, mass: 1.0, contact: 1, score: 16 },
   echo:    { name: '镜像残影', hp: 8,  r: 5,   speed: 26, mass: 0.7, contact: 0, score: 8 },
   boss: {
-    name: '零号 · 处刑者', hp: 950, r: 15, speed: 42, mass: 9, contact: 2, score: 800,
+    name: '零号 · 处刑者', hp: 3053, r: 15, speed: 151, mass: 9, contact: 2, score: 800,
+    // ↑ 难度标定产物（test/balance.js · M3 标尺 commit30/trackK3/sight100/delay10/dashSkip0.6 ·
+    //   全流程语境（预扣生命）下通过率 29% < 37%）：hp×3.213 / speed×3.595；
+    //   欲望×1.798 / 弹速×2.637 / 密度×2.194 / 单发×4.068→4 烘焙于 js/game/bosses.js BOSS_DIFF.boss
     isBoss: true, final: false, color: '#ff4757', sub: 'ZONE GUARDIAN', phases: BOSS_PHASES,
     pools: {
       1: ['ring', 'fan'],
@@ -124,7 +127,12 @@ const ENEMY_DEFS = {
     },
   },
   boss2: {
-    name: '终焉 · 回响体', hp: 1250, r: 15, speed: 46, mass: 9, contact: 2, score: 1500,
+    name: '终焉 · 回响体', hp: 5564, r: 15, speed: 153, mass: 9, contact: 2, score: 1500,
+    // ↑ 难度标定产物（test/balance.js · M3 标尺 commit30/trackK3/sight100/delay10/dashSkip0.6 ·
+    //   相对烘焙基 ×1.6 → 通过率 32% < 37%）：hp×4.45 / speed×3.32；
+    //   欲望×2.362 / 弹速×3.72 / 密度×2.834 / 单发×5.9→6 / 井伤×5.9 烘焙于 js/game/bosses.js BOSS_DIFF.boss2
+    // ↑ 难度标定产物（test/balance.js · M2 人类化标尺 · 通过率 28% < 37%）：hp×3.45 / speed×3，
+    //   欲望×8 / 弹速×4.15 / 密度×6.5 / 单发 4 / 井伤×4 烘焙于 js/game/bosses.js 的 BOSS_DIFF.boss2
     isBoss: true, final: true, color: '#e8e8ee', sub: 'FINAL BOSS', phases: BOSS2_PHASES,
     pools: {
       1: ['ring', 'clones', 'fan', 'clones'],
