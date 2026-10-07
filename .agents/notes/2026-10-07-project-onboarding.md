@@ -9,6 +9,7 @@ base: "main @ 458bd1a（v1.9）；HANDOFF.md 已有未提交修改"
 version: "v1.9 onboarding"
 branch: main
 commits:
+  - "eacc460 本次统一提交此前工作记录、issue 与最终平衡实现"
   - "458bd1a v1.9 Boss 难度重标定，当前代码与验收基线"
   - "66c0cde v1.8 部件化重构与结构守护，当前架构来源"
 tags: [onboarding, architecture, baseline, testing, documentation]

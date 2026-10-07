@@ -9,6 +9,7 @@ base: "main @ 458bd1a，seed=3 停滞已完成诊断"
 version: "v1.9 issue record"
 branch: main
 commits:
+  - "eacc460 本次统一提交此前工作记录、issue 与最终平衡实现"
   - "458bd1a 当前 v1.9 基线及问题所针对的移动惯性与验收实现"
 tags: [issue, documentation, portal, bot, deferred]
 ---
@@ -16,7 +17,7 @@ tags: [issue, documentation, portal, bot, deferred]
 # 任务归档 · 传送门导航停滞登记
 
 - **起点**：seed=3 问题诊断完成 → **产出**：docs/issue/seed3-portal-navigation-stall.md。
-- 操作者明确安排后续修复，本次仅登记；commits 关联已有问题基线，未创建新 Git 提交。
+- 操作者明确安排后续修复，本项工作当时仅登记；2026-10-08 随 eacc460 统一提交，问题仍延期。
 
 ## 完成内容
 

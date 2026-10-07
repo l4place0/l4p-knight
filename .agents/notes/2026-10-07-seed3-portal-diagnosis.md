@@ -9,6 +9,7 @@ base: "main @ 458bd1a（v1.9）及 onboarding 实测停滞"
 version: "v1.9 diagnosis"
 branch: main
 commits:
+  - "eacc460 本次统一提交此前工作记录、issue 与最终平衡实现"
   - "458bd1a 引入 Boss 重标定与 bot 人类化基因，诊断所针对的现有基线"
 tags: [diagnosis, bot, portal, navigation, commit, false-green]
 ---
