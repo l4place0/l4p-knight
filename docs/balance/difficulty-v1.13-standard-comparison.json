@@ -1,0 +1,5045 @@
+{
+  "gameVersion": "1.13.0",
+  "genes": {
+    "commit": 30,
+    "trackK": 3,
+    "sight": 100,
+    "delay": 10,
+    "dashSkip": 0.6
+  },
+  "config": {
+    "difficulty": "standard",
+    "size": 100,
+    "seedStart": 51,
+    "workers": 3
+  },
+  "profile": {
+    "name": "标准",
+    "target": 67,
+    "damageScale": 0.2035,
+    "desc": "推荐体验 · 适度容错"
+  },
+  "summary": {
+    "n": 100,
+    "passRate": 95,
+    "target": 67,
+    "confidence95": [
+      88.82,
+      97.85
+    ],
+    "outcomes": {
+      "victory": 95,
+      "defeat": 5
+    },
+    "invalid": 0,
+    "perHero": {
+      "vanguard": 92,
+      "bulwark": 96,
+      "stalker": 96,
+      "prototype": 96
+    },
+    "avgSeconds": 604.44
+  },
+  "results": [
+    {
+      "hero": "bulwark",
+      "seed": 51,
+      "outcome": "victory",
+      "seconds": 511.02,
+      "zone": 4,
+      "map": "boss",
+      "kills": 73,
+      "hits": 38,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 106.87,
+          "hits": 16,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 134.08,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 115.15,
+          "hits": 11,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 154.92,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 51,
+      "outcome": "victory",
+      "seconds": 830.45,
+      "zone": 4,
+      "map": "boss",
+      "kills": 74,
+      "hits": 97,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 87.78,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 170.88,
+          "hits": 8,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 227.07,
+          "hits": 38,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 344.72,
+          "hits": 48,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 51,
+      "outcome": "victory",
+      "seconds": 530.32,
+      "zone": 4,
+      "map": "boss",
+      "kills": 72,
+      "hits": 39,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 94.77,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 104.18,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 148.22,
+          "hits": 13,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 183.15,
+          "hits": 16,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 51,
+      "outcome": "victory",
+      "seconds": 518.38,
+      "zone": 4,
+      "map": "boss",
+      "kills": 77,
+      "hits": 45,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 102.17,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 95.77,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 101.07,
+          "hits": 9,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 219.38,
+          "hits": 31,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 52,
+      "outcome": "victory",
+      "seconds": 531.32,
+      "zone": 4,
+      "map": "boss",
+      "kills": 72,
+      "hits": 41,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 86.83,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 79.75,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 122.92,
+          "hits": 10,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 241.82,
+          "hits": 22,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 52,
+      "outcome": "victory",
+      "seconds": 605.95,
+      "zone": 4,
+      "map": "boss",
+      "kills": 85,
+      "hits": 45,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 69.23,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 135.15,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 155.2,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 246.37,
+          "hits": 17,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 52,
+      "outcome": "victory",
+      "seconds": 483.42,
+      "zone": 4,
+      "map": "boss",
+      "kills": 77,
+      "hits": 28,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 7,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 86.13,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 111.93,
+          "hits": 1,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 116.68,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 168.67,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 52,
+      "outcome": "victory",
+      "seconds": 741.68,
+      "zone": 4,
+      "map": "boss",
+      "kills": 76,
+      "hits": 82,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 121.17,
+          "hits": 13,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 113.7,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 191.78,
+          "hits": 25,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 315.03,
+          "hits": 37,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 53,
+      "outcome": "victory",
+      "seconds": 572.13,
+      "zone": 4,
+      "map": "boss",
+      "kills": 74,
+      "hits": 68,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 7,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 93.05,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 113.48,
+          "hits": 10,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 139.15,
+          "hits": 16,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 226.45,
+          "hits": 33,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 53,
+      "outcome": "victory",
+      "seconds": 522.3,
+      "zone": 4,
+      "map": "boss",
+      "kills": 80,
+      "hits": 40,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 73.4,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 106.28,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 103.28,
+          "hits": 11,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 239.33,
+          "hits": 22,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 53,
+      "outcome": "victory",
+      "seconds": 616.77,
+      "zone": 4,
+      "map": "boss",
+      "kills": 75,
+      "hits": 54,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 7,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 85.52,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 107.45,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 161.05,
+          "hits": 11,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 262.75,
+          "hits": 35,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 53,
+      "outcome": "victory",
+      "seconds": 524.98,
+      "zone": 4,
+      "map": "boss",
+      "kills": 71,
+      "hits": 41,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 100.17,
+          "hits": 11,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 149.63,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 98.32,
+          "hits": 8,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 176.87,
+          "hits": 16,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 54,
+      "outcome": "victory",
+      "seconds": 550.48,
+      "zone": 4,
+      "map": "boss",
+      "kills": 68,
+      "hits": 58,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 8,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 101.18,
+          "hits": 10,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 120.87,
+          "hits": 11,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 114.87,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 213.57,
+          "hits": 23,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 54,
+      "outcome": "victory",
+      "seconds": 639.67,
+      "zone": 4,
+      "map": "boss",
+      "kills": 86,
+      "hits": 56,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 8,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 77.35,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 113.55,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 170.33,
+          "hits": 22,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 278.43,
+          "hits": 25,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 54,
+      "outcome": "victory",
+      "seconds": 471.4,
+      "zone": 4,
+      "map": "boss",
+      "kills": 68,
+      "hits": 23,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 7,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 87,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 111.97,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 96.52,
+          "hits": 3,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 175.92,
+          "hits": 11,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 54,
+      "outcome": "victory",
+      "seconds": 605.37,
+      "zone": 4,
+      "map": "boss",
+      "kills": 83,
+      "hits": 39,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 99.4,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 120.03,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 145.5,
+          "hits": 11,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 240.43,
+          "hits": 18,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 55,
+      "outcome": "victory",
+      "seconds": 699.2,
+      "zone": 4,
+      "map": "boss",
+      "kills": 79,
+      "hits": 74,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 7,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 108.53,
+          "hits": 15,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 123.57,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 187.45,
+          "hits": 24,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 279.65,
+          "hits": 28,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 55,
+      "outcome": "victory",
+      "seconds": 540.67,
+      "zone": 4,
+      "map": "boss",
+      "kills": 72,
+      "hits": 38,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 76.5,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 102.68,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 131.95,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 229.53,
+          "hits": 18,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 55,
+      "outcome": "defeat",
+      "seconds": 483.08,
+      "zone": 4,
+      "map": "boss",
+      "kills": 72,
+      "hits": 45,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 103.82,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 103.83,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 99.68,
+          "hits": 12,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 175.75,
+          "hits": 19,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 1
+    },
+    {
+      "hero": "vanguard",
+      "seed": 55,
+      "outcome": "victory",
+      "seconds": 603.62,
+      "zone": 4,
+      "map": "boss",
+      "kills": 69,
+      "hits": 54,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 111.97,
+          "hits": 13,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 147.03,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 127.4,
+          "hits": 16,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 217.22,
+          "hits": 18,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 56,
+      "outcome": "victory",
+      "seconds": 844,
+      "zone": 4,
+      "map": "boss",
+      "kills": 80,
+      "hits": 114,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 100.25,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 127.1,
+          "hits": 17,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 213.68,
+          "hits": 35,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 402.97,
+          "hits": 53,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 56,
+      "outcome": "victory",
+      "seconds": 640.7,
+      "zone": 4,
+      "map": "boss",
+      "kills": 92,
+      "hits": 53,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 70.02,
+          "hits": 1,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 102.55,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 162.52,
+          "hits": 23,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 305.62,
+          "hits": 26,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 56,
+      "outcome": "victory",
+      "seconds": 648.38,
+      "zone": 4,
+      "map": "boss",
+      "kills": 76,
+      "hits": 56,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 87.02,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 145.82,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 144.2,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 271.35,
+          "hits": 30,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 56,
+      "outcome": "victory",
+      "seconds": 606.73,
+      "zone": 4,
+      "map": "boss",
+      "kills": 77,
+      "hits": 50,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 107.65,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 121.68,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 115.7,
+          "hits": 7,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 261.7,
+          "hits": 29,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 57,
+      "outcome": "defeat",
+      "seconds": 557.5,
+      "zone": 4,
+      "map": "boss",
+      "kills": 69,
+      "hits": 61,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 93.15,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 152.07,
+          "hits": 8,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 100,
+          "hits": 12,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 212.28,
+          "hits": 29,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 1
+    },
+    {
+      "hero": "prototype",
+      "seed": 57,
+      "outcome": "victory",
+      "seconds": 460.63,
+      "zone": 4,
+      "map": "boss",
+      "kills": 69,
+      "hits": 30,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 76.53,
+          "hits": 1,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 97.57,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 111.5,
+          "hits": 9,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 175.03,
+          "hits": 17,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 57,
+      "outcome": "victory",
+      "seconds": 443.87,
+      "zone": 4,
+      "map": "boss",
+      "kills": 70,
+      "hits": 42,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 87.45,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 124,
+          "hits": 13,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 78.18,
+          "hits": 8,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 154.23,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 57,
+      "outcome": "victory",
+      "seconds": 611.68,
+      "zone": 4,
+      "map": "boss",
+      "kills": 78,
+      "hits": 64,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 101.52,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 105.75,
+          "hits": 11,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 159.77,
+          "hits": 26,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 244.65,
+          "hits": 24,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 58,
+      "outcome": "victory",
+      "seconds": 650.65,
+      "zone": 4,
+      "map": "boss",
+      "kills": 79,
+      "hits": 52,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 99.28,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 123.65,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 153.28,
+          "hits": 10,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 274.43,
+          "hits": 31,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 58,
+      "outcome": "victory",
+      "seconds": 580.48,
+      "zone": 4,
+      "map": "boss",
+      "kills": 76,
+      "hits": 44,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 82.53,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 109.03,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 154.5,
+          "hits": 18,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 234.42,
+          "hits": 18,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 58,
+      "outcome": "victory",
+      "seconds": 538.02,
+      "zone": 4,
+      "map": "boss",
+      "kills": 78,
+      "hits": 58,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 97.93,
+          "hits": 15,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 94.38,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 127.22,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 218.48,
+          "hits": 24,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 58,
+      "outcome": "victory",
+      "seconds": 634.3,
+      "zone": 4,
+      "map": "boss",
+      "kills": 73,
+      "hits": 70,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 111.72,
+          "hits": 14,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 137.98,
+          "hits": 13,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 128.25,
+          "hits": 11,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 256.35,
+          "hits": 32,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 59,
+      "outcome": "victory",
+      "seconds": 566.27,
+      "zone": 4,
+      "map": "boss",
+      "kills": 82,
+      "hits": 62,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 108.15,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 93.55,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 89.1,
+          "hits": 9,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 275.47,
+          "hits": 35,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 59,
+      "outcome": "victory",
+      "seconds": 639.78,
+      "zone": 4,
+      "map": "boss",
+      "kills": 74,
+      "hits": 72,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 80.7,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 129.9,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 170.67,
+          "hits": 27,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 258.52,
+          "hits": 32,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 59,
+      "outcome": "victory",
+      "seconds": 580.23,
+      "zone": 4,
+      "map": "boss",
+      "kills": 78,
+      "hits": 55,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 100.35,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 112.93,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 118.88,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 248.07,
+          "hits": 28,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 59,
+      "outcome": "victory",
+      "seconds": 596.05,
+      "zone": 4,
+      "map": "boss",
+      "kills": 69,
+      "hits": 47,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 112.7,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 159.73,
+          "hits": 8,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 118.27,
+          "hits": 10,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 205.35,
+          "hits": 20,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 60,
+      "outcome": "victory",
+      "seconds": 604.17,
+      "zone": 4,
+      "map": "boss",
+      "kills": 71,
+      "hits": 75,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 105.3,
+          "hits": 13,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 119.48,
+          "hits": 8,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 129.87,
+          "hits": 13,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 249.52,
+          "hits": 41,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 60,
+      "outcome": "victory",
+      "seconds": 632.67,
+      "zone": 4,
+      "map": "boss",
+      "kills": 74,
+      "hits": 63,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 7,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 78.57,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 108.02,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 172.72,
+          "hits": 19,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 273.37,
+          "hits": 36,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 60,
+      "outcome": "victory",
+      "seconds": 540.35,
+      "zone": 4,
+      "map": "boss",
+      "kills": 74,
+      "hits": 49,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 7,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 85.9,
+          "hits": 10,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 95.33,
+          "hits": 1,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 161.52,
+          "hits": 15,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 197.6,
+          "hits": 23,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 60,
+      "outcome": "victory",
+      "seconds": 743.18,
+      "zone": 4,
+      "map": "boss",
+      "kills": 79,
+      "hits": 98,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 99.85,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 129.25,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 164.83,
+          "hits": 30,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 349.25,
+          "hits": 58,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 61,
+      "outcome": "victory",
+      "seconds": 763.07,
+      "zone": 4,
+      "map": "boss",
+      "kills": 83,
+      "hits": 89,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 101.95,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 125.33,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 194.32,
+          "hits": 36,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 341.47,
+          "hits": 32,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 61,
+      "outcome": "victory",
+      "seconds": 619.23,
+      "zone": 4,
+      "map": "boss",
+      "kills": 81,
+      "hits": 48,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 74.62,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 112.75,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 170.68,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 261.18,
+          "hits": 28,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 61,
+      "outcome": "victory",
+      "seconds": 425.95,
+      "zone": 4,
+      "map": "boss",
+      "kills": 70,
+      "hits": 23,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 78.02,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 96.37,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 89.52,
+          "hits": 8,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 162.05,
+          "hits": 8,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 61,
+      "outcome": "victory",
+      "seconds": 587.22,
+      "zone": 4,
+      "map": "boss",
+      "kills": 84,
+      "hits": 69,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 3,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 93,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 112.43,
+          "hits": 10,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 127.6,
+          "hits": 19,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 254.18,
+          "hits": 31,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 62,
+      "outcome": "victory",
+      "seconds": 625.95,
+      "zone": 4,
+      "map": "boss",
+      "kills": 78,
+      "hits": 53,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 106.62,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 127.13,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 143.28,
+          "hits": 11,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 248.92,
+          "hits": 21,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 62,
+      "outcome": "victory",
+      "seconds": 443.1,
+      "zone": 4,
+      "map": "boss",
+      "kills": 74,
+      "hits": 29,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 82.9,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 97,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 101.57,
+          "hits": 12,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 161.63,
+          "hits": 10,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 62,
+      "outcome": "victory",
+      "seconds": 580.35,
+      "zone": 4,
+      "map": "boss",
+      "kills": 74,
+      "hits": 41,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 104.58,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 106,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 135.38,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 234.38,
+          "hits": 18,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 62,
+      "outcome": "victory",
+      "seconds": 440.95,
+      "zone": 4,
+      "map": "boss",
+      "kills": 69,
+      "hits": 38,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 103.1,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 97.68,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 88.53,
+          "hits": 12,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 151.63,
+          "hits": 16,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 63,
+      "outcome": "victory",
+      "seconds": 712.45,
+      "zone": 4,
+      "map": "boss",
+      "kills": 70,
+      "hits": 81,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 111.28,
+          "hits": 17,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 111.98,
+          "hits": 13,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 172.42,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 316.77,
+          "hits": 37,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 63,
+      "outcome": "victory",
+      "seconds": 637.25,
+      "zone": 4,
+      "map": "boss",
+      "kills": 80,
+      "hits": 39,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 88.85,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 133.73,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 136.82,
+          "hits": 10,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 277.85,
+          "hits": 25,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 63,
+      "outcome": "victory",
+      "seconds": 555.07,
+      "zone": 4,
+      "map": "boss",
+      "kills": 72,
+      "hits": 43,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 8,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 96.85,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 111.68,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 154.83,
+          "hits": 16,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 191.7,
+          "hits": 16,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 63,
+      "outcome": "victory",
+      "seconds": 576.18,
+      "zone": 4,
+      "map": "boss",
+      "kills": 78,
+      "hits": 50,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 98.57,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 109.4,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 129.62,
+          "hits": 15,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 238.6,
+          "hits": 26,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 64,
+      "outcome": "victory",
+      "seconds": 690.52,
+      "zone": 4,
+      "map": "boss",
+      "kills": 72,
+      "hits": 91,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 97.95,
+          "hits": 17,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 161.35,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 181.95,
+          "hits": 33,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 249.27,
+          "hits": 29,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 64,
+      "outcome": "victory",
+      "seconds": 683.77,
+      "zone": 4,
+      "map": "boss",
+      "kills": 94,
+      "hits": 46,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 88.35,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 119.85,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 181.72,
+          "hits": 19,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 293.85,
+          "hits": 23,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 64,
+      "outcome": "victory",
+      "seconds": 857.98,
+      "zone": 4,
+      "map": "boss",
+      "kills": 76,
+      "hits": 90,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 95.93,
+          "hits": 1,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 126.07,
+          "hits": 10,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 220.03,
+          "hits": 30,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 415.95,
+          "hits": 49,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 64,
+      "outcome": "victory",
+      "seconds": 667.6,
+      "zone": 4,
+      "map": "boss",
+      "kills": 80,
+      "hits": 65,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 100.87,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 158.07,
+          "hits": 15,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 128.42,
+          "hits": 15,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 280.25,
+          "hits": 30,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 65,
+      "outcome": "victory",
+      "seconds": 494.4,
+      "zone": 4,
+      "map": "boss",
+      "kills": 72,
+      "hits": 49,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 110.57,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 107.08,
+          "hits": 10,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 107.37,
+          "hits": 13,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 169.38,
+          "hits": 17,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 65,
+      "outcome": "victory",
+      "seconds": 421,
+      "zone": 4,
+      "map": "boss",
+      "kills": 72,
+      "hits": 24,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 78.87,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 116.67,
+          "hits": 8,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 86.23,
+          "hits": 5,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 139.23,
+          "hits": 8,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 65,
+      "outcome": "victory",
+      "seconds": 577.07,
+      "zone": 4,
+      "map": "boss",
+      "kills": 76,
+      "hits": 50,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 87.95,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 123.85,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 105.67,
+          "hits": 10,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 259.6,
+          "hits": 29,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 65,
+      "outcome": "defeat",
+      "seconds": 685.72,
+      "zone": 4,
+      "map": "boss",
+      "kills": 80,
+      "hits": 80,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 111.5,
+          "hits": 13,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 139.4,
+          "hits": 10,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 159.88,
+          "hits": 29,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 274.93,
+          "hits": 28,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 1
+    },
+    {
+      "hero": "bulwark",
+      "seed": 66,
+      "outcome": "victory",
+      "seconds": 575.87,
+      "zone": 4,
+      "map": "boss",
+      "kills": 75,
+      "hits": 59,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 92.15,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 118.72,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 123.77,
+          "hits": 16,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 241.23,
+          "hits": 24,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 66,
+      "outcome": "victory",
+      "seconds": 546.65,
+      "zone": 4,
+      "map": "boss",
+      "kills": 84,
+      "hits": 34,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 74.82,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 103.05,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 137.47,
+          "hits": 9,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 231.32,
+          "hits": 20,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 66,
+      "outcome": "victory",
+      "seconds": 456.43,
+      "zone": 4,
+      "map": "boss",
+      "kills": 76,
+      "hits": 35,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 107.7,
+          "hits": 11,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 81.5,
+          "hits": 1,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 88.02,
+          "hits": 5,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 179.22,
+          "hits": 18,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 66,
+      "outcome": "victory",
+      "seconds": 628.92,
+      "zone": 4,
+      "map": "boss",
+      "kills": 69,
+      "hits": 55,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 103.25,
+          "hits": 14,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 158.78,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 140.85,
+          "hits": 10,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 226.03,
+          "hits": 19,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 67,
+      "outcome": "victory",
+      "seconds": 919.42,
+      "zone": 4,
+      "map": "boss",
+      "kills": 83,
+      "hits": 113,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 91.38,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 125.35,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 224.93,
+          "hits": 30,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 477.75,
+          "hits": 71,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 67,
+      "outcome": "victory",
+      "seconds": 426.57,
+      "zone": 4,
+      "map": "boss",
+      "kills": 75,
+      "hits": 29,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 83.87,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 93.25,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 91.42,
+          "hits": 6,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 158.03,
+          "hits": 16,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 67,
+      "outcome": "victory",
+      "seconds": 691.7,
+      "zone": 4,
+      "map": "boss",
+      "kills": 73,
+      "hits": 74,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 94.27,
+          "hits": 8,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 132.07,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 156.32,
+          "hits": 24,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 309.05,
+          "hits": 35,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 67,
+      "outcome": "victory",
+      "seconds": 628.85,
+      "zone": 4,
+      "map": "boss",
+      "kills": 80,
+      "hits": 53,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 114.37,
+          "hits": 11,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 126.52,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 133.78,
+          "hits": 15,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 254.18,
+          "hits": 22,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 68,
+      "outcome": "victory",
+      "seconds": 690.1,
+      "zone": 4,
+      "map": "boss",
+      "kills": 75,
+      "hits": 86,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 106.13,
+          "hits": 16,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 130.55,
+          "hits": 8,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 171.6,
+          "hits": 23,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 281.82,
+          "hits": 39,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 68,
+      "outcome": "victory",
+      "seconds": 785.73,
+      "zone": 4,
+      "map": "boss",
+      "kills": 101,
+      "hits": 77,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 78.45,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 130.2,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 195.1,
+          "hits": 23,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 381.98,
+          "hits": 41,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 68,
+      "outcome": "victory",
+      "seconds": 558.45,
+      "zone": 4,
+      "map": "boss",
+      "kills": 77,
+      "hits": 53,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 110.28,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 151.65,
+          "hits": 13,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 91.85,
+          "hits": 1,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 204.67,
+          "hits": 30,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 68,
+      "outcome": "victory",
+      "seconds": 574.72,
+      "zone": 4,
+      "map": "boss",
+      "kills": 76,
+      "hits": 48,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 103.08,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 134.43,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 96.17,
+          "hits": 5,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 241.03,
+          "hits": 22,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 69,
+      "outcome": "victory",
+      "seconds": 517.77,
+      "zone": 4,
+      "map": "boss",
+      "kills": 69,
+      "hits": 54,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 116.52,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 99.12,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 85.47,
+          "hits": 8,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 216.67,
+          "hits": 28,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 69,
+      "outcome": "victory",
+      "seconds": 556.5,
+      "zone": 4,
+      "map": "boss",
+      "kills": 78,
+      "hits": 41,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 72.88,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 115.27,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 142.42,
+          "hits": 12,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 225.93,
+          "hits": 25,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 69,
+      "outcome": "victory",
+      "seconds": 707.13,
+      "zone": 4,
+      "map": "boss",
+      "kills": 91,
+      "hits": 59,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 102.45,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 132.27,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 130.37,
+          "hits": 6,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 342.05,
+          "hits": 41,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 69,
+      "outcome": "victory",
+      "seconds": 530.25,
+      "zone": 4,
+      "map": "boss",
+      "kills": 74,
+      "hits": 46,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 100.08,
+          "hits": 9,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 117.12,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 110.37,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 202.68,
+          "hits": 18,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 70,
+      "outcome": "victory",
+      "seconds": 838.32,
+      "zone": 4,
+      "map": "boss",
+      "kills": 83,
+      "hits": 120,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 102.33,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 138.35,
+          "hits": 18,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 196,
+          "hits": 22,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 401.63,
+          "hits": 68,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 70,
+      "outcome": "defeat",
+      "seconds": 726.18,
+      "zone": 4,
+      "map": "boss",
+      "kills": 67,
+      "hits": 69,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 70.87,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 135.13,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 194.97,
+          "hits": 27,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 325.22,
+          "hits": 34,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 1
+    },
+    {
+      "hero": "stalker",
+      "seed": 70,
+      "outcome": "victory",
+      "seconds": 502.63,
+      "zone": 4,
+      "map": "boss",
+      "kills": 76,
+      "hits": 33,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 91.85,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 92.8,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 109.88,
+          "hits": 11,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 208.1,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 70,
+      "outcome": "defeat",
+      "seconds": 671.72,
+      "zone": 4,
+      "map": "boss",
+      "kills": 67,
+      "hits": 70,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 100.82,
+          "hits": 13,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 126.9,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 178.48,
+          "hits": 22,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 265.52,
+          "hits": 29,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 1
+    },
+    {
+      "hero": "bulwark",
+      "seed": 71,
+      "outcome": "victory",
+      "seconds": 707.63,
+      "zone": 4,
+      "map": "boss",
+      "kills": 70,
+      "hits": 70,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 93.32,
+          "hits": 14,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 128.37,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 142.83,
+          "hits": 15,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 343.12,
+          "hits": 34,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 71,
+      "outcome": "victory",
+      "seconds": 608.17,
+      "zone": 4,
+      "map": "boss",
+      "kills": 82,
+      "hits": 52,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 74.62,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 103.33,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 154.58,
+          "hits": 12,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 275.63,
+          "hits": 33,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 71,
+      "outcome": "victory",
+      "seconds": 622.78,
+      "zone": 4,
+      "map": "boss",
+      "kills": 80,
+      "hits": 64,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 90.02,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 150.15,
+          "hits": 16,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 138.45,
+          "hits": 11,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 244.17,
+          "hits": 34,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 71,
+      "outcome": "victory",
+      "seconds": 469.93,
+      "zone": 4,
+      "map": "boss",
+      "kills": 67,
+      "hits": 24,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 101.62,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 94.53,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 96.78,
+          "hits": 3,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 177,
+          "hits": 14,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 72,
+      "outcome": "victory",
+      "seconds": 596.62,
+      "zone": 4,
+      "map": "boss",
+      "kills": 79,
+      "hits": 30,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 106.17,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 122.55,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 168.52,
+          "hits": 10,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 199.38,
+          "hits": 13,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 72,
+      "outcome": "victory",
+      "seconds": 571.47,
+      "zone": 4,
+      "map": "boss",
+      "kills": 71,
+      "hits": 58,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 77.85,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 113.27,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 111.88,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 268.47,
+          "hits": 37,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 72,
+      "outcome": "victory",
+      "seconds": 626.42,
+      "zone": 4,
+      "map": "boss",
+      "kills": 77,
+      "hits": 56,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 89.15,
+          "hits": 7,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 128.5,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 138.4,
+          "hits": 18,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 270.37,
+          "hits": 28,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 72,
+      "outcome": "victory",
+      "seconds": 547.03,
+      "zone": 4,
+      "map": "boss",
+      "kills": 69,
+      "hits": 48,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 95.58,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 124.12,
+          "hits": 13,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 126.75,
+          "hits": 17,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 200.58,
+          "hits": 15,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 73,
+      "outcome": "victory",
+      "seconds": 548.37,
+      "zone": 4,
+      "map": "boss",
+      "kills": 80,
+      "hits": 35,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 3,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 86.03,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 115.77,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 115.43,
+          "hits": 8,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 231.13,
+          "hits": 18,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 73,
+      "outcome": "victory",
+      "seconds": 678.53,
+      "zone": 4,
+      "map": "boss",
+      "kills": 85,
+      "hits": 59,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 8,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 92.05,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 100.4,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 180.7,
+          "hits": 20,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 305.38,
+          "hits": 30,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 73,
+      "outcome": "victory",
+      "seconds": 557.47,
+      "zone": 4,
+      "map": "boss",
+      "kills": 80,
+      "hits": 44,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 7,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 87.35,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 105.3,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 138.72,
+          "hits": 12,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 226.1,
+          "hits": 26,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 73,
+      "outcome": "victory",
+      "seconds": 639.92,
+      "zone": 4,
+      "map": "boss",
+      "kills": 75,
+      "hits": 59,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 96.57,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 102.55,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 147.8,
+          "hits": 16,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 293,
+          "hits": 26,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 74,
+      "outcome": "victory",
+      "seconds": 624.65,
+      "zone": 4,
+      "map": "boss",
+      "kills": 81,
+      "hits": 75,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 3,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 105.03,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 128.15,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 113.37,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 278.1,
+          "hits": 37,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 74,
+      "outcome": "victory",
+      "seconds": 792.43,
+      "zone": 4,
+      "map": "boss",
+      "kills": 80,
+      "hits": 79,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 83.8,
+          "hits": 6,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 162.22,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 201.8,
+          "hits": 26,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 344.62,
+          "hits": 42,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 74,
+      "outcome": "victory",
+      "seconds": 576.9,
+      "zone": 4,
+      "map": "boss",
+      "kills": 72,
+      "hits": 52,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 92.47,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 119.05,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 132.23,
+          "hits": 12,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 233.15,
+          "hits": 31,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 74,
+      "outcome": "victory",
+      "seconds": 610.08,
+      "zone": 4,
+      "map": "boss",
+      "kills": 87,
+      "hits": 50,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 98.45,
+          "hits": 2,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 117.08,
+          "hits": 8,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 145.38,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 249.17,
+          "hits": 26,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "bulwark",
+      "seed": 75,
+      "outcome": "victory",
+      "seconds": 641.62,
+      "zone": 4,
+      "map": "boss",
+      "kills": 71,
+      "hits": 76,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 5,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 126.28,
+          "hits": 24,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 117.8,
+          "hits": 13,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 136.95,
+          "hits": 18,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 260.58,
+          "hits": 21,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "prototype",
+      "seed": 75,
+      "outcome": "victory",
+      "seconds": 563,
+      "zone": 4,
+      "map": "boss",
+      "kills": 76,
+      "hits": 45,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 78.4,
+          "hits": 3,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 107.13,
+          "hits": 4,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 135.38,
+          "hits": 16,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 242.08,
+          "hits": 22,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "stalker",
+      "seed": 75,
+      "outcome": "victory",
+      "seconds": 646.65,
+      "zone": 4,
+      "map": "boss",
+      "kills": 79,
+      "hits": 74,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 4,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 89.05,
+          "hits": 5,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 137.67,
+          "hits": 12,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 158.32,
+          "hits": 16,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 261.62,
+          "hits": 41,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    },
+    {
+      "hero": "vanguard",
+      "seed": 75,
+      "outcome": "victory",
+      "seconds": 533.38,
+      "zone": 4,
+      "map": "boss",
+      "kills": 73,
+      "hits": 43,
+      "floor": 2,
+      "room": "boss",
+      "combatRoomsCleared": 21,
+      "shopVisits": 4,
+      "chips": 6,
+      "perZone": [
+        {
+          "zone": 1,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 92.73,
+          "hits": 1,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 2,
+          "reached": true,
+          "bossReached": false,
+          "seconds": 131.67,
+          "hits": 11,
+          "combatRoomsCleared": 6
+        },
+        {
+          "zone": 3,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 123.95,
+          "hits": 14,
+          "combatRoomsCleared": 3
+        },
+        {
+          "zone": 4,
+          "reached": true,
+          "bossReached": true,
+          "seconds": 185.03,
+          "hits": 17,
+          "combatRoomsCleared": 6
+        }
+      ],
+      "bossDown": 2
+    }
+  ]
+}

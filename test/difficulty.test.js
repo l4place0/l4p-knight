@@ -37,4 +37,9 @@ for(const outcome of ['timeout','stall','error','violation'])assert.equal(summar
 }
 const navigationRegression=require('./difficulty-balance.js').run({hero:'prototype',seed:33},{difficulty:'casual'});
 assert.equal(navigationRegression.outcome,'victory','Seed 33 railgun hero must resolve the blocked guard route and complete the run');
+assert.equal(navigationRegression.combatRoomsCleared,21,'New layout requires all 21 combat rooms');
+assert.equal(navigationRegression.shopVisits,4);
+assert(navigationRegression.perZone.every(z=>z.reached));
+assert.equal(navigationRegression.perZone.reduce((n,z)=>n+z.hits,0),navigationRegression.hits);
+assert.equal(navigationRegression.perZone.reduce((n,z)=>n+z.combatRoomsCleared,0),21);
 console.log('PASS: three targets, defaults/invalid IDs, actual damage scaling, retries/end stats, equal-hero full-run cohorts, invalid-run rejection and seed 33 navigation regression.');

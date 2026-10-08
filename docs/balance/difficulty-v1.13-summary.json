@@ -1,0 +1,372 @@
+{
+  "date": "2026-10-09",
+  "gameVersion": "1.13.0",
+  "gameCommit": "c6b7fcd",
+  "genes": {
+    "commit": 30,
+    "trackK": 3,
+    "sight": 100,
+    "delay": 10,
+    "dashSkip": 0.6
+  },
+  "cohorts": [
+    {
+      "seedStart": 51,
+      "seedEnd": 75,
+      "role": "comparison"
+    },
+    {
+      "seedStart": 101,
+      "seedEnd": 125,
+      "role": "fresh"
+    }
+  ],
+  "bootstrap": {
+    "unit": "seed with all four heroes",
+    "stratified": true,
+    "replicates": 20000,
+    "rngSeed": 20261009
+  },
+  "tiers": {
+    "challenge": {
+      "profile": {
+        "name": "挑战",
+        "target": 37,
+        "damageScale": 0.265,
+        "desc": "紧张战斗 · 容错较低"
+      },
+      "summary": {
+        "n": 200,
+        "passRate": 76.5,
+        "target": 37,
+        "confidence95": [
+          70.16,
+          81.84
+        ],
+        "outcomes": {
+          "victory": 153,
+          "defeat": 47
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 84,
+          "bulwark": 82,
+          "stalker": 66,
+          "prototype": 74
+        },
+        "avgSeconds": 593.58
+      },
+      "clusterConfidence95": [
+        70,
+        83
+      ],
+      "comparison": {
+        "oldRate": 36,
+        "newRate": 80,
+        "changePoints": 44,
+        "paired": {
+          "lost": 8,
+          "gained": 52,
+          "bothVictory": 28,
+          "bothDefeat": 12,
+          "invalid": 0
+        },
+        "oldVictoryMedianSeconds": 444.62,
+        "newVictoryMedianSeconds": 595.31
+      },
+      "freshSummary": {
+        "n": 100,
+        "passRate": 73,
+        "target": 37,
+        "confidence95": [
+          63.57,
+          80.73
+        ],
+        "outcomes": {
+          "defeat": 27,
+          "victory": 73
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 88,
+          "bulwark": 72,
+          "stalker": 60,
+          "prototype": 72
+        },
+        "avgSeconds": 598.45
+      },
+      "victory": {
+        "n": 153,
+        "meanSeconds": 605.99,
+        "medianSeconds": 608.9,
+        "meanHits": 55.97,
+        "meanChips": 5.37
+      },
+      "zones": [
+        {
+          "zone": 1,
+          "name": "废弃工厂",
+          "reached": 200,
+          "defeated": 1,
+          "bossDefeated": 0,
+          "meanHitsWhenReached": 7.38,
+          "meanSecondsWhenReached": 94.87
+        },
+        {
+          "zone": 2,
+          "name": "熔断机房",
+          "reached": 199,
+          "defeated": 1,
+          "bossDefeated": 0,
+          "meanHitsWhenReached": 7.68,
+          "meanSecondsWhenReached": 120.93
+        },
+        {
+          "zone": 3,
+          "name": "核心圣所",
+          "reached": 198,
+          "defeated": 1,
+          "bossDefeated": 1,
+          "meanHitsWhenReached": 16.09,
+          "meanSecondsWhenReached": 142.6
+        },
+        {
+          "zone": 4,
+          "name": "虚空回廊",
+          "reached": 197,
+          "defeated": 44,
+          "bossDefeated": 36,
+          "meanHitsWhenReached": 25.71,
+          "meanSecondsWhenReached": 240.82
+        }
+      ],
+      "invalid": []
+    },
+    "standard": {
+      "profile": {
+        "name": "标准",
+        "target": 67,
+        "damageScale": 0.2035,
+        "desc": "推荐体验 · 适度容错"
+      },
+      "summary": {
+        "n": 200,
+        "passRate": 95.5,
+        "target": 67,
+        "confidence95": [
+          91.67,
+          97.61
+        ],
+        "outcomes": {
+          "victory": 191,
+          "defeat": 9
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 96,
+          "bulwark": 98,
+          "stalker": 96,
+          "prototype": 92
+        },
+        "avgSeconds": 604.16
+      },
+      "clusterConfidence95": [
+        92.5,
+        98
+      ],
+      "comparison": {
+        "oldRate": 68,
+        "newRate": 95,
+        "changePoints": 27,
+        "paired": {
+          "lost": 5,
+          "gained": 32,
+          "bothVictory": 63,
+          "bothDefeat": 0,
+          "invalid": 0
+        },
+        "oldVictoryMedianSeconds": 430.28,
+        "newVictoryMedianSeconds": 596.62
+      },
+      "freshSummary": {
+        "n": 100,
+        "passRate": 96,
+        "target": 67,
+        "confidence95": [
+          90.16,
+          98.43
+        ],
+        "outcomes": {
+          "victory": 96,
+          "defeat": 4
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 100,
+          "bulwark": 100,
+          "stalker": 96,
+          "prototype": 88
+        },
+        "avgSeconds": 603.89
+      },
+      "victory": {
+        "n": 191,
+        "meanSeconds": 604.47,
+        "medianSeconds": 600.03,
+        "meanHits": 56.89,
+        "meanChips": 5.31
+      },
+      "zones": [
+        {
+          "zone": 1,
+          "name": "废弃工厂",
+          "reached": 200,
+          "defeated": 0,
+          "bossDefeated": 0,
+          "meanHitsWhenReached": 7.33,
+          "meanSecondsWhenReached": 94.82
+        },
+        {
+          "zone": 2,
+          "name": "熔断机房",
+          "reached": 200,
+          "defeated": 0,
+          "bossDefeated": 0,
+          "meanHitsWhenReached": 7.8,
+          "meanSecondsWhenReached": 120.37
+        },
+        {
+          "zone": 3,
+          "name": "核心圣所",
+          "reached": 200,
+          "defeated": 0,
+          "bossDefeated": 0,
+          "meanHitsWhenReached": 15.59,
+          "meanSecondsWhenReached": 139.12
+        },
+        {
+          "zone": 4,
+          "name": "虚空回廊",
+          "reached": 200,
+          "defeated": 9,
+          "bossDefeated": 9,
+          "meanHitsWhenReached": 26.38,
+          "meanSecondsWhenReached": 249.85
+        }
+      ],
+      "invalid": []
+    },
+    "casual": {
+      "profile": {
+        "name": "休闲",
+        "target": 99,
+        "damageScale": 0.12,
+        "desc": "轻松探索 · 高容错"
+      },
+      "summary": {
+        "n": 200,
+        "passRate": 100,
+        "target": 99,
+        "confidence95": [
+          98.12,
+          100
+        ],
+        "outcomes": {
+          "victory": 200
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 100,
+          "bulwark": 100,
+          "stalker": 100,
+          "prototype": 100
+        },
+        "avgSeconds": 604.28
+      },
+      "clusterConfidence95": [
+        100,
+        100
+      ],
+      "comparison": {
+        "oldRate": 98,
+        "newRate": 100,
+        "changePoints": 2,
+        "paired": {
+          "lost": 0,
+          "gained": 2,
+          "bothVictory": 98,
+          "bothDefeat": 0,
+          "invalid": 0
+        },
+        "oldVictoryMedianSeconds": 442.19,
+        "newVictoryMedianSeconds": 604.5
+      },
+      "freshSummary": {
+        "n": 100,
+        "passRate": 100,
+        "target": 99,
+        "confidence95": [
+          96.3,
+          100
+        ],
+        "outcomes": {
+          "victory": 100
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 100,
+          "bulwark": 100,
+          "stalker": 100,
+          "prototype": 100
+        },
+        "avgSeconds": 602.05
+      },
+      "victory": {
+        "n": 200,
+        "meanSeconds": 604.28,
+        "medianSeconds": 598.85,
+        "meanHits": 56.81,
+        "meanChips": 5.41
+      },
+      "zones": [
+        {
+          "zone": 1,
+          "name": "废弃工厂",
+          "reached": 200,
+          "defeated": 0,
+          "bossDefeated": 0,
+          "meanHitsWhenReached": 7.29,
+          "meanSecondsWhenReached": 94.87
+        },
+        {
+          "zone": 2,
+          "name": "熔断机房",
+          "reached": 200,
+          "defeated": 0,
+          "bossDefeated": 0,
+          "meanHitsWhenReached": 7.55,
+          "meanSecondsWhenReached": 119.91
+        },
+        {
+          "zone": 3,
+          "name": "核心圣所",
+          "reached": 200,
+          "defeated": 0,
+          "bossDefeated": 0,
+          "meanHitsWhenReached": 15.38,
+          "meanSecondsWhenReached": 138.99
+        },
+        {
+          "zone": 4,
+          "name": "虚空回廊",
+          "reached": 200,
+          "defeated": 0,
+          "bossDefeated": 0,
+          "meanHitsWhenReached": 26.6,
+          "meanSecondsWhenReached": 250.52
+        }
+      ],
+      "invalid": []
+    }
+  }
+}

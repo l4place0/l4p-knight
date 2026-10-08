@@ -9,19 +9,31 @@ function run(spec,opts={}){
   const G=GAME.createGame({seed:spec.seed,headless:true,difficulty:opts.difficulty});
   if(opts.scale!=null)G.damageTuning=opts.scale;
   const bot=BOT.createBot(spec.seed,GENES);G.startRun(spec.hero);
+  const perZone=C.ZONES.map((z,i)=>({zone:i+1,reached:false,bossReached:false,seconds:0,hits:0,combatRoomsCleared:0}));
+  const cleared=new Set();
   let outcome='timeout',reason=null,frames=0,lastKey='',idle=0;
   for(;frames<1200*60;frames++){
+    const area=perZone[G.zoneIdx],previousHits=G.damageTaken;
+    area.reached=true;area.bossReached ||= G.isBossRoom;
     try{bot.update(G,1/60,G.input);G.update(1/60);}catch(e){outcome='error';reason=e.stack;break;}
+    area.seconds+=1/60;area.hits+=G.damageTaken-previousHits;
+    if(G.floor)for(const room of G.floor.rooms)if(room.kind==='combat'&&room.cleared){
+      const key=[G.floor.zone,G.floor.level,room.id].join(':');
+      if(!cleared.has(key)){cleared.add(key);perZone[G.floor.zone].combatRoomsCleared++;}
+    }
     reason=spatialViolations(G)[0];if(reason){outcome='violation';break;}
     if(G.state==='victory'||G.state==='defeat'){outcome=G.state;break;}
     if(frames%60===59){
-      const key=[G.zoneIdx,G.roomIdx,G.isBossRoom,G.state,G.kills,G.damageTaken,G.wavIdx,G.pendSpawns.length,
+      const key=[G.zoneIdx,G.roomIdx,G.isBossRoom,G.isBossRoom?'boss':G.floor?.current,cleared.size,G.state,G.kills,G.damageTaken,G.wavIdx,G.pendSpawns.length,
         Math.round(G.enemies.reduce((sum,e)=>sum+Math.max(0,e.hp),0))].join(':');
       idle=key===lastKey?idle+1:0;lastKey=key;
       if(idle>=60){outcome='stall';reason='60s without combat/room/state progress';break;}
     }
   }
-  return {...spec,outcome,seconds:+((frames+1)/60).toFixed(2),zone:G.zoneIdx+1,map:G.mapId,kills:G.kills,hits:G.damageTaken,
+  return {...spec,outcome,seconds:+(Math.min(frames+1,1200*60)/60).toFixed(2),zone:G.zoneIdx+1,map:G.mapId,kills:G.kills,hits:G.damageTaken,
+    floor:G.roomIdx+1,room:G.isBossRoom?'boss':G.floor?.rooms[G.floor.current].kind,
+    combatRoomsCleared:cleared.size,shopVisits:G.shopVisits,chips:G.chips.length,
+    perZone:perZone.map(z=>({...z,seconds:+z.seconds.toFixed(2)})),
     bossDown:Object.keys(G.bossDown).length,...(reason?{reason,player:{x:G.player.x,y:G.player.y,weapon:G.weapons[G.weaponSlot].id},
       enemies:G.enemies.filter(e=>!e.dead).map(e=>({type:e.type,x:e.x,y:e.y,hp:e.hp,state:e.state||e.st}))}:{})};
 }
@@ -49,7 +61,7 @@ async function main(){
   if(args.includes('--scale')){opts.scale=Number(get('--scale'));if(!Number.isFinite(opts.scale)||opts.scale<=0)throw new Error('Invalid scale');}
   const results=await batch(opts),summary=summarize(results,C.DIFFICULTIES[difficulty].target);
   console.log(JSON.stringify({opts,summary,invalid:results.filter(r=>!['victory','defeat'].includes(r.outcome))}));
-  const out=get('--out');if(out){fs.mkdirSync(require('node:path').dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify({genes:GENES,config:opts,profile:C.DIFFICULTIES[difficulty],summary,results},null,2)+'\n');}
+  const out=get('--out');if(out){fs.mkdirSync(require('node:path').dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify({gameVersion:require('../package.json').version,genes:GENES,config:opts,profile:C.DIFFICULTIES[difficulty],summary,results},null,2)+'\n');}
   const meetsTarget=args.includes('--holdout') ? summary.confidence95[0]<=summary.target&&summary.target<=summary.confidence95[1] :
     Math.abs(summary.passRate-summary.target)<=Number(get('--tolerance',5));
   if(summary.invalid||(args.includes('--verify')&&!meetsTarget))process.exitCode=1;
