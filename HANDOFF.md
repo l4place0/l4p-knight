@@ -1,10 +1,17 @@
 # HANDOFF · 零号协议 ZERO PROTOCOL 开发交接文档
 
-> 交接日期：2026-10-08 · 交接版本：v1.11（小怪同步、英雄／武器平衡、机制契约与变异验证）
+> 交接日期：2026-10-09 · 交接版本：v1.13（每层多房间，沿用 v1.12 三档难度参数）
 > 项目来源：`ai-benchmark/glm-5,3-flash/zcode/My Soul Knight/shot01`（已完整复制至本目录，逐文件 diff 校验一致）
 > 本文目标：让任何开发者（人或 AI）在不询问原作者的情况下继续开发。
 
 ---
+
+v1.13：`zoneIdx` 为区域、`roomIdx` 为楼层，`G.floor.current` 为层内房间。
+每层入口/三个战斗房/宝箱/出口共六间，通过 `G.doors` 的 E 交互往返，战斗中 `doorsLocked` 封门。
+`loadRoom` 建立整层图，`enterRoom` 切换并保存拾取物与地图状态；`roomVisit` 在切换时递增，
+供 AI 路径与动画残影重置。三个战斗房肃清后，在出口只发放一次晶片三选一。
+`debugJump` 进入指定楼层的首个战斗房；旧单房评测现衡量这个子房，历史胜率不再是新布局标定。
+新增 `npm run test:rooms`（也包含在 `npm test`）与 `node test/rooms-browser.js`（需 Playwright/Edge 与本地服务器）。
 
 ## 1. 这是什么项目
 
@@ -146,7 +153,7 @@ test/serve.js       静态服务器
 | Boss 难度 | bosses.js `BOSS_DIFF` + core.js hp/speed | v1.9 重标定：M3 人类化标尺（bot 基因 commit30/trackK3/sight100/delay10/dashSkip0.6）下单 Boss 通过率 <37%（boss1 29%/boss2 30%，全流程语境）；`G.bossTuning` 为实验叠加钩（balance.js --try 注入）；数值变动须重跑 test/balance.js 标定 |
 | 小怪难度 | core.js `ENEMY_DIFF` + enemies.js | v1.11：既有区域成长上 HP×3（第 4 区 ×3.2）/speed×1.8/冷却消耗×4.5/弹速×2.4/密度×3/伤害×4；`G.enemyTuning` 覆盖字段用于实验。Boss 房与召唤物排除，预警时间和波次预算保留；改后跑每房 batch 与留出验证 |
 | Boss 死亡 | `bossDying` / `updateBoss` | Boss 死后**滞留** enemies 列表走 dying 演出，完成后置 `dead` 并写 `G.bossDown[zoneIdx]`；提前移除会死锁（历史 bug #2） |
-| 房间流程 | `updateWaves` → `offerChips` → `chooseChip` → 区域末尾 `openShop` → `shopLeave` → `openPortal` → `nextLevel` | `nextLevel`：房内推进 → 区域末尾有 `bossId` 且未击破 → 首领房；首领房传送门 → 下一区。`chipOffered` 一次性标志防重复触发 |
+| 房间流程 | `loadRoom` → `enterRoom` / `useDoor` → `updateWaves` 解封 → 三间清完进出口 `offerChips` → `chooseChip` → 区域末尾 `openShop` → `shopLeave` → `openPortal` → `nextLevel` | `nextLevel`：下一层 → 区域末尾有 `bossId` 且未击破 → 首领房；首领房传送门 → 下一区。`floor.rewarded` 防本层重复领奖；`room.cleared` 防回访刷怪 |
 | 引力井 | game/systems.js `G.wells`·`updateWells`（布设于 game/bosses.js） | Boss2 专属：范围内拉扯玩家（冲刺 `dashT > 0` 时免疫拉扯），到期内爆 `explode`；bot 在 `computeDanger` 规避 |
 | 属性系统 | game/player.js `computeStats` | 晶片 apply → 羁绊 apply → 武器自适应（pierce+电磁炮=无限贯穿）→ 商店永久加成（bonusShield/powerBonus）→ 英雄底子；**createGame 时即初始化**（标题 HUD 依赖，bug #10） |
 | 晶片升级 | `G.chipLv` / `G.acquireChip` | 已持有晶片再次获取 → `chipLv[id]++`（不重复入列表）；`computeStats` 以 k = 1.5^lv 调 `apply(s, k)`；整数型效果 ceil 进位、乘法减益设下限、触发型晶片缩放数值面（`frostK/chainK/reloadK/luckyK/splitK` 随属性袋传递）；分裂减伤的羁绊退款按 `s.splitK` 同步 |

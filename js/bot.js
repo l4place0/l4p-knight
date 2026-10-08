@@ -41,6 +41,7 @@ function createBot(seed, genes) {
   let strafeDir = 1, strafeT = 0, stuckT = 0, lx = 0, ly = 0;
   let stuckReps = 0, escapeT = 0, escapeA = 0, lmx = 0, lmy = 0;
   let path = [], pathT = 0, pathI = 0, pathTargetKey = '';
+  let roomVisit = -1;
   let chipDelay = 0, swapT = 0;
   // 盾卫战术僵局看门狗：目标盾卫持续无伤害进展（格挡/环绕失效）达到阈值时升级为贴身刃破盾
   let stallHp = null, stallKills = 0, stallT = 0;
@@ -237,6 +238,10 @@ function createBot(seed, genes) {
   }
 
   function update(G, dt, input) {
+    if (roomVisit !== G.roomVisit) {
+      roomVisit = G.roomVisit; path = []; pathI = 0; pathT = 0; pathTargetKey = '';
+      commitT = 0; stuckT = 0; escapeT = 0; stuckReps = 0;
+    }
     const P = G.player;
     input.moveX = 0; input.moveY = 0; input.fire = false;
     input.dash = false; input.melee = false; input.interact = false;
@@ -358,6 +363,9 @@ function createBot(seed, genes) {
     } else if (G.portal) {
       // 传送门导航同样走寻路（避免被墙局部极小卡住）
       navX = G.portal.x; navY = G.portal.y; navW = 1.2;
+    } else if (G.navigationDoor && G.navigationDoor()) {
+      const door = G.navigationDoor();
+      navX = door.x; navY = door.y; navW = 1.2;
     } else {
       // 无目标：回场地中心
       const cx = G.mw * TILE / 2, cy = G.mh * TILE / 2;
@@ -403,7 +411,7 @@ function createBot(seed, genes) {
      * 承诺期内沿用已定方向（无法逐帧穿针，环弹间隙的精确走位消失） */
     // 清场导航不沿用战斗方向承诺：16px 路点无法容纳 30/45 帧的惯性。
     // 仅在没有战斗目标且门已开启时生效，不提高战斗躲避能力。
-    const portalNavigation = !target && !!G.portal;
+    const portalNavigation = !target && (!!G.portal || !!(G.navigationDoor && G.navigationDoor()));
     // 十二秒无伤害进展且被墙阻断时，暂时逐路点跟随；恢复视线即恢复战斗承诺。
     const stalledNavigation = botStalled && stallT > 12 && navX != null && !canSeeTarget;
     if (portalNavigation || stalledNavigation) commitT = 0;
@@ -482,6 +490,8 @@ function createBot(seed, genes) {
 
     /* ---- 交互 ---- */
     if (G.portal && dist(P.x, P.y, G.portal.x, G.portal.y) < 15) input.interact = true;
+    const door = G.navigationDoor && G.navigationDoor();
+    if (door && dist(P.x, P.y, door.x, door.y) < 16) input.interact = true;
     for (const pk of G.pickups) {
       if (pk.kind === 'crate' && (WEAPON_TIER[pk.weapon] || 0) > (WEAPON_TIER[G.weapons[0].id] || 0)
         && dist(P.x, P.y, pk.x, pk.y) < 14) {

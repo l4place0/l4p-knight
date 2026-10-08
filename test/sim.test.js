@@ -14,6 +14,7 @@
 'use strict';
 const LIB = require('./lib.js');
 const { DT, HANG_SECONDS, SEEDS, log, check, failureCount, simulateRun, CORE, GAME, BOT } = LIB;
+require('./rooms.test.js');
 
 /* ---------------- 主流程 ---------------- */
 console.log('========================================');

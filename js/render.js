@@ -219,6 +219,7 @@ function attach(G) {
     ctx.drawImage(renderBG(G), 0, 0);
     const accent = ZONES[G.zoneIdx] ? ZONES[G.zoneIdx].accent : '#45f0e2';
 
+    drawDoors(ctx, G, accent);
     drawPortal(ctx, G.portal, t, accent);
     if (G.visualPlayback) G.visualPlayback.drawCorpses(ctx);
     drawPickups(ctx, G, t);
@@ -238,12 +239,53 @@ function attach(G) {
     drawCrosshair(ctx, G, mouse, t);
     ctx.restore();
 
+    drawFloorMap(ctx, G);
     // 全屏闪光（不受震动影响）
     if (G.flashFx > 0) {
       ctx.fillStyle = hexA(G.flashColor, Math.min(0.55, G.flashFx));
       ctx.fillRect(0, 0, VIEW_W, VIEW_H);
     }
   };
+}
+
+function drawDoors(ctx, G, accent) {
+  ctx.save();
+  ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+  for (const d of G.doors || []) {
+    const col = G.doorsLocked ? '#ff4757' : accent;
+    ctx.fillStyle = '#080b10'; ctx.fillRect(d.x - 13, d.y - 11, 26, 22);
+    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.strokeRect(d.x - 13, d.y - 11, 26, 22);
+    ctx.fillStyle = col;
+    ctx.fillText(G.doorsLocked ? '×' : d.dx > 0 ? '→' : d.dx < 0 ? '←' : d.dy > 0 ? '↓' : '↑', d.x, d.y + 3);
+    ctx.fillStyle = '#eeeeee'; ctx.fillText(d.name, d.x, d.y + 22);
+  }
+  ctx.restore();
+}
+
+function drawFloorMap(ctx, G) {
+  if (!G.floor || G.isBossRoom) return;
+  ctx.save();
+  const rooms = G.floor.rooms;
+  const minY = Math.min(...rooms.map(r => r.y));
+  const point = r => ({ x: VIEW_W - 91 + r.x * 23, y: 74 + (r.y - minY) * 19 });
+  ctx.fillStyle = 'rgba(5,8,12,0.88)'; ctx.fillRect(VIEW_W - 104, 50, 100, 66);
+  ctx.font = '8px sans-serif'; ctx.textAlign = 'left'; ctx.fillStyle = '#eeeeee';
+  const cleared = rooms.filter(r => r.kind === 'combat' && r.cleared).length;
+  ctx.fillText('第 ' + (G.roomIdx + 1) + ' 层 · 清房 ' + cleared + '/3', VIEW_W - 99, 61);
+  ctx.strokeStyle = '#57616c'; ctx.lineWidth = 1;
+  for (const r of rooms) for (const to of r.links) if (to > r.id) {
+    const a = point(r), b = point(rooms[to]);
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+  }
+  ctx.textAlign = 'center';
+  for (const r of rooms) {
+    const p = point(r);
+    ctx.fillStyle = r.id === G.floor.current ? '#45f0e2' : !r.visited ? '#252b35' : r.cleared ? '#7b8792' : '#ff4757';
+    ctx.fillRect(p.x - 6, p.y - 6, 12, 12);
+    ctx.fillStyle = r.id === G.floor.current ? '#061014' : '#ffffff';
+    ctx.fillText(r.kind === 'entry' ? '入' : r.kind === 'exit' ? '出' : r.kind === 'treasure' ? '宝' : String(r.id), p.x, p.y + 3);
+  }
+  ctx.restore();
 }
 
 /* ---------- 标题背景 ---------- */

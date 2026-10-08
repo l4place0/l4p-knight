@@ -26,6 +26,8 @@ e.state='dash'; e.t=0.21; assert.equal(playback.sample(e).frame,3);
 playback.event('death', e); assert.equal(playback.corpseCount,1);
 playback.event('death', e); assert.equal(playback.corpseCount,1, 'Death event must be idempotent');
 G.mapId='z1b'; assert.equal(playback.corpseCount,0, 'Corpses cannot leak across rooms');
+playback.event('death', { ...e, id: 3 }); assert.equal(playback.corpseCount, 1);
+G.roomVisit = 1; assert.equal(playback.corpseCount, 0, 'Rooms sharing a map must clear old corpses');
 const boss = {type:'boss',isBoss:true,st:'transition',t:0.75,vx:0,vy:0};
 assert.deepEqual([playback.sample(boss).action,playback.sample(boss).frame],['phase',3]);
 boss.st='dying';boss.t=0.65;

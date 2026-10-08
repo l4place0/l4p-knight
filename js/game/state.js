@@ -23,6 +23,7 @@ PARTS.state = function (ctx) {
     shake: 0, flashFx: 0, flashColor: '#ffffff', hurtFx: 0, fade: 0,
     banner: null, toasts: [], prompt: null,
     zoneIdx: 0, roomIdx: 0, isBossRoom: false,
+    floor: null, doors: [], doorsLocked: false, roomVisit: 0,
     enemies: [], bullets: [], pickups: [], mines: [],
     lasers: [], beams: [], bossLaser: null, wells: [],
     particles: [], floaters: [], rings: [], ghosts: [],

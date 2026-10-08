@@ -42,25 +42,85 @@ PARTS.rooms = function (ctx) {
     return 'charger';
   }
 
+  // roomIdx 表示楼层，floor.current 表示该层当前房间。房间图含环路与可选支路。
   G.loadRoom = function () {
     const zone = ZONES[G.zoneIdx];
-    ctx.loadMap(zone.maps[G.roomIdx]);
+    const flip = rng.chance(0.5) ? 1 : -1;
+    const defs = [
+      ['入口', 'entry', 0, 0], ['战斗 1', 'combat', 1, 0],
+      ['战斗 2', 'combat', 2, 0], ['战斗 3', 'combat', 2, flip],
+      ['宝箱', 'treasure', 1, flip], ['出口', 'exit', 3, 0],
+    ];
+    G.floor = {
+      current: 0, rewarded: false, zone: G.zoneIdx, level: G.roomIdx,
+      rooms: defs.map(([name, kind, x, y], id) => ({
+        id, name, kind, x, y, links: [], visited: false, cleared: kind !== 'combat',
+        mapId: kind === 'combat' ? zone.maps[(G.roomIdx + id - 1) % zone.maps.length] : zone.maps[G.roomIdx],
+        pickups: [], solid: null,
+      })),
+    };
+    for (const [a, b] of [[0, 1], [1, 2], [2, 3], [3, 4], [4, 1], [2, 5]]) {
+      G.floor.rooms[a].links.push(b); G.floor.rooms[b].links.push(a);
+    }
+    G.enterRoom(0);
+  };
+
+  G.floorCleared = function () {
+    return G.floor && G.floor.rooms.every(r => r.cleared);
+  };
+
+  G.enterRoom = function (id, from) {
+    const floor = G.floor;
+    const room = floor && floor.rooms[id];
+    if (!room) return;
+    if (from != null && (!floor.rooms[from].links.includes(id) || G.doorsLocked)) return;
+    if (from != null) {
+      const previous = floor.rooms[from];
+      previous.pickups = G.pickups.slice(); previous.solid = G.solid.slice();
+    }
+    floor.current = id;
+    const zone = ZONES[G.zoneIdx];
+    ctx.loadMap(room.mapId);
+    if (room.solid) G.solid.set(room.solid);
     G.enemies.length = 0; ctx.pooledClear(G.bullets, ctx.poolBullets); G.pickups.length = 0;
     G.mines.length = 0; G.lasers.length = 0; G.beams.length = 0;
     G.bossLaser = null; G.wells.length = 0;
     ctx.pooledClear(G.particles, ctx.poolParticles); ctx.pooledClear(G.rings, ctx.poolRings); G.ghosts.length = 0;
     ctx.pooledClear(G.floaters, ctx.poolFloaters); ctx.timers.length = 0;
     G.isBossRoom = false; G.portal = null; G.roomClearT = 0;
+    G.prompt = null;
     G.chipOffered = false;
     G.fade = 1;
     // 玩家出生点：底部中央附近的空地
     const P = G.player;
     P.x = (G.mw * TILE) / 2; P.y = (G.mh - 2.5) * TILE;
     while (ctx.boxHitsWall(P.x, P.y, P.r) && P.y > TILE * 3) P.y -= TILE;
-    P.vx = 0; P.vy = 0; P.kx = 0; P.ky = 0; P.iframes = 1.0; P.undyingUsed = false;
+    P.vx = 0; P.vy = 0; P.kx = 0; P.ky = 0; P.iframes = 1.0;
+    P.dashT = 0; P.chargeT = 0;
+    if (from == null) P.undyingUsed = false;
     ctx.computeReachable(P.x, P.y);
+    // 门位选在可达的边缘地面，沿用原地图障碍，保证玩家与敌人碰撞一致。
+    G.doors = room.links.map(to => {
+      const other = floor.rooms[to];
+      const dx = other.x - room.x, dy = other.y - room.y;
+      const ax = dx ? (dx > 0 ? (G.mw - 2.5) * TILE : 2.5 * TILE) : G.mw * TILE / 2;
+      const ay = dy ? (dy > 0 ? (G.mh - 2.5) * TILE : 2.5 * TILE) : G.mh * TILE / 2;
+      const spots = G.spawnSpots.filter(s => !ctx.boxHitsWall(s.x, s.y, P.r + 2));
+      spots.sort((a, b) => dist(a.x, a.y, ax, ay) - dist(b.x, b.y, ax, ay));
+      const spot = spots[0] || { x: P.x, y: P.y };
+      return { to, x: spot.x, y: spot.y, name: other.name, dx, dy };
+    });
+    if (from != null) {
+      const door = G.doors.find(d => d.to === from);
+      const spots = G.spawnSpots.filter(s => dist(s.x, s.y, door.x, door.y) >= 32 && !ctx.boxHitsWall(s.x, s.y, P.r));
+      spots.sort((a, b) => dist(a.x, a.y, door.x, door.y) - dist(b.x, b.y, door.x, door.y));
+      if (spots[0]) { P.x = spots[0].x; P.y = spots[0].y; }
+    }
+    G.doorsLocked = !room.cleared;
+    G.roomVisit = (G.roomVisit || 0) + 1;
     // 波次
-    const budget = 3 + (G.zoneIdx + 1) * 2 + G.roomIdx * 2;
+    const total = 3 + (G.zoneIdx + 1) * 2 + G.roomIdx * 2;
+    const budget = Math.floor(total / 3) + (id <= total % 3 ? 1 : 0);
     const w1 = Math.ceil(budget / 2);
     G.waves = [
       Array.from({ length: w1 }, () => pickType(zone.weights)),
@@ -68,16 +128,45 @@ PARTS.rooms = function (ctx) {
     ];
     G.wavIdx = -1; G.pendSpawns = []; G.waveDelay = 1.0;
     G.spawnT = 0;
-    ctx.banner(zone.name, '区域 ' + (G.roomIdx + 1) + ' / ' + zone.maps.length, zone.accent, 2.2);
-    G.roomLabel = '区域 ' + (G.roomIdx + 1) + '/' + zone.maps.length;
-    // 晶片箱（第 2 区起 60% 概率）
-    if ((G.zoneIdx >= 1 || G.roomIdx >= 1) && rng.chance(0.6)) {
+    if (room.cleared) { G.waves = []; G.chipOffered = true; }
+    ctx.banner(zone.name, '第 ' + (G.roomIdx + 1) + ' 层 · ' + room.name, zone.accent, 1.3);
+    G.roomLabel = '第 ' + (G.zoneIdx + 1) + ' 区 · ' + (G.roomIdx + 1) + ' 层 · ' + room.name;
+    G.pickups = room.pickups.slice();
+    // 宝箱房必出武器箱；后续楼层每个战斗房首次进入时有 20% 概率。
+    if (!room.visited && (room.kind === 'treasure' || (room.kind === 'combat' && (G.zoneIdx >= 1 || G.roomIdx >= 1) && rng.chance(0.2)))) {
       const spot = farSpot(140);
       if (spot) {
         const pool = ['smg', 'shotgun', 'railgun'].filter(w => w !== G.weapons[0].id);
         G.pickups.push({ x: spot.x, y: spot.y, kind: 'crate', weapon: rng.pick(pool), t: 0 });
       }
     }
+    room.visited = true;
+    if (room.kind === 'exit' && G.floorCleared()) {
+      if (!floor.rewarded) { floor.rewarded = true; offerChips(); }
+      else openPortal();
+    }
+  };
+
+  G.useDoor = function (to) {
+    if (G.state !== 'playing' || G.isBossRoom || G.doorsLocked) return;
+    const door = (G.doors || []).find(d => d.to === to);
+    if (!door || dist(G.player.x, G.player.y, door.x, door.y) >= 18) return;
+    G.sfx('ui'); G.enterRoom(to, G.floor.current);
+  };
+
+  // AI 与玩家共用门交互；BFS 优先探索未清战斗房，最后前往出口。
+  G.navigationDoor = function () {
+    if (!G.floor || G.isBossRoom || G.doorsLocked || G.portal) return null;
+    const rooms = G.floor.rooms, start = G.floor.current;
+    const queue = [[start, null]], seen = new Set([start]);
+    while (queue.length) {
+      const [id, first] = queue.shift(), r = rooms[id];
+      if (id !== start && ((!r.cleared && r.kind === 'combat') || (G.floorCleared() && r.kind === 'exit'))) {
+        return G.doors.find(d => d.to === first);
+      }
+      for (const to of r.links) if (!seen.has(to)) { seen.add(to); queue.push([to, first == null ? to : first]); }
+    }
+    return null;
   };
 
   function farSpot(minD) {
@@ -97,6 +186,8 @@ PARTS.rooms = function (ctx) {
 
   function updateWaves(dt) {
     if (G.isBossRoom) return;
+    const room = G.floor && G.floor.rooms[G.floor.current];
+    if (room && room.cleared) return;
     // 场上存活 < 7 时，从待生成队列落人
     const alive = G.enemies.filter(e => !e.dead).length;
     if (G.pendSpawns.length && alive < 7) {
@@ -134,7 +225,10 @@ PARTS.rooms = function (ctx) {
         const co = G.daily && G.daily.flag.coinOnly;
         if (rng.chance(0.4)) G.pickups.push({ x: spot.x, y: spot.y, kind: co ? 'coin' : 'heart', t: 0 });
         else if (rng.chance(0.5)) G.pickups.push({ x: spot.x, y: spot.y, kind: co ? 'coin' : 'battery', t: 0 });
-        offerChips();
+        if (room) {
+          room.cleared = true; G.doorsLocked = false;
+          ctx.toast('房间已肃清 · 房门开启' + (G.floorCleared() ? ' · 前往出口领取晶片' : ''), '#45f0e2');
+        } else offerChips();
       }
     }
   }
@@ -281,6 +375,7 @@ PARTS.rooms = function (ctx) {
 
   G.nextLevel = function () {
     const zone = ZONES[G.zoneIdx];
+    if (!G.portal || (!G.isBossRoom && !G.floorCleared())) return;
     // 首领房内的传送门：区域守卫已击破 → 进入下一区
     if (G.isBossRoom) {
       G.isBossRoom = false;
@@ -359,7 +454,7 @@ PARTS.rooms = function (ctx) {
   G.debugJump = function (zone, room) {
     G.zoneIdx = clamp(zone - 1, 0, ZONES.length - 1);
     G.roomIdx = clamp(room - 1, 0, ZONES[G.zoneIdx].maps.length - 1);
-    G.loadRoom(); G.state = 'playing';
+    G.loadRoom(); G.enterRoom(1); G.state = 'playing';
   };
 
   /* ---- 跨部件挂载：谁定义谁挂 ctx ---- */

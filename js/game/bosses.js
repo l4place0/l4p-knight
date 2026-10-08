@@ -319,6 +319,8 @@ PARTS.bosses = function (ctx) {
 
   G.loadBossRoom = function (bossId) {
     bossId = bossId || 'boss';
+    G.doors = []; G.doorsLocked = false;
+    G.roomVisit = (G.roomVisit || 0) + 1;
     ctx.loadMap('boss');
     G.enemies.length = 0; ctx.pooledClear(G.bullets, ctx.poolBullets); G.pickups.length = 0;
     G.mines.length = 0; G.lasers.length = 0; G.beams.length = 0;

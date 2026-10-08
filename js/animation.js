@@ -73,7 +73,7 @@ function createPlayback(G, now = () => performance.now() / 1000) {
   const durations = { attack: 0.36, melee: 0.16, dash: 0.16, hurt: 0.3, special: 0.48, phase: 1.5, death: 0.8 };
   const priority = { attack: 1, special: 2, melee: 3, dash: 4, hurt: 5, phase: 6, death: 7 };
   function resetContext() {
-    const key = [G.zoneIdx, G.mapId, G.roomIdx, G.isBossRoom].join(':');
+    const key = [G.zoneIdx, G.mapId, G.roomIdx, G.isBossRoom, G.roomVisit].join(':');
     if (run !== G.player || room !== key) {
       run = G.player; room = key; pending = new WeakMap(); corpses = []; endAnchor = null;
     }

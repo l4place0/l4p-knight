@@ -343,6 +343,13 @@ PARTS.player = function (ctx) {
       }
     }
 
+    // 房门：战斗封锁，肃清后按 E 往返相邻房间。
+    for (const door of (G.doors || [])) {
+      if (dist(P.x, P.y, door.x, door.y) < 18) {
+        G.prompt = G.doorsLocked ? '战斗中 · 房门已封锁' : '按 E 前往 · ' + door.name;
+        if (!G.doorsLocked && interactPressed) { G.useDoor(door.to); return; }
+      }
+    }
     // 传送门
     if (G.portal) {
       G.portal.t += dt;
