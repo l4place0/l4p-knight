@@ -142,7 +142,8 @@ const ENEMY_DEFS = {
   },
 };
 
-/* 普通战斗房小怪难度（区域序号）；Boss 房及其召唤物使用原数值。
+/* 普通战斗房小怪基础难度（区域序号）；实际 HP 另乘 DIFFICULTY_CURVE.enemyHp。
+ * Boss 房及其召唤物不套普通房倍率。
  * test/enemy-balance.js 标定；G.enemyTuning 可覆盖各字段做确定性对照实验。 */
 const ENEMY_DIFF = {
   1: { hpMul: 3, speedMul: 1.8, aggression: 4.5, bulletMul: 2.4, densityMul: 3, dmgMul: 4 },
@@ -152,11 +153,19 @@ const ENEMY_DIFF = {
 };
 
 /* 整局难度：固定 M3 AI、四英雄等权，从首房正常推进至最终 Boss。
- * damageScale 在统一伤害入口作用于弹幕、激光、接触、地雷与引力井。 */
+ * damageScale 在统一伤害入口与分阶段曲线相乘，覆盖所有危险源。 */
 const DIFFICULTIES = {
-  challenge: { name: '挑战', target: 37, damageScale: 0.265, desc: '紧张战斗 · 容错较低' },
-  standard: { name: '标准', target: 67, damageScale: 0.2035, desc: '推荐体验 · 适度容错' },
+  challenge: { name: '挑战', target: 37, damageScale: 0.252, desc: '紧张战斗 · 容错较低' },
+  standard: { name: '标准', target: 67, damageScale: 0.207, desc: '推荐体验 · 适度容错' },
   casual: { name: '休闲', target: 99, damageScale: 0.12, desc: '轻松探索 · 高容错' },
+};
+
+// v1.14：四段道中与两场首领按到达后的失败风险校准，补给按整层分摊。
+// 仿真可经 G.curveTuning 做全局参数对照；实际游戏与种子/胜败记录无关。
+const DIFFICULTY_CURVE = {
+  routeDamage: [1.6, 1.45, 1.85, 1.5], bossDamage: { boss: 2.05, boss2: 1.5 },
+  bossHp: { boss: 0.85, boss2: 0.6 },
+  extraEnemies: 1, enemyHp: 0.8, clearLootChance: 0.7 / 3,
 };
 
 /* ---------------- 战术晶片 ----------------
@@ -677,7 +686,7 @@ const SPRITES = {
 const CORE = {
   TAU, clamp, lerp, dist, angDiff, RNG,
   VIEW_W, VIEW_H, TILE, PAL,
-  WEAPONS, ENEMY_DEFS, ENEMY_DIFF, DIFFICULTIES, CHIPS, SYNERGIES, HEROES,
+  WEAPONS, ENEMY_DEFS, ENEMY_DIFF, DIFFICULTIES, DIFFICULTY_CURVE, CHIPS, SYNERGIES, HEROES,
   DAILY_MODIFIERS, dailyForDate,
   MAPS, ZONES, BOSS_PHASES, BOSS2_PHASES, FONT35, SPRITES,
 };

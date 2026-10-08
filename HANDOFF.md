@@ -1,10 +1,16 @@
 # HANDOFF · 零号协议 ZERO PROTOCOL 开发交接文档
 
-> 交接日期：2026-10-09 · 交接版本：v1.13（每层多房间，沿用 v1.12 三档难度参数）
+> 交接日期：2026-10-09 · 交接版本：v1.14（多房间道中与首领压力平衡）
 > 项目来源：`ai-benchmark/glm-5,3-flash/zcode/My Soul Knight/shot01`（已完整复制至本目录，逐文件 diff 校验一致）
 > 本文目标：让任何开发者（人或 AI）在不询问原作者的情况下继续开发。
 
 ---
+
+v1.14：`DIFFICULTY_CURVE` 集中配置分区/首领承伤、NPC/首领 HP、每房追加敌人和补给概率。
+固定 M3 最终留出 600 局通过率 37.5% / 67.5% / 98%，道中/首领风险差距最大 1.09 个百分点，故障 0。
+见 [完整曲线报告](docs/balance/difficulty-v1.14.md)。`test/difficulty-balance.js` 输出六段条件失败率，
+`test/difficulty-curve-report.js` 校验最终参数/目标/曲线；`npm run test:curve`（亦在 npm test 内）验证实际结算与五个旧超时回归。
+旧单房与首领平衡表为历史基础值，实际游戏还应用新曲线，继续调参时必须用新的独立种子验收。
 
 v1.13：`zoneIdx` 为区域、`roomIdx` 为楼层，`G.floor.current` 为层内房间。
 每层入口/三个战斗房/宝箱/出口共六间，通过 `G.doors` 的 E 交互往返，战斗中 `doorsLocked` 封门。

@@ -337,10 +337,12 @@ PARTS.bosses = function (ctx) {
     if (G.debugBossHp) d = Object.assign({}, d, { hp: G.debugBossHp });
     // Boss 数值注入钩：G.bossTuning.hpMul/speedMul（难度标定用，默认空 = 行为不变）
     const bt = G.bossTuning || {};
+    const curve = G.curveTuning || C.DIFFICULTY_CURVE;
+    const hpMul = (bt.hpMul || 1) * (G.debugBossHp ? 1 : (curve.bossHp?.[bossId] ?? 1));
     const boss = {
       id: ++G.eid, type: bossId, isBoss: true, x: (G.mw * TILE) / 2, y: TILE * 4,
       vx: 0, vy: 0, kx: 0, ky: 0, r: d.r, mass: d.mass, speed: d.speed * (bt.speedMul || 1),
-      hp: d.hp * (bt.hpMul || 1), maxHp: d.hp * (bt.hpMul || 1), contact: d.contact, name: d.name,
+      hp: d.hp * hpMul, maxHp: d.hp * hpMul, contact: d.contact, name: d.name,
       phases: d.phases, pools: d.pools, final: !!d.final,
       flash: 0, hitCd: 0, spawning: 0, dead: false,
       st: 'intro', t: 1.8, phase: 1, invuln: 0.8, atk: null, atkT: 1.2,

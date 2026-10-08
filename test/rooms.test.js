@@ -43,7 +43,7 @@ for (let seed = 1; seed <= 20; seed++) {
         assert.deepEqual(spatialViolations(G), [], '门交互位置不能嵌墙');
       }
     }
-    assert.equal(budget, 3 + (z + 1) * 2 + level * 2, '每层保留原始敌人预算');
+    assert.equal(budget, 3 + (z + 1) * 2 + level * 2 + 3 * CORE.DIFFICULTY_CURVE.extraEnemies, '每层预算包含三个战斗房的增量');
   }
 }
 

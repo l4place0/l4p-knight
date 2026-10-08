@@ -109,6 +109,7 @@ PARTS.enemies = function (ctx) {
     const tuned = !d.isBoss && !G.isBossRoom;
     const diff = Object.assign({ hpMul: 1, speedMul: 1, aggression: 1, bulletMul: 1, densityMul: 1, dmgMul: 1 },
       tuned ? C.ENEMY_DIFF[z + 1] : null, tuned ? G.enemyTuning : null);
+    if (tuned && G.enemyTuning?.hpMul == null) diff.hpMul *= (G.curveTuning || C.DIFFICULTY_CURVE).enemyHp ?? 1;
     const e = {
       id: ++G.eid, type, x, y, vx: 0, vy: 0, kx: 0, ky: 0,
       r: d.r, mass: d.mass, speed: d.speed * (1 + 0.06 * z),

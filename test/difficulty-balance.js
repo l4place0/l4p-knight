@@ -8,15 +8,19 @@ function scenarios(size=100,seedStart=1){return Array.from({length:size},(_,i)=>
 function run(spec,opts={}){
   const G=GAME.createGame({seed:spec.seed,headless:true,difficulty:opts.difficulty});
   if(opts.scale!=null)G.damageTuning=opts.scale;
+  if(opts.curve)G.curveTuning=opts.curve;
   const bot=BOT.createBot(spec.seed,GENES);G.startRun(spec.hero);
-  const perZone=C.ZONES.map((z,i)=>({zone:i+1,reached:false,bossReached:false,seconds:0,hits:0,combatRoomsCleared:0}));
+  const perZone=C.ZONES.map((z,i)=>({zone:i+1,reached:false,bossReached:false,routeCleared:false,
+    seconds:0,hits:0,routeSeconds:0,bossSeconds:0,routeHits:0,bossHits:0,combatRoomsCleared:0}));
   const cleared=new Set();
   let outcome='timeout',reason=null,frames=0,lastKey='',idle=0;
   for(;frames<1200*60;frames++){
-    const area=perZone[G.zoneIdx],previousHits=G.damageTaken;
+    const area=perZone[G.zoneIdx],previousHits=G.damageTaken,wasBoss=G.isBossRoom,zone=G.zoneIdx;
     area.reached=true;area.bossReached ||= G.isBossRoom;
     try{bot.update(G,1/60,G.input);G.update(1/60);}catch(e){outcome='error';reason=e.stack;break;}
     area.seconds+=1/60;area.hits+=G.damageTaken-previousHits;
+    area[wasBoss?'bossSeconds':'routeSeconds']+=1/60;area[wasBoss?'bossHits':'routeHits']+=G.damageTaken-previousHits;
+    if(!wasBoss&&(G.zoneIdx!==zone||G.isBossRoom))area.routeCleared=true;
     if(G.floor)for(const room of G.floor.rooms)if(room.kind==='combat'&&room.cleared){
       const key=[G.floor.zone,G.floor.level,room.id].join(':');
       if(!cleared.has(key)){cleared.add(key);perZone[G.floor.zone].combatRoomsCleared++;}
@@ -30,10 +34,11 @@ function run(spec,opts={}){
       if(idle>=60){outcome='stall';reason='60s without combat/room/state progress';break;}
     }
   }
+  if(outcome==='timeout')reason='1200s hard limit';
   return {...spec,outcome,seconds:+(Math.min(frames+1,1200*60)/60).toFixed(2),zone:G.zoneIdx+1,map:G.mapId,kills:G.kills,hits:G.damageTaken,
     floor:G.roomIdx+1,room:G.isBossRoom?'boss':G.floor?.rooms[G.floor.current].kind,
     combatRoomsCleared:cleared.size,shopVisits:G.shopVisits,chips:G.chips.length,
-    perZone:perZone.map(z=>({...z,seconds:+z.seconds.toFixed(2)})),
+    perZone:perZone.map(z=>({...z,seconds:+z.seconds.toFixed(2),routeSeconds:+z.routeSeconds.toFixed(2),bossSeconds:+z.bossSeconds.toFixed(2)})),
     bossDown:Object.keys(G.bossDown).length,...(reason?{reason,player:{x:G.player.x,y:G.player.y,weapon:G.weapons[G.weaponSlot].id},
       enemies:G.enemies.filter(e=>!e.dead).map(e=>({type:e.type,x:e.x,y:e.y,hp:e.hp,state:e.state||e.st}))}:{})};
 }
@@ -44,6 +49,19 @@ function summarize(results,target){
   return {n,passRate:+rate.toFixed(2),target,confidence95:[+((mid-half)*100).toFixed(2),+((mid+half)*100).toFixed(2)],outcomes,invalid,perHero:Object.fromEntries(Object.keys(C.HEROES).map(id=>{
     const group=results.filter(r=>r.hero===id);return[id,group.length?+(100*group.filter(r=>r.outcome==='victory').length/group.length).toFixed(2):null];})),
     avgSeconds:+(results.reduce((sum,r)=>sum+r.seconds,0)/n).toFixed(2)};
+}
+function summarizeCurve(results){
+  const blocks=[];
+  for(let i=0;i<C.ZONES.length;i++){
+    for(const kind of ['route','boss']){
+      if(kind==='boss'&&!C.ZONES[i].bossId)continue;
+      const reached=results.filter(r=>r.perZone[i][kind==='boss'?'bossReached':'reached']).length;
+      const deaths=results.filter(r=>r.outcome==='defeat'&&r.zone===i+1&&(kind==='boss'?r.room==='boss':r.room!=='boss')).length;
+      blocks.push({zone:i+1,kind,reached,deaths,deathRate:reached?+(deaths*100/reached).toFixed(2):null});
+    }
+  }
+  const aggregate=kind=>{const bs=blocks.filter(b=>b.kind===kind),n=bs.reduce((s,b)=>s+b.reached,0),deaths=bs.reduce((s,b)=>s+b.deaths,0);return {attempts:n,deaths,deathRate:n?+(deaths*100/n).toFixed(2):null};};
+  return {blocks,route:aggregate('route'),boss:aggregate('boss')};
 }
 async function batch(opts={}){
   const specs=scenarios(opts.size||100,opts.seedStart||1),workers=Math.min(opts.workers||4,specs.length);
@@ -59,13 +77,21 @@ async function main(){
   const opts={difficulty,size:Number(get('--size',100)),seedStart:Number(get('--seed-start',1)),workers:Number(get('--workers',4))};
   for(const key of ['size','seedStart','workers'])if(!Number.isInteger(opts[key])||opts[key]<1)throw new Error('Invalid '+key);
   if(args.includes('--scale')){opts.scale=Number(get('--scale'));if(!Number.isFinite(opts.scale)||opts.scale<=0)throw new Error('Invalid scale');}
+  if(args.includes('--curve')){
+    opts.curve=JSON.parse(get('--curve'));
+    if(!Array.isArray(opts.curve.routeDamage)||opts.curve.routeDamage.length!==4||
+      !opts.curve.routeDamage.every(v=>Number.isFinite(v)&&v>0)||!['boss','boss2'].every(id=>Number.isFinite(opts.curve.bossDamage?.[id])&&opts.curve.bossDamage[id]>0)||
+      !Number.isInteger(opts.curve.extraEnemies)||opts.curve.extraEnemies<0||!Number.isFinite(opts.curve.clearLootChance)||opts.curve.clearLootChance<0||opts.curve.clearLootChance>1)throw new Error('Invalid curve');
+    if(opts.curve.enemyHp!=null&&(!Number.isFinite(opts.curve.enemyHp)||opts.curve.enemyHp<=0))throw new Error('Invalid enemy HP curve');
+    if(opts.curve.bossHp!=null&&!['boss','boss2'].every(id=>Number.isFinite(opts.curve.bossHp[id])&&opts.curve.bossHp[id]>0))throw new Error('Invalid boss HP curve');
+  }
   const results=await batch(opts),summary=summarize(results,C.DIFFICULTIES[difficulty].target);
-  console.log(JSON.stringify({opts,summary,invalid:results.filter(r=>!['victory','defeat'].includes(r.outcome))}));
-  const out=get('--out');if(out){fs.mkdirSync(require('node:path').dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify({gameVersion:require('../package.json').version,genes:GENES,config:opts,profile:C.DIFFICULTIES[difficulty],summary,results},null,2)+'\n');}
+  console.log(JSON.stringify({opts,summary,stages:summarizeCurve(results),invalid:results.filter(r=>!['victory','defeat'].includes(r.outcome))}));
+  const out=get('--out');if(out){fs.mkdirSync(require('node:path').dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify({gameVersion:require('../package.json').version,genes:GENES,config:opts,profile:C.DIFFICULTIES[difficulty],curve:opts.curve||C.DIFFICULTY_CURVE,summary,stages:summarizeCurve(results),results},null,2)+'\n');}
   const meetsTarget=args.includes('--holdout') ? summary.confidence95[0]<=summary.target&&summary.target<=summary.confidence95[1] :
     Math.abs(summary.passRate-summary.target)<=Number(get('--tolerance',5));
   if(summary.invalid||(args.includes('--verify')&&!meetsTarget))process.exitCode=1;
 }
 if(!isMainThread)parentPort.postMessage(workerData.specs.map(spec=>run(spec,workerData.opts)));
 else if(require.main===module)main().catch(e=>{console.error(e);process.exitCode=1;});
-module.exports={GENES,scenarios,run,summarize,batch};
+module.exports={GENES,scenarios,run,summarize,summarizeCurve,batch};

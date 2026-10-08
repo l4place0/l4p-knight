@@ -1,0 +1,596 @@
+{
+  "date": "2026-10-09",
+  "gameVersion": "1.14.0",
+  "curve": {
+    "routeDamage": [
+      1.6,
+      1.45,
+      1.85,
+      1.5
+    ],
+    "bossDamage": {
+      "boss": 2.05,
+      "boss2": 1.5
+    },
+    "bossHp": {
+      "boss": 0.85,
+      "boss2": 0.6
+    },
+    "extraEnemies": 1,
+    "enemyHp": 0.8,
+    "clearLootChance": 0.2333333333333333
+  },
+  "calibrationSeeds": [
+    1,
+    25
+  ],
+  "holdoutSeeds": [
+    501,
+    550
+  ],
+  "tiers": {
+    "challenge": {
+      "profile": {
+        "name": "挑战",
+        "target": 37,
+        "damageScale": 0.252,
+        "desc": "紧张战斗 · 容错较低"
+      },
+      "calibration": {
+        "n": 100,
+        "passRate": 36,
+        "target": 37,
+        "confidence95": [
+          27.27,
+          45.76
+        ],
+        "outcomes": {
+          "defeat": 64,
+          "victory": 36
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 24,
+          "bulwark": 32,
+          "stalker": 48,
+          "prototype": 40
+        },
+        "avgSeconds": 410.45
+      },
+      "holdout": {
+        "n": 200,
+        "passRate": 37.5,
+        "target": 37,
+        "confidence95": [
+          31.09,
+          44.39
+        ],
+        "outcomes": {
+          "defeat": 125,
+          "victory": 75
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 24,
+          "bulwark": 40,
+          "stalker": 32,
+          "prototype": 54
+        },
+        "avgSeconds": 406.39
+      },
+      "stages": {
+        "blocks": [
+          {
+            "zone": 1,
+            "kind": "route",
+            "reached": 200,
+            "deaths": 23,
+            "deathRate": 11.5
+          },
+          {
+            "zone": 2,
+            "kind": "route",
+            "reached": 177,
+            "deaths": 31,
+            "deathRate": 17.51
+          },
+          {
+            "zone": 3,
+            "kind": "route",
+            "reached": 146,
+            "deaths": 17,
+            "deathRate": 11.64
+          },
+          {
+            "zone": 3,
+            "kind": "boss",
+            "reached": 129,
+            "deaths": 17,
+            "deathRate": 13.18
+          },
+          {
+            "zone": 4,
+            "kind": "route",
+            "reached": 112,
+            "deaths": 21,
+            "deathRate": 18.75
+          },
+          {
+            "zone": 4,
+            "kind": "boss",
+            "reached": 91,
+            "deaths": 16,
+            "deathRate": 17.58
+          }
+        ],
+        "route": {
+          "attempts": 635,
+          "deaths": 92,
+          "deathRate": 14.49
+        },
+        "boss": {
+          "attempts": 220,
+          "deaths": 33,
+          "deathRate": 15
+        }
+      },
+      "routeBossGapPoints": 0.51,
+      "old": {
+        "summary": {
+          "n": 200,
+          "passRate": 76.5,
+          "target": 37,
+          "confidence95": [
+            70.16,
+            81.84
+          ],
+          "outcomes": {
+            "victory": 153,
+            "defeat": 47
+          },
+          "invalid": 0,
+          "perHero": {
+            "vanguard": 84,
+            "bulwark": 82,
+            "stalker": 66,
+            "prototype": 74
+          },
+          "avgSeconds": 593.58
+        },
+        "stages": {
+          "blocks": [
+            {
+              "zone": 1,
+              "kind": "route",
+              "reached": 200,
+              "deaths": 1,
+              "deathRate": 0.5
+            },
+            {
+              "zone": 2,
+              "kind": "route",
+              "reached": 199,
+              "deaths": 1,
+              "deathRate": 0.5
+            },
+            {
+              "zone": 3,
+              "kind": "route",
+              "reached": 198,
+              "deaths": 0,
+              "deathRate": 0
+            },
+            {
+              "zone": 3,
+              "kind": "boss",
+              "reached": 198,
+              "deaths": 1,
+              "deathRate": 0.51
+            },
+            {
+              "zone": 4,
+              "kind": "route",
+              "reached": 197,
+              "deaths": 8,
+              "deathRate": 4.06
+            },
+            {
+              "zone": 4,
+              "kind": "boss",
+              "reached": 189,
+              "deaths": 36,
+              "deathRate": 19.05
+            }
+          ],
+          "route": {
+            "attempts": 794,
+            "deaths": 10,
+            "deathRate": 1.26
+          },
+          "boss": {
+            "attempts": 387,
+            "deaths": 37,
+            "deathRate": 9.56
+          }
+        }
+      },
+      "victoryMedianSeconds": 577.82,
+      "maxSeconds": 863.85
+    },
+    "standard": {
+      "profile": {
+        "name": "标准",
+        "target": 67,
+        "damageScale": 0.207,
+        "desc": "推荐体验 · 适度容错"
+      },
+      "calibration": {
+        "n": 100,
+        "passRate": 67,
+        "target": 67,
+        "confidence95": [
+          57.31,
+          75.44
+        ],
+        "outcomes": {
+          "defeat": 33,
+          "victory": 67
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 72,
+          "bulwark": 52,
+          "stalker": 72,
+          "prototype": 72
+        },
+        "avgSeconds": 509.83
+      },
+      "holdout": {
+        "n": 200,
+        "passRate": 67.5,
+        "target": 67,
+        "confidence95": [
+          60.73,
+          73.61
+        ],
+        "outcomes": {
+          "victory": 135,
+          "defeat": 65
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 56,
+          "bulwark": 62,
+          "stalker": 68,
+          "prototype": 84
+        },
+        "avgSeconds": 521.46
+      },
+      "stages": {
+        "blocks": [
+          {
+            "zone": 1,
+            "kind": "route",
+            "reached": 200,
+            "deaths": 4,
+            "deathRate": 2
+          },
+          {
+            "zone": 2,
+            "kind": "route",
+            "reached": 196,
+            "deaths": 15,
+            "deathRate": 7.65
+          },
+          {
+            "zone": 3,
+            "kind": "route",
+            "reached": 181,
+            "deaths": 9,
+            "deathRate": 4.97
+          },
+          {
+            "zone": 3,
+            "kind": "boss",
+            "reached": 172,
+            "deaths": 11,
+            "deathRate": 6.4
+          },
+          {
+            "zone": 4,
+            "kind": "route",
+            "reached": 161,
+            "deaths": 15,
+            "deathRate": 9.32
+          },
+          {
+            "zone": 4,
+            "kind": "boss",
+            "reached": 146,
+            "deaths": 11,
+            "deathRate": 7.53
+          }
+        ],
+        "route": {
+          "attempts": 738,
+          "deaths": 43,
+          "deathRate": 5.83
+        },
+        "boss": {
+          "attempts": 318,
+          "deaths": 22,
+          "deathRate": 6.92
+        }
+      },
+      "routeBossGapPoints": 1.09,
+      "old": {
+        "summary": {
+          "n": 200,
+          "passRate": 95.5,
+          "target": 67,
+          "confidence95": [
+            91.67,
+            97.61
+          ],
+          "outcomes": {
+            "victory": 191,
+            "defeat": 9
+          },
+          "invalid": 0,
+          "perHero": {
+            "vanguard": 96,
+            "bulwark": 98,
+            "stalker": 96,
+            "prototype": 92
+          },
+          "avgSeconds": 604.16
+        },
+        "stages": {
+          "blocks": [
+            {
+              "zone": 1,
+              "kind": "route",
+              "reached": 200,
+              "deaths": 0,
+              "deathRate": 0
+            },
+            {
+              "zone": 2,
+              "kind": "route",
+              "reached": 200,
+              "deaths": 0,
+              "deathRate": 0
+            },
+            {
+              "zone": 3,
+              "kind": "route",
+              "reached": 200,
+              "deaths": 0,
+              "deathRate": 0
+            },
+            {
+              "zone": 3,
+              "kind": "boss",
+              "reached": 200,
+              "deaths": 0,
+              "deathRate": 0
+            },
+            {
+              "zone": 4,
+              "kind": "route",
+              "reached": 200,
+              "deaths": 0,
+              "deathRate": 0
+            },
+            {
+              "zone": 4,
+              "kind": "boss",
+              "reached": 200,
+              "deaths": 9,
+              "deathRate": 4.5
+            }
+          ],
+          "route": {
+            "attempts": 800,
+            "deaths": 0,
+            "deathRate": 0
+          },
+          "boss": {
+            "attempts": 400,
+            "deaths": 9,
+            "deathRate": 2.25
+          }
+        }
+      },
+      "victoryMedianSeconds": 594.73,
+      "maxSeconds": 968.35
+    },
+    "casual": {
+      "profile": {
+        "name": "休闲",
+        "target": 99,
+        "damageScale": 0.12,
+        "desc": "轻松探索 · 高容错"
+      },
+      "calibration": {
+        "n": 100,
+        "passRate": 97,
+        "target": 99,
+        "confidence95": [
+          91.55,
+          98.97
+        ],
+        "outcomes": {
+          "victory": 97,
+          "defeat": 3
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 96,
+          "bulwark": 100,
+          "stalker": 92,
+          "prototype": 100
+        },
+        "avgSeconds": 584.87
+      },
+      "holdout": {
+        "n": 200,
+        "passRate": 98,
+        "target": 99,
+        "confidence95": [
+          94.97,
+          99.22
+        ],
+        "outcomes": {
+          "victory": 196,
+          "defeat": 4
+        },
+        "invalid": 0,
+        "perHero": {
+          "vanguard": 96,
+          "bulwark": 98,
+          "stalker": 98,
+          "prototype": 100
+        },
+        "avgSeconds": 591.01
+      },
+      "stages": {
+        "blocks": [
+          {
+            "zone": 1,
+            "kind": "route",
+            "reached": 200,
+            "deaths": 0,
+            "deathRate": 0
+          },
+          {
+            "zone": 2,
+            "kind": "route",
+            "reached": 200,
+            "deaths": 0,
+            "deathRate": 0
+          },
+          {
+            "zone": 3,
+            "kind": "route",
+            "reached": 200,
+            "deaths": 1,
+            "deathRate": 0.5
+          },
+          {
+            "zone": 3,
+            "kind": "boss",
+            "reached": 199,
+            "deaths": 0,
+            "deathRate": 0
+          },
+          {
+            "zone": 4,
+            "kind": "route",
+            "reached": 199,
+            "deaths": 3,
+            "deathRate": 1.51
+          },
+          {
+            "zone": 4,
+            "kind": "boss",
+            "reached": 196,
+            "deaths": 0,
+            "deathRate": 0
+          }
+        ],
+        "route": {
+          "attempts": 799,
+          "deaths": 4,
+          "deathRate": 0.5
+        },
+        "boss": {
+          "attempts": 395,
+          "deaths": 0,
+          "deathRate": 0
+        }
+      },
+      "routeBossGapPoints": 0.5,
+      "old": {
+        "summary": {
+          "n": 200,
+          "passRate": 100,
+          "target": 99,
+          "confidence95": [
+            98.12,
+            100
+          ],
+          "outcomes": {
+            "victory": 200
+          },
+          "invalid": 0,
+          "perHero": {
+            "vanguard": 100,
+            "bulwark": 100,
+            "stalker": 100,
+            "prototype": 100
+          },
+          "avgSeconds": 604.28
+        },
+        "stages": {
+          "blocks": [
+            {
+              "zone": 1,
+              "kind": "route",
+              "reached": 200,
+              "deaths": 0,
+              "deathRate": 0
+            },
+            {
+              "zone": 2,
+              "kind": "route",
+              "reached": 200,
+              "deaths": 0,
+              "deathRate": 0
+            },
+            {
+              "zone": 3,
+              "kind": "route",
+              "reached": 200,
+              "deaths": 0,
+              "deathRate": 0
+            },
+            {
+              "zone": 3,
+              "kind": "boss",
+              "reached": 200,
+              "deaths": 0,
+              "deathRate": 0
+            },
+            {
+              "zone": 4,
+              "kind": "route",
+              "reached": 200,
+              "deaths": 0,
+              "deathRate": 0
+            },
+            {
+              "zone": 4,
+              "kind": "boss",
+              "reached": 200,
+              "deaths": 0,
+              "deathRate": 0
+            }
+          ],
+          "route": {
+            "attempts": 800,
+            "deaths": 0,
+            "deathRate": 0
+          },
+          "boss": {
+            "attempts": 400,
+            "deaths": 0,
+            "deathRate": 0
+          }
+        }
+      },
+      "victoryMedianSeconds": 580.22,
+      "maxSeconds": 1089.05
+    }
+  }
+}

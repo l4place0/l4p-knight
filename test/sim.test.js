@@ -15,6 +15,7 @@
 const LIB = require('./lib.js');
 const { DT, HANG_SECONDS, SEEDS, log, check, failureCount, simulateRun, CORE, GAME, BOT } = LIB;
 require('./rooms.test.js');
+require('./difficulty-curve.test.js');
 
 /* ---------------- 主流程 ---------------- */
 console.log('========================================');
@@ -73,13 +74,13 @@ for (const [hero,seed] of [['prototype',1979]]) {
 }
 
 /* --- 1c. 每日挑战：固定种子 + 修改器钩路回归 --- */
-console.log('【每日挑战】seed = 20261006 · 通货紧缩 + 金币雨 · 60 游戏秒冒烟');
+console.log('【每日挑战】seed = 20261006 · 通货紧缩 + 金币雨 · 120 游戏秒冒烟');
 {
   const daily = { date: '2026-10-06', seed: 20261006,
     mods: [CORE.DAILY_MODIFIERS[0], CORE.DAILY_MODIFIERS[1]] };
   const seenKinds = new Set();
   const r = simulateRun(daily.seed, {
-    quiet: true, maxSeconds: 60, daily, perfectBot: true,
+    quiet: true, maxSeconds: 120, daily, perfectBot: true,
     onFrame: (g) => { for (const p of g.pickups) seenKinds.add(p.kind); },
   });
   log('结果: 击杀 ' + r.G.kills + ' · 拾取金币 ' + r.G.coinsCollected + ' · 出现过的掉落 ' + ([...seenKinds].join('/') || '无'));

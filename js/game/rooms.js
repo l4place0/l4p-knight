@@ -120,7 +120,8 @@ PARTS.rooms = function (ctx) {
     G.roomVisit = (G.roomVisit || 0) + 1;
     // 波次
     const total = 3 + (G.zoneIdx + 1) * 2 + G.roomIdx * 2;
-    const budget = Math.floor(total / 3) + (id <= total % 3 ? 1 : 0);
+    const curve = G.curveTuning || C.DIFFICULTY_CURVE;
+    const budget = Math.floor(total / 3) + (id <= total % 3 ? 1 : 0) + curve.extraEnemies;
     const w1 = Math.ceil(budget / 2);
     G.waves = [
       Array.from({ length: w1 }, () => pickType(zone.weights)),
@@ -223,8 +224,10 @@ PARTS.rooms = function (ctx) {
         // 战利品（掉在可达点）
         const spot = farSpot(30) || { x: G.player.x, y: G.player.y };
         const co = G.daily && G.daily.flag.coinOnly;
-        if (rng.chance(0.4)) G.pickups.push({ x: spot.x, y: spot.y, kind: co ? 'coin' : 'heart', t: 0 });
-        else if (rng.chance(0.5)) G.pickups.push({ x: spot.x, y: spot.y, kind: co ? 'coin' : 'battery', t: 0 });
+        const curve = G.curveTuning || C.DIFFICULTY_CURVE;
+        if (rng.chance(curve.clearLootChance)) {
+          G.pickups.push({ x: spot.x, y: spot.y, kind: co ? 'coin' : rng.chance(4 / 7) ? 'heart' : 'battery', t: 0 });
+        }
         if (room) {
           room.cleared = true; G.doorsLocked = false;
           ctx.toast('房间已肃清 · 房门开启' + (G.floorCleared() ? ' · 前往出口领取晶片' : ''), '#45f0e2');

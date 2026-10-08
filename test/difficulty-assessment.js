@@ -48,7 +48,7 @@ for(const id of Object.keys(C.DIFFICULTIES)){
     else if(prev.outcome==='defeat'&&r.outcome==='defeat')paired.bothDefeat++;
     else if(r.outcome==='victory')paired.gained++;else paired.lost++;
   }
-  tiers[id]={profile:C.DIFFICULTIES[id],summary:summarize(results,C.DIFFICULTIES[id].target),
+  tiers[id]={profile:compared.profile,summary:summarize(results,compared.profile.target),
     clusterConfidence95:clusterInterval([compared.results,fresh.results]),
     comparison:{oldRate:old.summary.passRate,newRate:compared.summary.passRate,
       changePoints:round(compared.summary.passRate-old.summary.passRate),paired,

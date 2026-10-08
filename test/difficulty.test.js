@@ -12,7 +12,7 @@ for(const id of Object.keys(C.DIFFICULTIES)){
   const G=GAME.createGame({headless:true,difficulty:id});G.startRun();
   G.player.iframes=0;G.player.shield=0;
   const hp=G.player.hp;context(G).damagePlayer(2,0,0);
-  assert(Math.abs(hp-G.player.hp-2*C.DIFFICULTIES[id].damageScale)<1e-10);
+  assert(Math.abs(hp-G.player.hp-2*C.DIFFICULTIES[id].damageScale*C.DIFFICULTY_CURVE.routeDamage[0])<1e-10);
   assert.equal(G.endStats().difficulty,id);
   G.startRun('stalker');assert.equal(G.difficultyId,id,'Retry retains difficulty');
   G.startRun('vanguard',null,'casual');assert.equal(G.difficultyId,'casual');
@@ -42,4 +42,6 @@ assert.equal(navigationRegression.shopVisits,4);
 assert(navigationRegression.perZone.every(z=>z.reached));
 assert.equal(navigationRegression.perZone.reduce((n,z)=>n+z.hits,0),navigationRegression.hits);
 assert.equal(navigationRegression.perZone.reduce((n,z)=>n+z.combatRoomsCleared,0),21);
+assert(navigationRegression.perZone.every(z=>z.routeCleared),'Every regional route must finish before victory');
+assert(navigationRegression.perZone.every(z=>z.routeHits+z.bossHits===z.hits));
 console.log('PASS: three targets, defaults/invalid IDs, actual damage scaling, retries/end stats, equal-hero full-run cohorts, invalid-run rejection and seed 33 navigation regression.');
