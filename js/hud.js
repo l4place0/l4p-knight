@@ -40,6 +40,7 @@ function update(dt) {
       const d = document.createElement('div');
       d.className = 'wslot';
       d.textContent = (i + 1) + '·' + w.name;
+      if (window.ZERO_RENDER) d.prepend(window.ZERO_RENDER.icon(w.id, 16));
       ui.wpnRow.appendChild(d);
     });
   }

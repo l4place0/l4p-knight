@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><title>零号协议 · 重绘素材总览</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0c1015;color:#dce5eb;font:14px 'Segoe UI','Microsoft YaHei',sans-serif;padding:32px;max-width:1200px;margin:auto}
+h1{color:#45f0e2;letter-spacing:4px}h2{font-size:18px;border-bottom:1px solid #28323c;padding-bottom:12px;margin-top:28px}
+p{color:#8999a6}.grid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}.card{background:#151c24;border:1px solid #2b3642;min-height:98px;text-align:center;padding:12px 4px;font-size:11px;color:#9daeba}
+.card canvas{display:block;margin:0 auto 8px;width:48px;height:48px;image-rendering:pixelated}.cover{width:100%;max-height:260px;object-fit:cover;border:1px solid #33414b}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.tiles canvas{width:100%;image-rendering:pixelated}.tiles p{margin:6px 0}
+a{color:#45f0e2}@media(max-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+<h1>ZERO PROTOCOL / 美术重绘</h1><p>本地 ImageGen 素材 · 游戏实际精灵尺寸预览 · 黑灰机械 / 青色能量 / 红色敌意 / 琥珀补给</p>
+<img class="cover" src="title.png" alt="标题背景">
+<h2>角色与装置</h2><div id="characters" class="grid"></div>
+<h2>武器、补给与战斗特效</h2><div id="items" class="grid"></div>
+<h2>战术晶片与强化剂</h2><div id="chips" class="grid"></div>
+<h2>四区场景材质 · 地板 / 地板变体 / 墙顶 / 墙面</h2><div id="tiles" class="tiles"></div>
+<p><a href="../../index.html">进入游戏</a> · <a href="README.md">素材说明</a> · <a href="prompts.json">完整生成提示词</a></p>
+<script src="../../js/core.js"></script><script src="../../js/render.js"></script>
+<script>
+ZERO_RENDER.artReady.then(()=>{
+ const C=ZERO_CORE,R=ZERO_RENDER;
+ const groups={characters:['vanguard','bulwark','stalker','prototype',...Object.keys(C.ENEMY_DEFS),'portal','mine','ghost'],items:[...Object.keys(C.WEAPONS),'crate','heart','battery','coin','plasma','enemyOrb','missile','grenadeShot','muzzle','slash'],chips:[...C.CHIPS.map(c=>c.id),'power']};
+ const names={...Object.fromEntries(Object.entries(C.HEROES).map(([k,v])=>[k,v.name])),...Object.fromEntries(Object.entries(C.ENEMY_DEFS).map(([k,v])=>[k,v.name])),...Object.fromEntries(Object.entries(C.WEAPONS).map(([k,v])=>[k,v.name])),...Object.fromEntries(C.CHIPS.map(c=>[c.id,c.name])),portal:'传送门',mine:'地雷',ghost:'冲刺残影',crate:'补给箱',heart:'机械医疗心',battery:'能量电池',coin:'金币',plasma:'友方弹体',enemyOrb:'敌方弹体',missile:'追踪导弹',grenadeShot:'榴弹弹体',muzzle:'枪口火光',slash:'相位刃弧',power:'攻击强化剂'};
+ for(const [group,ids] of Object.entries(groups))for(const id of ids){const card=document.createElement('div');card.className='card';card.append(R.icon(id,48),document.createTextNode(names[id]||id));document.getElementById(group).append(card)}
+ const img=new Image();img.onload=()=>{for(let row=0;row<4;row++){const d=document.createElement('div'),cv=document.createElement('canvas');cv.width=256;cv.height=64;const ctx=cv.getContext('2d');ctx.imageSmoothingEnabled=false;ctx.drawImage(img,0,row*img.height/4,img.width,img.height/4,0,0,256,64);d.append(cv);const p=document.createElement('p');p.textContent=C.ZONES[row].short;d.append(p);document.getElementById('tiles').append(d)}};img.src='tiles.png';
+});
+</script></html>

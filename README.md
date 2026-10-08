@@ -1,12 +1,18 @@
 # 零号协议 ZERO PROTOCOL
 
 > 类《元气骑士》高打击感 · 极简黑白灰像素风 · 2D 肉鸽弹幕射击游戏
-> 纯原生 HTML5 Canvas + Web Audio 合成，零依赖，零外部资源。
+> 纯原生 HTML5 Canvas + Web Audio 合成，零运行依赖，美术资源本地打包。
 
 ![风格](https://img.shields.io/badge/%E9%A3%8E%E6%A0%BC-%E9%BB%91%E7%99%BD%E7%81%B0%E5%83%8F%E7%B4%A0%2B%E9%9C%93%E8%99%B9%E9%AB%98%E4%BA%AE-45f0e2)
 ![评分](https://img.shields.io/badge/%E8%AF%84%E6%B5%8B%E8%AF%84%E5%AE%9A-A-ffb84d)
 
 ---
+
+## 游戏素材全面重绘（2026-10-08）
+
+使用内置 ImageGen 重绘角色、武器补给、四区地墙材质、19 枚晶片及强化剂图标与标题背景。
+四名英雄在选择界面与对局中使用独立外观；图片加载失败时回退至原像素画。
+素材与生成提示词见 [美术资源说明](assets/art/README.md)，不改变碰撞与战斗数值。
 
 ## v1.11 更新（2026-10-08 · 英雄／武器平衡与机制测试）
 

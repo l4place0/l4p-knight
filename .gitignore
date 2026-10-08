@@ -17,3 +17,6 @@ test/mutation-results/
 
 # ZCode 会话目录
 .zcode/
+
+# 可通过 test/art-assets.js 重建的浏览器截图
+test/art-preview/

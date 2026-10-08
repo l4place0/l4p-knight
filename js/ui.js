@@ -91,6 +91,7 @@ function buildHeroCards() {
     d.className = 'heroCard' + (hid === deps.getSelHero() ? ' sel' : '') + (locked ? ' locked' : '');
     d.innerHTML = '<div class="hName">' + (locked ? '🔒 ' : '') + h.name + '</div>' +
       '<div class="hDesc">' + (locked ? '<span class="lockedTag">累计通关 1 次解锁</span>' : h.desc) + '</div>';
+    if (window.ZERO_RENDER) d.prepend(window.ZERO_RENDER.icon(hid));
     d.addEventListener('click', () => {
       if (locked) { AUDIO.play('clink'); G.toast && G.toast('未解锁：累计通关 1 次以启动零号原型机', '#8b8b98'); return; }
       deps.setSelHero(hid); AUDIO.play('ui');
@@ -153,6 +154,7 @@ function showChipOffer() {
       '<div class="ccName">' + c.name + '</div>' + upBadge +
       '<div class="ccDesc">' + c.desc + '</div>' +
       (c.syn && c.syn.length ? '<div class="ccSyn">羁绊：' + c.syn.map(s => s.name).join(' / ') + '</div>' : '');
+    if (window.ZERO_RENDER) div.prepend(window.ZERO_RENDER.icon(c.id));
     div.addEventListener('click', () => { AUDIO.play('chipPick'); G.chooseChip(i); });
     ui.chipCards.appendChild(div);
   });
@@ -177,6 +179,7 @@ function showShop() {
       '<div class="ccRarity" style="color:' + ['', '#a9a9b4', '#45f0e2', '#ffb84d'][it.rarity || 1] + '">' + it.name + (isUp ? ' · 升级' : '') + '</div>' +
       '<div class="sDesc">' + (isUp ? '已持有 → 升一级（效果 ×1.5）<br>' : '') + it.desc + '</div>' +
       '<div class="sPrice">' + (it.sold ? '已购入' : '\u25C6 ' + it.price + ' 金币') + '</div>';
+    if (window.ZERO_RENDER) div.prepend(window.ZERO_RENDER.icon(it.chipId || it.weapon || (it.kind === 'heal' ? 'heart' : it.kind === 'power' ? 'power' : 'battery')));
     if (!it.sold) div.addEventListener('click', () => { G.shopBuy(i); AUDIO.play('buy'); });
     ui.shopCards.appendChild(div);
   });

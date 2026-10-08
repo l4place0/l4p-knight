@@ -11,9 +11,65 @@ const { TAU, clamp, lerp, dist, angDiff, VIEW_W, VIEW_H, TILE,
 
 /* ---------- 精灵预渲染缓存 ---------- */
 const spriteCache = new Map();
+// ImageGen production atlases. Logical sizes stay independent of source resolution.
+const artImages = {};
+const artBase = new URL('../assets/art/', document.currentScript.src);
+const atlasEntries = {};
+const characterNames = ['vanguard', 'bulwark', 'stalker', 'prototype',
+  'charger', 'gunner', 'guard', 'sniper', 'bomber', 'wraith', 'echo', 'boss',
+  'boss2', 'portal', 'mine', 'ghost'];
+const itemNames = ['smg', 'shotgun', 'railgun', 'blade', 'homing', 'grenade',
+  'crate', 'heart', 'battery', 'coin', 'plasma', 'enemyOrb', 'missile',
+  'grenadeShot', 'muzzle', 'slash'];
+characterNames.forEach((name, i) => { atlasEntries[name] = ['characters', i, 4, 4]; });
+itemNames.forEach((name, i) => { atlasEntries[name] = ['items', i, 4, 4]; });
+C.CHIPS.forEach((chip, i) => { atlasEntries[chip.id] = ['chips', i, 5, 4]; });
+atlasEntries.power = ['chips', 19, 5, 4];
+const artReady = Promise.all(['characters', 'items', 'tiles', 'chips', 'title'].map(name =>
+  new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => { artImages[name] = img; spriteCache.clear(); bgCache.clear(); resolve(true); };
+    img.onerror = () => resolve(false); // Offline/missing files retain the original renderer.
+    img.src = new URL(name + '.png', artBase).href;
+  })));
+function atlasSprite(name) {
+  const entry = atlasEntries[name === 'player' ? 'vanguard' : name];
+  if (!entry || !artImages[entry[0]]) return null;
+  const [sheet, index, cols, rows] = entry, img = artImages[sheet];
+  const cw = img.width / cols, ch = img.height / rows;
+  const cell = document.createElement('canvas');
+  cell.width = Math.ceil(cw); cell.height = Math.ceil(ch);
+  const cc = cell.getContext('2d');
+  cc.drawImage(img, (index % cols) * cw, Math.floor(index / cols) * ch, cw, ch, 0, 0, cell.width, cell.height);
+  const pixels = cc.getImageData(0, 0, cell.width, cell.height).data;
+  let left = cell.width, top = cell.height, right = -1, bottom = -1;
+  for (let y = 0; y < cell.height; y++) for (let x = 0; x < cell.width; x++) {
+    if (pixels[(y * cell.width + x) * 4 + 3] < 32) continue;
+    left = Math.min(left, x); right = Math.max(right, x);
+    top = Math.min(top, y); bottom = Math.max(bottom, y);
+  }
+  if (right < left) return null;
+  const sw = right - left + 1, sh = bottom - top + 1;
+  const maxSize = sheet === 'chips' ? 24 : name.startsWith('boss') ? 36 :
+    ['portal', 'slash'].includes(name) ? 26 : sheet === 'characters' ? 20 :
+    ['heart', 'battery', 'coin', 'plasma', 'enemyOrb', 'missile', 'grenadeShot', 'muzzle'].includes(name) ? 8 : 16;
+  const scale = (maxSize - 2) / Math.max(sw, sh);
+  const cv = document.createElement('canvas');
+  const w = cv.width = Math.max(1, Math.round(sw * scale)) + 2;
+  const h = cv.height = Math.max(1, Math.round(sh * scale)) + 2;
+  const ctx = cv.getContext('2d');
+  ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(cell, left, top, sw, sh, 1, 1, w - 2, h - 2);
+  const flash = document.createElement('canvas'); flash.width = w; flash.height = h;
+  const fc = flash.getContext('2d'); fc.drawImage(cv, 0, 0);
+  fc.globalCompositeOperation = 'source-in'; fc.fillStyle = '#fff'; fc.fillRect(0, 0, w, h);
+  return { cv, w, h, flash };
+}
 function makeSprite(name, tint) {
   const key = name + (tint || '');
   if (spriteCache.has(key)) return spriteCache.get(key);
+  const generated = atlasSprite(name);
+  if (generated) { spriteCache.set(key, generated); return generated; }
   const def = SPRITES[name];
   if (!def) return null;
   const art = def.art, pal = def.pal;
@@ -85,7 +141,7 @@ function pixelTextW(str, scale) {
 /* ---------- 地图瓦片渲染缓存（每区域一张底图） ---------- */
 const bgCache = new Map();
 function renderBG(G) {
-  const key = G.mapId;
+  const key = G.zoneIdx + ':' + G.mapId;
   if (bgCache.has(key)) return bgCache.get(key);
   const cv = document.createElement('canvas');
   cv.width = VIEW_W; cv.height = VIEW_H;
@@ -128,6 +184,17 @@ function renderBG(G) {
       if (n < 0.16) { ctx.fillStyle = '#1d1d24'; ctx.fillRect(x + 3 + ((rnd() * 9) | 0), y + 3 + ((rnd() * 9) | 0), 2, 1); ctx.fillRect(x + 3 + ((rnd() * 9) | 0), y + 4 + ((rnd() * 8) | 0), 1, 1); }
       else if (n < 0.2) { ctx.fillStyle = hexA(accent, 0.13); ctx.fillRect(x + 7, y + 7, 2, 2); }
       else if (n < 0.24) { ctx.fillStyle = '#1a1a21'; ctx.fillRect(x + 2, y + 11, 5, 1); }
+    }
+    if (artImages.tiles) {
+      const img = artImages.tiles, cw = img.width / 4, ch = img.height / 4;
+      const wall = G.solid[ty * G.mw + tx];
+      const below = ty + 1 < G.mh && G.solid[(ty + 1) * G.mw + tx];
+      const col = wall ? (below ? 2 : 3) : (tx + ty) % 2;
+      const row = clamp(G.zoneIdx, 0, 3);
+      ctx.drawImage(img, col * cw, row * ch, cw, ch, x, y, TILE, TILE);
+      if (!wall) {
+        ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.fillRect(x, y, TILE, TILE);
+      }
     }
   }
   bgCache.set(key, cv);
@@ -179,6 +246,11 @@ function attach(G) {
 
 /* ---------- 标题背景 ---------- */
 function drawTitleBg(ctx, t) {
+  if (artImages.title) {
+    ctx.drawImage(artImages.title, 0, 0, VIEW_W, VIEW_H);
+    ctx.fillStyle = 'rgba(4,8,12,0.48)'; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    return;
+  }
   ctx.fillStyle = '#0b0b0f';
   ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   ctx.fillStyle = '#14141a';
@@ -204,6 +276,8 @@ function drawPortal(ctx, portal, t, accent) {
   const { x, y } = portal;
   const pulse = 0.7 + Math.sin(t * 4) * 0.3;
   ctx.drawImage(makeGlow(accent, 18), x - 18, y - 18);
+  const portalSprite = makeSprite('portal');
+  if (portalSprite) ctx.drawImage(portalSprite.cv, x - portalSprite.w / 2, y - portalSprite.h / 2);
   ctx.strokeStyle = accent;
   ctx.lineWidth = 1.5;
   for (let i = 0; i < 3; i++) {
@@ -226,6 +300,8 @@ function drawPickups(ctx, G, t) {
     const x = Math.round(pk.x), y = Math.round(pk.y + bobY);
     if (pk.kind === 'coin') {
       ctx.drawImage(makeGlow('#ffb84d', 7), x - 7, y - 7);
+      const coin = makeSprite('coin');
+      if (coin) { ctx.drawImage(coin.cv, x - coin.w / 2, y - coin.h / 2); continue; }
       ctx.fillStyle = '#ffb84d';
       ctx.fillRect(x - 2, y - 2, 4, 4);
       ctx.fillStyle = '#ffe6b0';
@@ -266,6 +342,8 @@ function drawMines(ctx, G, t) {
     ctx.fillStyle = hexA('#ffb84d', blink);
     ctx.fillRect(m.x - 2, m.y - 2, 4, 4);
     ctx.drawImage(makeGlow('#ffb84d', 8), m.x - 8, m.y - 8);
+    const mine = makeSprite('mine');
+    if (mine) ctx.drawImage(mine.cv, m.x - 5, m.y - 5, 10, 10);
   }
 }
 
@@ -357,7 +435,9 @@ function drawGhosts(ctx, G) {
     ctx.globalAlpha = (gh.life / gh.max) * 0.4;
     ctx.fillStyle = '#45f0e2';
     const x = Math.round(gh.x), y = Math.round(gh.y);
-    ctx.fillRect(x - 4, y - 5, 8, 10);
+    const sp = makeSprite('ghost');
+    if (sp) ctx.drawImage(sp.cv, x - sp.w / 2, y - sp.h / 2);
+    else ctx.fillRect(x - 4, y - 5, 8, 10);
     ctx.globalAlpha = 1;
   }
 }
@@ -378,7 +458,7 @@ function drawPlayer(ctx, G, t) {
   // 无敌闪烁
   const blink = P.iframes > 0 && Math.floor(t * 18) % 2 === 0;
   if (!blink) {
-    const sp = makeSprite('player');
+    const sp = makeSprite(G.heroId) || makeSprite('player');
     if (sp) {
       ctx.drawImage(sp.cv, x - (sp.w >> 1), y - (sp.h >> 1));
       if (P.flashWhite > 0) { ctx.globalAlpha = P.flashWhite; ctx.drawImage(sp.flash, x - (sp.w >> 1), y - (sp.h >> 1)); ctx.globalAlpha = 1; }
@@ -401,6 +481,8 @@ function drawPlayer(ctx, G, t) {
       ctx.drawImage(makeGlow(w.color, 7), mx - 7, my - 7);
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(mx - 1, my - 1, 3, 3);
+      const muzzle = makeSprite('muzzle');
+      if (muzzle) ctx.drawImage(muzzle.cv, mx - 4, my - 4, 8, 8);
     }
     // 电磁炮蓄力
     if (w.type === 'rail' && P.chargeT > 0) {
@@ -418,6 +500,12 @@ function drawPlayer(ctx, G, t) {
     const prog = 1 - P.slashT / 0.16;
     const a0 = P.slashA - 0.95 + prog * 1.9;
     const range = 26 * G.stats.meleeRange;
+    const slash = makeSprite('slash');
+    if (slash) {
+      ctx.save(); ctx.translate(x, y); ctx.rotate(P.slashA);
+      ctx.globalAlpha = 1 - prog;
+      ctx.drawImage(slash.cv, 0, -range, range, range * 2); ctx.restore();
+    }
     ctx.strokeStyle = hexA('#ffffff', 0.9);
     ctx.lineWidth = 2.5;
     ctx.beginPath();
@@ -577,6 +665,12 @@ function drawBullets(ctx, G, t) {
     ctx.fillRect(Math.round(x - b.r / 1.4), Math.round(y - b.r / 1.4), Math.ceil(b.r / 1.4 * 2), Math.ceil(b.r / 1.4 * 2));
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(Math.round(x - 0.5), Math.round(y - 0.5), 1.5, 1.5);
+    const sp = makeSprite(b.friendly ? (b.kind === 'homing' ? 'missile' : b.kind === 'grenade' ? 'grenadeShot' : 'plasma') : 'enemyOrb');
+    if (sp) {
+      const size = Math.max(3, b.r * 2);
+      ctx.save(); ctx.translate(x, y); ctx.rotate(Math.atan2(b.vy, b.vx));
+      ctx.drawImage(sp.cv, -size / 2, -size / 2, size, size); ctx.restore();
+    }
   }
 }
 
@@ -646,7 +740,19 @@ function drawCrosshair(ctx, G, mouse, t) {
   }
 }
 
-root.ZERO_RENDER = { attach, makeSprite };
+function icon(name, size = 24) {
+  const canvas = document.createElement('canvas'); canvas.width = canvas.height = size;
+  canvas.className = 'artIcon'; canvas.setAttribute('aria-hidden', 'true');
+  const draw = () => {
+    const sp = makeSprite(name); if (!sp) return;
+    const ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, size, size);
+    ctx.imageSmoothingEnabled = false;
+    const scale = (size - 2) / Math.max(sp.w, sp.h);
+    ctx.drawImage(sp.cv, (size - sp.w * scale) / 2, (size - sp.h * scale) / 2, sp.w * scale, sp.h * scale);
+  };
+  draw(); artReady.then(draw); return canvas;
+}
+root.ZERO_RENDER = { attach, makeSprite, icon, artReady };
 if (typeof module !== 'undefined' && module.exports) module.exports = root.ZERO_RENDER;
 
 })(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : this));
