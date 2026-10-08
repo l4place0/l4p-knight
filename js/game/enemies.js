@@ -26,6 +26,7 @@ PARTS.enemies = function (ctx) {
     e.hp -= dmg;
     if (G.stats.frost) e.slowT = Math.max(e.slowT || 0, e.type === 'boss' ? 0.6 : (G.stats.frostAmp ? 2.2 : 1.8) * (G.stats.frostK || 1));
     e.flash = 1; e.hitCd = 0.05;
+    if (G.visualEvent) G.visualEvent('hurt', e);
     if (knock) {
       const m = e.mass || 1;
       e.kx += Math.cos(dir) * knock / m;
@@ -51,6 +52,7 @@ PARTS.enemies = function (ctx) {
   function breakGuard(e) {
     if (e.type !== 'guard' || e.broken > 0) return;
     e.broken = 6; e.staggerT = 1.6;
+    if (G.visualEvent) G.visualEvent('special', e);
     ctx.addFloater(e.x, e.y - 12, '破盾!', '#ff4757', true);
     ctx.addParts(e.x, e.y, 12, ['#a9a9b4', '#ffffff'], { spd: 140, life: 0.4 });
     ctx.addRing(e.x, e.y, '#a9a9b4', { vr: 180, life: 0.3 });
@@ -77,6 +79,7 @@ PARTS.enemies = function (ctx) {
       return;
     }
     e.dead = true;
+    if (G.visualEvent) G.visualEvent('death', e);
     // 金币掉落
     const luckyMul = G.stats.lucky ? 1 + 0.6 * (G.stats.luckyK || 1) : 1;
     const coinN = (e.elite ? 3 : (e.type === 'guard' ? 2 : 1)) * (G.daily && G.daily.flag.coinRain ? 2 : 1);
@@ -136,6 +139,7 @@ PARTS.enemies = function (ctx) {
   }
 
   function enemyBullet(e, x, y, angle, speed, damage, opts) {
+    if (G.visualEvent) G.visualEvent('attack', e);
     return ctx.spawnBullet(x, y, angle, speed * e.diff.bulletMul, damage * e.diff.dmgMul, false, opts);
   }
 
@@ -240,6 +244,7 @@ PARTS.enemies = function (ctx) {
           if (ctx.pointSegDist(P.x, P.y, e.x, e.y, hitP.x, hitP.y) < 6.5) ctx.damagePlayer(2 * e.diff.dmgMul, e.x, e.y);
           ctx.addParts(hitP.x, hitP.y, 6, ['#ff4757', '#ffffff'], { spd: 100, life: 0.3 });
           G.sfx('sniperFire');
+          if (G.visualEvent) G.visualEvent('attack', e);
           if (la) la.dead = true;
           e.state = 'rest'; e.t = 0; e.cd = rng.range(2.4, 3.2);
         }
@@ -257,6 +262,7 @@ PARTS.enemies = function (ctx) {
         if (e.t > 0.5) {
           // 起爆：不计击杀（无连击/金币）
           e.dead = true;
+          if (G.visualEvent) G.visualEvent('death', e);
           ctx.explode(e.x, e.y, 38, e.diff.dmgMul, false, '#ff4757');
         }
       } else {
@@ -288,6 +294,7 @@ PARTS.enemies = function (ctx) {
       if (e.blinkCd <= 0 && (d > 260 || !G.losClear(e.x, e.y, P.x, P.y))) {
         e.blinkCd = rng.range(4.5, 6.5);
         wraithBlink(e, P);
+        if (G.visualEvent) G.visualEvent('special', e);
       }
     } else if (e.type === 'echo') {
       // 镜像残影：缓慢逼近保持中距，蓄力后发射一枚镜像弹（无接触伤害）

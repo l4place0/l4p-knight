@@ -204,6 +204,7 @@ function renderBG(G) {
 /* ---------- 附加到游戏实例 ---------- */
 function attach(G) {
   const cv = document.createElement('canvas');
+  G.visualPlayback = root.ZERO_ANIMATION ? root.ZERO_ANIMATION.createPlayback(G) : null;
   G.render = function (ctx, mouse) {
     const t = G.time;
     ctx.save();
@@ -219,6 +220,7 @@ function attach(G) {
     const accent = ZONES[G.zoneIdx] ? ZONES[G.zoneIdx].accent : '#45f0e2';
 
     drawPortal(ctx, G.portal, t, accent);
+    if (G.visualPlayback) G.visualPlayback.drawCorpses(ctx);
     drawPickups(ctx, G, t);
     drawMines(ctx, G, t);
     drawWells(ctx, G, t);
@@ -445,7 +447,15 @@ function drawGhosts(ctx, G) {
 /* ---------- 玩家 ---------- */
 function drawPlayer(ctx, G, t) {
   const P = G.player;
-  if (G.state === 'defeat') return;
+  const pose = G.visualPlayback && G.visualPlayback.sample(P);
+  if (G.state === 'defeat') {
+    if (pose && pose.sprite) {
+      ctx.save(); ctx.translate(Math.round(P.x), Math.round(P.y));
+      if (Math.cos(P.aimA) < 0) ctx.scale(-1, 1);
+      ctx.drawImage(pose.sprite.cv, -pose.sprite.w / 2, -pose.sprite.h / 2); ctx.restore();
+    }
+    return;
+  }
   const x = Math.round(P.x), y = Math.round(P.y + Math.sin(P.bob * 6) * 0.5);
   // 护盾光环
   if (P.shield > 0) {
@@ -456,12 +466,16 @@ function drawPlayer(ctx, G, t) {
     ctx.stroke();
   }
   // 无敌闪烁
-  const blink = P.iframes > 0 && Math.floor(t * 18) % 2 === 0;
+  const showingAction = pose && pose.sprite && ['dash', 'hurt', 'melee'].includes(pose.action);
+  const blink = !showingAction && P.iframes > 0 && Math.floor(t * 18) % 2 === 0;
   if (!blink) {
-    const sp = makeSprite(G.heroId) || makeSprite('player');
+    const sp = (pose && pose.sprite) || makeSprite(G.heroId) || makeSprite('player');
     if (sp) {
-      ctx.drawImage(sp.cv, x - (sp.w >> 1), y - (sp.h >> 1));
-      if (P.flashWhite > 0) { ctx.globalAlpha = P.flashWhite; ctx.drawImage(sp.flash, x - (sp.w >> 1), y - (sp.h >> 1)); ctx.globalAlpha = 1; }
+      ctx.save(); ctx.translate(x, y);
+      if (pose && pose.sprite && Math.cos(P.aimA) < 0) ctx.scale(-1, 1);
+      ctx.drawImage(sp.cv, -(sp.w >> 1), -(sp.h >> 1));
+      if (P.flashWhite > 0) { ctx.globalAlpha = P.flashWhite; ctx.drawImage(sp.flash, -(sp.w >> 1), -(sp.h >> 1)); ctx.globalAlpha = 1; }
+      ctx.restore();
     }
   }
   // 武器（朝向 aim）
@@ -530,10 +544,11 @@ function drawEnemies(ctx, G, t) {
     if (e.dead) continue;
     if (e.spawning > 0) continue; // 生成预告单独绘制
     const x = Math.round(e.x), y = Math.round(e.y);
-    const sp = makeSprite(e.type);
+    const pose = G.visualPlayback && G.visualPlayback.sample(e);
+    const sp = (pose && pose.sprite) || makeSprite(e.type);
     if (!sp) continue;
     const sc = e.elite ? 1.18 : 1;
-    const bob = e.type === 'boss' ? Math.sin(t * 2) * 1.5 : Math.sin(t * 4 + e.id) * 0.5;
+    const bob = pose && pose.sprite ? 0 : e.type === 'boss' ? Math.sin(t * 2) * 1.5 : Math.sin(t * 4 + e.id) * 0.5;
     // 影子
     ctx.fillStyle = 'rgba(0,0,0,0.35)';
     ctx.beginPath();
@@ -551,7 +566,7 @@ function drawEnemies(ctx, G, t) {
       const pulse = 0.6 + Math.sin(t * 6) * 0.4;
       ctx.fillStyle = pc;
       ctx.globalAlpha = pulse;
-      ctx.fillRect(x - 2, y - 2 + Math.round(bob), 5, 5);
+      if (e.st !== 'dying') ctx.fillRect(x - 2, y - 2 + Math.round(bob), 5, 5);
       ctx.globalAlpha = 1;
       // 蓄力提示
       if (e.st === 'attack' && e.atk && !e.atk.fired && e.atk.t < 0.35) {
@@ -639,7 +654,8 @@ function drawSpawning(ctx, G, t) {
     ctx.fillStyle = hexA(accent, 0.35);
     ctx.fillRect(x - 1, y - 12 + 12 * prog, 2, 12 - 12 * prog + 2);
     ctx.globalAlpha = prog * 0.8;
-    const sp = makeSprite(e.type);
+    const pose = G.visualPlayback && G.visualPlayback.sample(e);
+    const sp = (pose && pose.sprite) || makeSprite(e.type);
     if (sp) ctx.drawImage(sp.cv, x - (sp.w >> 1), y - (sp.h >> 1));
     ctx.globalAlpha = 1;
   }

@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node test/serve.js 8941",
     "test": "node test/sim.test.js",
+    "test:animation": "node test/animation.test.js",
     "test:enemies": "node test/enemy-balance.test.js",
     "test:mechanics": "node test/mechanics.test.js",
     "test:mechanics-mutation": "node test/mechanics-mutation.js",

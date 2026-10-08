@@ -227,6 +227,7 @@ function updateOverlays(settleEnd) {
   if (G.state === 'shop') showShop();
   if (G.state !== 'shop') ui.shopOverlay.classList.remove('show');
   if ((G.state === 'victory' || G.state === 'defeat') && G.endScreen && !ui.screenEnd.classList.contains('show')) {
+    if (G.state === 'defeat' && G.visualPlayback && !G.visualPlayback.deathDone()) return;
     showEnd(G.endScreen, settleEnd(G.endScreen));
   }
 }

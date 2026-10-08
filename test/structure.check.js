@@ -36,6 +36,7 @@ const SCRIPT_ORDER = [
   'js/game/bosses.js',
   'js/game/rooms.js',
   'js/game.js',
+  'js/animation.js',
   'js/render.js',
   'js/audio.js',
   'js/music.js',

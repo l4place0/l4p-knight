@@ -100,6 +100,7 @@ PARTS.player = function (ctx) {
     P.vx -= Math.cos(aim) * (w.id === 'shotgun' ? 55 : 12);
     P.vy -= Math.sin(aim) * (w.id === 'shotgun' ? 55 : 12);
     P.recoil = 1; P.muzzleT = 0.06;
+    if (G.visualEvent) G.visualEvent('attack', P);
     ctx.addParts(mx, my, 4, [w.color, '#ffffff'], { spd: 60, life: 0.15, size: 1.6 });
     ctx.shake(w.shake);
     G.sfx(w.id === 'shotgun' ? 'shotgun' : 'shoot');
@@ -133,6 +134,7 @@ PARTS.player = function (ctx) {
     ctx.addParts(x1, y1, 10, [w.color, '#ffffff'], { spd: 120, life: 0.3 });
     ctx.addRing(x1, y1, w.color, { vr: 200, life: 0.25 });
     P.recoil = 1.6; ctx.shake(w.shake); ctx.flash('#b9bcff', 0.08);
+    if (G.visualEvent) G.visualEvent('attack', P);
     G.sfx('rail');
     G.sfx('railImpact');
   }
@@ -142,6 +144,7 @@ PARTS.player = function (ctx) {
     if (P.meleeCd > 0) return;
     P.meleeCd = w.interval / s.rate;
     P.slashT = 0.16; P.slashA = P.aimA;
+    if (G.visualEvent) G.visualEvent('melee', P);
     const range = w.range * s.meleeRange, arc = w.arc;
     let hitAny = false;
     for (const e of G.enemies) {
@@ -193,11 +196,13 @@ PARTS.player = function (ctx) {
     G.damageTaken++;
     G.vengeanceT = 3;
     G.hurtFx = 1; ctx.shake(3.5); ctx.flash('#ff4757', 0.10);
+    if (G.visualEvent) G.visualEvent('hurt', P);
     if (sx != null) { P.vx += (P.x - sx) * 2.2; P.vy += (P.y - sy) * 2.2; }
     G.sfx(absorb > 0 && n <= 0 ? 'shieldHit' : 'hurt');
     if (P.shield <= 0 && absorb > 0) { G.sfx('shieldBreak'); ctx.addRing(P.x, P.y, '#45f0e2', { vr: 200, life: 0.3 }); }
     if (P.hp <= 0) {
       P.hp = 0; G.state = 'defeat';
+      if (G.visualEvent) G.visualEvent('death', P);
       G.deathLog = '在第 ' + (G.zoneIdx + 1) + ' 区倒下 · 击杀 ' + G.kills;
       G.endScreen = { victory: false, stats: ctx.endStats() };
       ctx.addParts(P.x, P.y, 40, ['#ffffff', '#ff4757', '#a9a9b4'], { spd: 200, life: 0.8, size: 2.6 });
@@ -250,6 +255,7 @@ PARTS.player = function (ctx) {
       if (ml > 0.1) a = Math.atan2(inp.moveY, inp.moveX);
       else a = P.aimA;
       P.dashA = a; P.dashT = 0.16;
+      if (G.visualEvent) G.visualEvent('dash', P);
       P.dashCd = 0.9 * s.dashCd;
       P.iframes = Math.max(P.iframes, 0.24);
       G.dashEchoT = G.stats.dashEcho ? (G.synActive.some(s2 => s2.id === 'phasekill') ? 2.0 : 1.0) : 0;

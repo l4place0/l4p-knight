@@ -4,6 +4,9 @@
 完整实际提示词及透明选项保存在 [prompts.json](prompts.json)。
 运行 `npm start` 后打开 [素材总览](http://127.0.0.1:8941/assets/art/preview.html)。
 
+角色动作扩展：13 个角色共 546 帧，已接入游戏；参见 [动作说明](animations/README.md) 与
+[播放和逐帧预览](http://127.0.0.1:8941/assets/art/animations/preview.html)。
+
 ## 交付范围
 
 | 文件 | 布局 | 内容 |

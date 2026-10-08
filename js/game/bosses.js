@@ -29,6 +29,7 @@ PARTS.bosses = function (ctx) {
   /* ---------------- Boss ---------------- */
   function bossTransition(e, ph) {
     e.st = 'transition'; e.t = 1.5; e.phase = ph; e.invuln = 1.6;
+    if (G.visualEvent) G.visualEvent('phase', e);
     e.atk = null; e.atkIdx = 0;   // 转阶段重置攻击轮换 → 下一段以该阶段签名攻击开场
     G.bossLaser = null;
     // 清除敌方弹幕 → 火花
@@ -41,6 +42,7 @@ PARTS.bosses = function (ctx) {
 
   function bossDying(e) {
     e.st = 'dying'; e.t = 1.3; e.expT = 0;
+    if (G.visualEvent) G.visualEvent('death', e);
     for (const b of G.bullets) if (!b.friendly) b.life = 0;
     G.bossLaser = null; G.mines.length = 0; G.wells.length = 0;
     G.timeScale = 0.35;
