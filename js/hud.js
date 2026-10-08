@@ -50,7 +50,7 @@ function update(dt) {
   ui.dashFill.style.width = ((1 - P.dashCd / (0.9 * G.stats.dashCd)) * 100) + '%';
   // 关卡
   const zone = C.ZONES[G.zoneIdx];
-  ui.zoneLabel.textContent = G.state === 'title' ? '待命' : (G.daily ? '每日 · ' : '') + zone.name;
+  ui.zoneLabel.textContent = G.state === 'title' ? '待命' : (G.daily ? '每日 · ' : '') + zone.name + ' · ' + C.DIFFICULTIES[G.difficultyId].name;
   ui.roomLabel.textContent = G.state === 'title' ? '' : (G.roomLabel || '');
   // 金币
   ui.coins.textContent = '金币 ' + G.coins;

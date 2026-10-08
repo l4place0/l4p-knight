@@ -22,7 +22,7 @@ PARTS.rooms = function (ctx) {
     const rating = (t < 300 && G.damageTaken <= 6) ? 'S' : (t < 420 && G.damageTaken <= 12) ? 'A' : 'B';
     return {
       time: t, kills: G.kills, maxCombo: G.maxCombo, damageTaken: G.damageTaken,
-      score: G.score, rating,
+      score: G.score, rating, difficulty: G.difficultyId,
       chips: G.chips.map(id => {
         const c = CHIPS.find(c => c.id === id);
         const lv = (G.chipLv && G.chipLv[id]) || 0;
@@ -303,7 +303,8 @@ PARTS.rooms = function (ctx) {
   };
 
   /* ---------------- 开始 / 调试 ---------------- */
-  G.startRun = function (heroId, daily) {
+  G.startRun = function (heroId, daily, difficulty) {
+    if (difficulty != null) G.difficultyId = Object.hasOwn(C.DIFFICULTIES, difficulty) ? difficulty : 'standard';
     G.heroId = heroId || 'vanguard';
     G.chips = []; G.chipLv = {}; G.synActive = []; G.weaponSlot = 0;
     // 每日挑战：按当日修改器设置 G.daily.flag（非每日路径逐位不变，矩阵基线不受影响）

@@ -22,7 +22,7 @@ console.log('========================================\n');
 
 /* --- 1. 完整流程不变量（多种子 · 多英雄） ---
  * 小怪标定到每房 M3 通过率 <37% 后，连续七房的人类化 bot 可以提前阵亡。
- * 难度由 enemy-balance.js 的 batch 独立验收；此处保留逐帧不变量，超时/异常硬失败。
+ * 难度由 difficulty-balance.js 的 M3 整局 batch 独立验收；此处保留逐帧不变量，超时/异常硬失败。
  * 下一段使用实际当前数值的完美 bot 验证完整通关，无火力/生命/跳关注入。 */
 for (const seed of SEEDS) {
   console.log('【通关仿真】seed = ' + seed);
@@ -186,7 +186,7 @@ if (failureCount() === 0) {
   console.log('   [2] 敌军受击击退不穿墙、不越界（逐帧断言）');
   console.log('   [3] Boss 三阶段血量阈值精确、无死锁');
   console.log('   [4] 当前难度完整流程 VICTORY（完美 bot）；人类化阵亡允许，超时/异常硬失败');
-  console.log('   难度另验：node test/enemy-balance.js --verify（每房 M3 batch <37%）');
+  console.log('   难度另验：node test/difficulty-balance.js --difficulty standard --verify（M3 整局目标 67%）');
 } else {
   console.log(' ✗ 自检未通过，失败断言 ' + failureCount() + ' 项');
 }

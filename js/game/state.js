@@ -31,6 +31,7 @@ PARTS.state = function (ctx) {
     combo: 0, comboT: 0, maxCombo: 0,
     coins: 0, coinsCollected: 0, shopVisits: 0, shopItems: null,
     heroId: 'vanguard', daily: null, bonusShield: 0, powerBonus: 0, dashEchoT: 0,
+    difficultyId: Object.hasOwn(C.DIFFICULTIES, ctx.difficulty) ? ctx.difficulty : 'standard',
     score: 0, kills: 0, damageTaken: 0,
     eid: 0, wavIdx: 0, waves: [], pendSpawns: [], waveDelay: 0, roomClearT: 0,
     portal: null, chipOffer: null, endScreen: null, bossDown: {},

@@ -52,6 +52,7 @@ function runScenario(spec) {
   const GAME = require(path.join(ROOT, 'js', 'game.js'));
   const BOT = require(path.join(ROOT, 'js', 'bot.js'));
   const G = GAME.createGame({ seed: spec.seed, headless: true });
+  G.damageTuning=1; // 历史 Boss 标定的原伤害口径。
   const wd = workerData;
   const bot = BOT.createBot(spec.seed, wd.genes);   // 人类化基因（可选，默认 undefined = 完美 bot）
   G.debugDmg = wd.playerDmg || 0;

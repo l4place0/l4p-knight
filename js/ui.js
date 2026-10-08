@@ -51,6 +51,15 @@ function init(d) {
 
   // 标题界面初始构建（拆分前为 main.js 加载末尾的同步执行，顺序不变）
   buildHeroCards();
+  const difficultySelect = el('difficultySelect');
+  difficultySelect.value = deps.getDifficulty();
+  function describeDifficulty() {
+    el('difficultyDescription').textContent = ' · ' + C.DIFFICULTIES[difficultySelect.value].desc;
+  }
+  describeDifficulty();
+  difficultySelect.addEventListener('change', () => {
+    deps.setDifficulty(difficultySelect.value); describeDifficulty(); buildDailyPanel(); AUDIO.play('ui');
+  });
   showRecords();
   buildDailyPanel();
   buildChipSlot();
@@ -72,7 +81,7 @@ function buildDailyPanel() {
   elDate.textContent = today.date + ' · ' + today.seed;
   document.getElementById('dailyMods').innerHTML = today.mods.map(m =>
     '<div class="dailyMod"><b>▍' + m.name + '</b>' + m.desc + '</div>').join('');
-  const best = STORAGE.dailyBest();
+  const best = STORAGE.dailyBest(deps.getDifficulty());
   document.getElementById('dailyBest').textContent = best
     ? ('今日最佳 ' + best.score + ' 分 · ' + best.hero)
     : '今日暂无记录 · 虚位以待';
@@ -193,6 +202,7 @@ function showEnd(es, daily) {
   ui.endEn.textContent = es.victory ? '— VICTORY —' : '— GAME OVER —';
   ui.endRating.textContent = '评价 ' + es.stats.rating;
   ui.endStats.innerHTML =
+    '<span>难度</span><b>' + C.DIFFICULTIES[es.stats.difficulty || G.difficultyId].name + '</b>' +
     '<span>通关用时</span><b>' + es.stats.time.toFixed(1) + ' 秒</b>' +
     '<span>击杀数</span><b>' + es.stats.kills + '</b>' +
     '<span>最高连击</span><b>×' + es.stats.maxCombo + '</b>' +

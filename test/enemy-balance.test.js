@@ -11,6 +11,7 @@ const { simulateRun } = require('./lib.js');
 function isolated() {
   const G = GAME.createGame({ seed: 3, headless: true });
   G.startRun(); G.debugClear(); G.waves = []; G.wavIdx = 99; G.pendSpawns = []; G.chipOffered = true;
+  G.damageTuning=1;
   G.player.iframes = 0;
   return G;
 }

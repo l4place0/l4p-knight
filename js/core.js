@@ -151,6 +151,14 @@ const ENEMY_DIFF = {
   4: { hpMul: 3.2, speedMul: 1.8, aggression: 4.5, bulletMul: 2.4, densityMul: 3, dmgMul: 4 },
 };
 
+/* 整局难度：固定 M3 AI、四英雄等权，从首房正常推进至最终 Boss。
+ * damageScale 在统一伤害入口作用于弹幕、激光、接触、地雷与引力井。 */
+const DIFFICULTIES = {
+  challenge: { name: '挑战', target: 37, damageScale: 0.265, desc: '紧张战斗 · 容错较低' },
+  standard: { name: '标准', target: 67, damageScale: 0.2035, desc: '推荐体验 · 适度容错' },
+  casual: { name: '休闲', target: 99, damageScale: 0.12, desc: '轻松探索 · 高容错' },
+};
+
 /* ---------------- 战术晶片 ----------------
  * rarity: 1 常规(灰) 2 稀有(青) 3 史诗(琥珀)
  * apply(s, k) 修改属性袋；s 字段见 game.computeStats
@@ -669,7 +677,7 @@ const SPRITES = {
 const CORE = {
   TAU, clamp, lerp, dist, angDiff, RNG,
   VIEW_W, VIEW_H, TILE, PAL,
-  WEAPONS, ENEMY_DEFS, ENEMY_DIFF, CHIPS, SYNERGIES, HEROES,
+  WEAPONS, ENEMY_DEFS, ENEMY_DIFF, DIFFICULTIES, CHIPS, SYNERGIES, HEROES,
   DAILY_MODIFIERS, dailyForDate,
   MAPS, ZONES, BOSS_PHASES, BOSS2_PHASES, FONT35, SPRITES,
 };

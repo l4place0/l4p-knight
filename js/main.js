@@ -30,6 +30,9 @@ const bot = BOT.createBot(seed);
 let botOn = botParam;    // AI 代打开关（B 键 / 按钮 / 结算重试共用）
 let runDaily = false;    // 本局是否每日挑战（Enter 重开 / 重试按钮沿用）
 let selHero = 'vanguard';
+const savedDifficulty = STORAGE.getMeta().difficulty;
+let selDifficulty = Object.hasOwn(C.DIFFICULTIES, q.get('difficulty')) ? q.get('difficulty') :
+  (Object.hasOwn(C.DIFFICULTIES, savedDifficulty) ? savedDifficulty : 'standard');
 // 场景矩阵回放：URL 指定英雄（与无头矩阵同一套场景参数编码）
 if (q.get('hero') && C.HEROES[q.get('hero')]) selHero = q.get('hero');
 
@@ -40,6 +43,11 @@ UI.init({
   getRunDaily: () => runDaily,
   getSelHero: () => selHero,
   setSelHero: (h) => { selHero = h; },
+  getDifficulty: () => selDifficulty,
+  setDifficulty: (id) => {
+    selDifficulty = Object.hasOwn(C.DIFFICULTIES, id) ? id : 'standard';
+    const meta = STORAGE.getMeta(); meta.difficulty = selDifficulty; STORAGE.setMeta(meta);
+  },
 });
 HUD.init(UI.els, G);
 INPUT.init({
@@ -65,7 +73,7 @@ function startRun(withBot, dailyRun) {
   botOn = !!withBot;
   runDaily = !!dailyRun;
   UI.onRunStart();   // 商店签名跨局失效 + 收起标题/结算屏（时序与拆分前一致）
-  G.startRun(selHero, runDaily ? today : null);
+  G.startRun(selHero, runDaily ? today : null, selDifficulty);
   if (runDaily) G.banner = { text: '每日挑战 · ' + G.daily.name, sub: today.mods.map(m => m.desc).join('　'), color: '#ffb84d', life: 3.4, max: 3.4 };
   if (jumpZone) G.debugJump(jumpZone, jumpRoom || 1);
   if (q.get('boss') === '1') G.loadBossRoom((C.ZONES[G.zoneIdx] && C.ZONES[G.zoneIdx].bossId) || 'boss');
@@ -93,7 +101,7 @@ function settleEnd(es) {
     STORAGE.setRecords(r);
   }
   if (!G.daily) return null;
-  return { rank: STORAGE.recordDaily(es, G), best: STORAGE.dailyBest() }; // 今日最佳在写入后读取（含本局）
+  return { rank: STORAGE.recordDaily(es, G), best: STORAGE.dailyBest(G.difficultyId) }; // 同档位今日最佳
 }
 
 /* ---------- 固定步长主循环 ---------- */

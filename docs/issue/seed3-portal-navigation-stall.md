@@ -78,4 +78,6 @@ node -e "const {simulateRun}=require('./test/lib.js'); const {ORIGINAL}=require(
 - [仿真基建](../../test/lib.js) · [聚合验收入口](../../test/sim.test.js)
 - [完整诊断归档](../../.agents/notes/2026-10-07-seed3-portal-diagnosis.md)
 
-本记录仅登记问题与诊断结果，修复尚未实施。
+2026-10-08 三档整局难度任务中已修复当前版本：清场传送门导航暂停战斗方向承诺，
+并停止已清场时的补给吸引合力。`test/difficulty.test.js` 使用原问题的门与玩家位置，
+正常移动/交互在十秒内进入第四区；历史诊断脚本仍固定旧提交以保留原证据。

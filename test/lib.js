@@ -19,7 +19,7 @@ const { spatialViolations } = require('./invariants.js');
 
 /* ---------------- 常量 ---------------- */
 const DT = 1 / 60;
-const MAX_SIM_SECONDS = 60 * 11;     // 单局最长模拟 11 游戏分钟（Boss 重标定后全通关需更久）
+const MAX_SIM_SECONDS = 60 * 20;     // 与三档整局评测同用 20 分钟上限，超时仍为运行故障。
 const HANG_SECONDS = 3.0;            // 单帧逻辑耗时超过 3 秒视为卡死
 const SEEDS = process.env.SEEDS ? process.env.SEEDS.split(',').map(Number) : [1, 2, 3];
 

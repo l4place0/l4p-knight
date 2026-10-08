@@ -29,6 +29,7 @@ function createGame(opts) {
     C: root.ZERO_CORE,
     headless: !!opts.headless,
     seed: opts.seed || 1,
+    difficulty: opts.difficulty || 'standard',
   };
   /* 装配顺序钉死：state 打底（G 工厂/池/RNG）→ systems（碰撞/主更新管线）→
    * player（属性/玩家）→ enemies（敌人 AI/伤害）→ bosses（Boss 状态机）→

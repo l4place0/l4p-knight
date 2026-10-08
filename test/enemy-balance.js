@@ -38,6 +38,7 @@ function invariant(G) {
 }
 function runScenario(spec, opts) {
   const G = GAME.createGame({ seed: spec.seed, headless: true });
+  G.damageTuning=1; // 历史单房评测保持原口径；新档位使用 difficulty-balance 整局评测。
   const bot = BOT.createBot(spec.seed, opts.perfect ? null : GENES);
   G.enemyTuning = opts.original ? ORIGINAL : opts.tuning;
   G.startRun(spec.hero); G.debugJump(spec.zone, spec.room);

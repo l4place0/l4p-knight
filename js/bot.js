@@ -391,7 +391,7 @@ function createBot(seed, genes) {
 
     /* ---- 拾取需求（僵局升级期间全部压制：破僵局必须专注） ---- */
     const wantsWeapon = !botStalled && G.pickups.some(pk => pk.kind === 'crate' && (WEAPON_TIER[pk.weapon] || 0) > (WEAPON_TIER[G.weapons[0].id] || 0));
-    if (!botStalled) for (const pk of G.pickups) {
+    if (!botStalled && (target || !G.portal)) for (const pk of G.pickups) {
       const d = dist(P.x, P.y, pk.x, pk.y);
       if (pk.kind === 'heart' && P.hp < P.maxHp && d < 110) { wx += (pk.x - P.x) / d * 0.8; wy += (pk.y - P.y) / d * 0.8; }
       else if (pk.kind === 'battery' && P.shield < P.maxShield && d < 90) { wx += (pk.x - P.x) / d * 0.6; wy += (pk.y - P.y) / d * 0.6; }
@@ -401,6 +401,12 @@ function createBot(seed, genes) {
     /* ---- 16 向评分移动（模拟真实箱体位移，墙敏感） ---- */
     /* 决策惯性基因 commit：人类承诺一个移动方向后 200-400ms 内不逐帧微调——
      * 承诺期内沿用已定方向（无法逐帧穿针，环弹间隙的精确走位消失） */
+    // 清场导航不沿用战斗方向承诺：16px 路点无法容纳 30/45 帧的惯性。
+    // 仅在没有战斗目标且门已开启时生效，不提高战斗躲避能力。
+    const portalNavigation = !target && !!G.portal;
+    // 十二秒无伤害进展且被墙阻断时，暂时逐路点跟随；恢复视线即恢复战斗承诺。
+    const stalledNavigation = botStalled && stallT > 12 && navX != null && !canSeeTarget;
+    if (portalNavigation || stalledNavigation) commitT = 0;
     if (genes && genes.commit && commitT > 0) {
       commitT--;
       input.moveX = commitX; input.moveY = commitY;
@@ -422,7 +428,7 @@ function createBot(seed, genes) {
     if (bestA != null && bestScore > -3.0) {
       input.moveX = Math.cos(bestA);
       input.moveY = Math.sin(bestA);
-      if (genes && genes.commit) { commitT = genes.commit; commitX = input.moveX; commitY = input.moveY; }
+      if (genes && genes.commit && !portalNavigation && !stalledNavigation) { commitT = genes.commit; commitX = input.moveX; commitY = input.moveY; }
     }
     }
 

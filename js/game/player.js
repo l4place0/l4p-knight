@@ -181,6 +181,7 @@ PARTS.player = function (ctx) {
   function damagePlayer(n, sx, sy) {
     const P = G.player;
     if (P.iframes > 0 || G.state !== 'playing') return;
+    n *= G.damageTuning == null ? C.DIFFICULTIES[G.difficultyId].damageScale : G.damageTuning;
     const s = G.stats;
     if (s.undying && !P.undyingUsed && P.hp - Math.max(0, n - P.shield) <= 0) {
       P.undyingUsed = true;

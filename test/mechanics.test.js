@@ -8,6 +8,7 @@ function runMechanics(env = loadMechanics(), only) {
   const { CORE:C, GAME, BOT, context } = env;
   function fixture(hero='vanguard') {
     const G=GAME.createGame({seed:5,headless:true}); G.startRun(hero); G.debugClear();
+    G.damageTuning=1; // 机制契约单独验证原始伤害，档位缩放由 difficulty.test 验证。
     G.waves=[]; G.wavIdx=99; G.pendSpawns=[]; G.chipOffered=true;
     G.player.x=240; G.player.y=208; G.player.iframes=0;
     return G;

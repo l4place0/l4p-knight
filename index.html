@@ -271,6 +271,13 @@ canvas {
     <div class="subLogo">ZERO PROTOCOL</div>
     <div style="color:#6a6a76; font-size:calc(6px*var(--s)); letter-spacing:calc(1px*var(--s));">黑白灰废土 · 高强度肉鸽弹幕射击</div>
     <div id="heroRow"></div>
+    <div style="font-size:calc(7px*var(--s));margin:calc(4px*var(--s));">
+      <label for="difficultySelect">难度</label>
+      <select id="difficultySelect" style="font:inherit;background:#182430;color:#e8e8ee;border:1px solid #345064;padding:calc(3px*var(--s));">
+        <option value="challenge">挑战</option><option value="standard" selected>标准（推荐）</option><option value="casual">休闲</option>
+      </select>
+      <span id="difficultyDescription"></span>
+    </div>
     <div id="dailyPanel">
       <div id="dailyHead">每日挑战 · <span id="dailyDate"></span></div>
       <div id="dailyMods"></div>
