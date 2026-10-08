@@ -9,7 +9,7 @@ base: "v1.8（含消融实验与变异测试基建）"
 version: "实验基建（游戏数值未变更）"
 branch: main
 commits:
-  - "<batch-tool> test: Boss 难度标定工具（1 batch=100 场景）+ bossTuning 注入钩 + 弹幕密度钩"
+  - "fb5104f test: Boss 难度标定工具（1 batch=100 场景）+ bossTuning 注入钩 + 弹幕密度钩"
 tags: [balance, difficulty, batch, boss, yardstick, rl-adjacent, finding]
 ---
 
