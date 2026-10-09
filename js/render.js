@@ -41,12 +41,20 @@ function atlasSprite(name) {
   cell.width = Math.ceil(cw); cell.height = Math.ceil(ch);
   const cc = cell.getContext('2d');
   cc.drawImage(img, (index % cols) * cw, Math.floor(index / cols) * ch, cw, ch, 0, 0, cell.width, cell.height);
-  const pixels = cc.getImageData(0, 0, cell.width, cell.height).data;
-  let left = cell.width, top = cell.height, right = -1, bottom = -1;
-  for (let y = 0; y < cell.height; y++) for (let x = 0; x < cell.width; x++) {
-    if (pixels[(y * cell.width + x) * 4 + 3] < 32) continue;
-    left = Math.min(left, x); right = Math.max(right, x);
-    top = Math.min(top, y); bottom = Math.max(bottom, y);
+  // Local-file images may be drawable but not readable in Chromium. Keep the
+  // registered atlas cell when alpha trimming is forbidden; rendering, flashes
+  // and icons need only drawImage, which remains allowed on a tainted canvas.
+  let left = 0, top = 0, right = cell.width - 1, bottom = cell.height - 1;
+  try {
+    const pixels = cc.getImageData(0, 0, cell.width, cell.height).data;
+    left = cell.width; top = cell.height; right = bottom = -1;
+    for (let y = 0; y < cell.height; y++) for (let x = 0; x < cell.width; x++) {
+      if (pixels[(y * cell.width + x) * 4 + 3] < 32) continue;
+      left = Math.min(left, x); right = Math.max(right, x);
+      top = Math.min(top, y); bottom = Math.max(bottom, y);
+    }
+  } catch (error) {
+    if (error.name !== 'SecurityError') throw error;
   }
   if (right < left) return null;
   const sw = right - left + 1, sh = bottom - top + 1;

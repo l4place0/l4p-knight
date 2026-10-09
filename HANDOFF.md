@@ -1,10 +1,13 @@
 # HANDOFF · 零号协议 ZERO PROTOCOL 开发交接文档
 
-> 交接日期：2026-10-09 · 交接版本：v1.14.2（AI 导航与战斗停滞修复）
+> 交接日期：2026-10-09 · 交接版本：v1.14.3（本地图片画布渲染兼容）
 > 项目来源：`ai-benchmark/glm-5,3-flash/zcode/My Soul Knight/shot01`（已完整复制至本目录，逐文件 diff 校验一致）
 > 本文目标：让任何开发者（人或 AI）在不询问原作者的情况下继续开发。
 
 ---
+
+v1.14.3：图集 alpha 裁剪捕获 `SecurityError` 时使用完整图集格继续绘图。受限画布与旧渲染器负向验证纳入 `npm test`，
+普通 HTTP 与 HTTP 故障注入页面验收通过；Edge `file://` 实机复核尚待用户确认，详见 [issue 006](docs/issues/006-local-file-canvas-security.md)。
 
 v1.14.2：保留 v1.12 的传送门导航修复，补充真实历史检查点验证。`botStalled` 触发后电磁炮保持开火输入，
 避免墙边反复取消蓄力；同一脱困阶段忽略隔墙冲锋预警，普通战斗感知与数值保持。

@@ -17,6 +17,7 @@ const { DT, HANG_SECONDS, SEEDS, log, check, failureCount, simulateRun, CORE, GA
 require('./rooms.test.js');
 require('./difficulty-curve.test.js');
 require('./navigation-issues.test.js');
+require('./render-file.test.js');
 
 /* ---------------- 主流程 ---------------- */
 console.log('========================================');

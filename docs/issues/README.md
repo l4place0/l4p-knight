@@ -10,5 +10,6 @@
 | [003](003-room-door-presentation.md) | P2 | 房门是地面方框/红叉，缺少门洞与状态反馈 | closed · 2b5105b |
 | [004](004-seed3-portal-navigation-stall.md) | 未评定 | 区域守卫击破后 AI 传送门导航停滞 | closed · c924f23；f4d71cc 补齐验收 |
 | [005](005-z4b-perfect-bot-stall.md) | 未评定 | z4b 完美 bot 战斗停滞 | closed · f4d71cc（v1.14.2） |
+| [006](006-local-file-canvas-security.md) | P1 | 本地图片像素读取拒绝导致角色/HUD 消失 | 已修复 · 待 Edge 本地文件复核 |
 
 001–003 验收：[v1.14.1 修复报告](../qa/browser-fixes-v1.14.1.md)。004–005 验收：[v1.14.2 修复报告](../qa/navigation-issues-v1.14.2.md)；历史优先级未重新评定。

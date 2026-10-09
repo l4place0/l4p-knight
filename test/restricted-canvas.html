@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8"><title>本地图片像素读取限制回归</title>
+<style>body{margin:0;background:#080b10;color:#eee;font:14px sans-serif}header{padding:12px}iframe{width:100%;height:82vh;border:0;display:block}</style>
+<header>
+<p>HTTP 故障注入：允许绘图，令像素读取抛出 SecurityError。用于验证渲染兼容，未访问 file://。</p>
+<p id="status" role="status">正在加载…</p>
+</header>
+<iframe id="app" title="受限画布中的真实游戏"></iframe>
+<script>
+const app=document.getElementById('app'),status=document.getElementById('status');
+fetch('../index.html').then(r=>{if(!r.ok)throw Error('游戏页面加载失败');return r.text();}).then(html=>{
+  const base=new URL('../',location.href).href;
+  const fault='<base href="'+base+'"><script>'+ 
+    'window.pixelReadBlocks=0;window.renderErrors=[];'+
+    'addEventListener("error",e=>window.renderErrors.push(e.message));'+
+    'addEventListener("unhandledrejection",e=>window.renderErrors.push(String(e.reason)));'+
+    'CanvasRenderingContext2D.prototype.getImageData=function(){window.pixelReadBlocks++;throw new DOMException("Injected pixel-read restriction","SecurityError");};'+
+    '<'+'/script>';
+  app.srcdoc=html.replace('<head>','<head>'+fault);
+}).catch(e=>{status.textContent='FAIL · '+e.message;});
+setInterval(()=>{
+  const w=app.contentWindow,d=w.document,hud=d.getElementById('hud');
+  if(!hud)return;
+  const blocks=w.pixelReadBlocks,errors=w.renderErrors||[];
+  const started=!!d.querySelector('#hpPips .pip')&&hud.style.display!=='none';
+  status.textContent=(errors.length?'FAIL':blocks&&started?'PASS':'待开局')+
+    ' · 已拒绝 '+blocks+' 次像素读取 · 未捕获异常 '+errors.length+
+    (started?' · 生命、武器和关卡 HUD 已显示':' · 点击开始游戏进行验收');
+},500);
+</script>
+</html>
