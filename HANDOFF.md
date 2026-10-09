@@ -6,6 +6,9 @@
 
 ---
 
+本轮多房间改造、难度平衡、浏览器观察、issue 修复与 Edge 验收的完整过程已归档：
+[2026-10-09 会话总览](.agents/notes/2026-10-09-multi-room-session-summary.md)。阶段记录、数据与截图均由该总览关联。
+
 v1.14.3：图集 alpha 裁剪捕获 `SecurityError` 时使用完整图集格继续绘图。受限画布与旧渲染器负向验证纳入 `npm test`，
 普通 HTTP 与 HTTP 故障注入页面验收通过；用户于 2026-10-09 确认 Edge `file://` 实机复核通过，
 [issue 006](docs/issues/006-local-file-canvas-security.md) 已关闭。
