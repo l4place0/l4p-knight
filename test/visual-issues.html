@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<title>视觉 issue 浏览器回归</title>
+<style>
+body { margin: 0; background: #080b10; color: #e8e8ee; font: 14px sans-serif; }
+header { padding: 12px; } button, select { font: inherit; padding: 6px; }
+#result { white-space: pre-wrap; line-height: 1.5; }
+iframe { display: block; border: 0; margin: auto; }
+</style>
+<header>
+  <button id="run">运行三项 issue 回归</button>
+  <select id="scene" aria-label="查看验收场景" disabled>
+    <option value="visibility">原小地图区域的玩家</option>
+    <option value="sniper">墙后狙击预警</option>
+    <option value="boss">首领蓄力预告</option>
+    <option value="doors">封锁房门</option>
+    <option value="open">开启房门</option>
+  </select>
+  <div id="result" role="status">点击运行，在真实游戏 iframe 中检查布局、渲染射线与门位。</div>
+</header>
+<iframe id="fixture" title="真实游戏验收场景" width="1642" height="864"></iframe>
+<script src="visual-issues.js"></script>
+</html>

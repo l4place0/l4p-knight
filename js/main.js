@@ -60,7 +60,10 @@ INPUT.init({
 
 /* ---------- 缩放 ---------- */
 function fit() {
-  const s = Math.max(1, Math.min(4, Math.floor(Math.min(window.innerWidth / C.VIEW_W, window.innerHeight / C.VIEW_H))));
+  const css = getComputedStyle(document.documentElement);
+  const height = C.VIEW_H + parseFloat(css.getPropertyValue('--hud-top')) + parseFloat(css.getPropertyValue('--hud-bottom'));
+  const available = Math.min(4, (window.innerWidth - 16) / C.VIEW_W, (window.innerHeight - 16) / height);
+  const s = available >= 1 ? Math.floor(available) : Math.max(0.1, available);
   document.documentElement.style.setProperty('--s', s);
 }
 window.addEventListener('resize', fit);

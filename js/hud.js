@@ -10,9 +10,10 @@ const C = window.ZERO_CORE;
 
 let ui = null, G = null;
 let lastCombo = 0, comboPopT = 0, bossGhostV = 1;
+let mapContext = null;
 const toastEls = new Map(); // 存活 toast 对象 → DOM 节点(增量更新用)
 
-function init(uiRefs, game) { ui = uiRefs; G = game; }
+function init(uiRefs, game) { ui = uiRefs; G = game; mapContext = ui.floorMap.getContext('2d'); }
 
 function update(dt) {
   document.getElementById('hud').style.display = (G.state === 'title') ? 'none' : 'block';
@@ -52,6 +53,13 @@ function update(dt) {
   const zone = C.ZONES[G.zoneIdx];
   ui.zoneLabel.textContent = G.state === 'title' ? '待命' : (G.daily ? '每日 · ' : '') + zone.name + ' · ' + C.DIFFICULTIES[G.difficultyId].name;
   ui.roomLabel.textContent = G.state === 'title' ? '' : (G.roomLabel || '');
+  ui.floorMap.hidden = !G.floor || G.isBossRoom;
+  if (!ui.floorMap.hidden) {
+    window.ZERO_RENDER.drawFloorMap(mapContext, G);
+    const cleared = G.floor.rooms.filter(r => r.kind === 'combat' && r.cleared).length;
+    ui.floorMap.setAttribute('aria-label', '第 ' + (G.roomIdx + 1) + ' 层 · 战斗房 ' + cleared + '/3 · 当前 ' + G.floor.rooms[G.floor.current].name);
+    ui.objective.textContent = cleared < 3 ? '清除战斗房 ' + cleared + '/3 · 清完后前往出口' : G.floor.rewarded ? '晶片已领取 · 进入传送门继续' : '战斗房已肃清 · 前往出口领取晶片';
+  } else ui.objective.textContent = '';
   // 金币
   ui.coins.textContent = '金币 ' + G.coins;
   // 得分 / 连击

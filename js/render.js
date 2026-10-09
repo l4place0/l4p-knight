@@ -226,7 +226,7 @@ function attach(G) {
     drawMines(ctx, G, t);
     drawWells(ctx, G, t);
     drawLasers(ctx, G, t);
-    drawBossLaser(ctx, G.bossLaser, t);
+    drawBossLaser(ctx, G, G.bossLaser, t);
     drawGhosts(ctx, G);
     drawEnemies(ctx, G, t);
     drawPlayer(ctx, G, t);
@@ -239,7 +239,6 @@ function attach(G) {
     drawCrosshair(ctx, G, mouse, t);
     ctx.restore();
 
-    drawFloorMap(ctx, G);
     // 全屏闪光（不受震动影响）
     if (G.flashFx > 0) {
       ctx.fillStyle = hexA(G.flashColor, Math.min(0.55, G.flashFx));
@@ -248,30 +247,58 @@ function attach(G) {
   };
 }
 
+function doorGeometry(G, d) {
+  const angle = Math.atan2(d.dy, d.dx);
+  const hit = G.raycastWall(d.x, d.y, angle, Math.max(VIEW_W, VIEW_H));
+  return { angle, length: hit.len, wallX: hit.x + Math.cos(angle) * 4, wallY: hit.y + Math.sin(angle) * 4 };
+}
+
 function drawDoors(ctx, G, accent) {
   ctx.save();
-  ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+  ctx.textAlign = 'center';
   for (const d of G.doors || []) {
     const col = G.doorsLocked ? '#ff4757' : accent;
-    ctx.fillStyle = '#080b10'; ctx.fillRect(d.x - 13, d.y - 11, 26, 22);
-    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.strokeRect(d.x - 13, d.y - 11, 26, 22);
-    ctx.fillStyle = col;
-    ctx.fillText(G.doorsLocked ? '×' : d.dx > 0 ? '→' : d.dx < 0 ? '←' : d.dy > 0 ? '↓' : '↑', d.x, d.y + 3);
-    ctx.fillStyle = '#eeeeee'; ctx.fillText(d.name, d.x, d.y + 22);
+    const { angle, length } = doorGeometry(G, d);
+    ctx.save(); ctx.translate(d.x, d.y); ctx.rotate(angle);
+    // Short approach from the reachable E interaction point to the first wall.
+    // The wall remains the room boundary; moving between rooms uses E.
+    ctx.fillStyle = '#10151a'; ctx.fillRect(-4, -10, length + 12, 20);
+    ctx.fillStyle = '#56616c';
+    ctx.fillRect(-4, -13, length + 12, 3); ctx.fillRect(-4, 10, length + 12, 3);
+    ctx.fillStyle = '#080b10'; ctx.fillRect(length - 2, -10, 12, 20);
+    ctx.fillStyle = '#8795a1';
+    ctx.fillRect(length - 3, -14, 14, 3); ctx.fillRect(length - 3, 11, 14, 3);
+    if (G.doorsLocked) {
+      ctx.fillStyle = '#414b55'; ctx.fillRect(length, -10, 8, 20);
+      ctx.fillStyle = '#76818b';
+      for (let y = -9; y < 10; y += 4) ctx.fillRect(length, y, 8, 1);
+      ctx.fillStyle = col; ctx.fillRect(length + 3, -10, 2, 20);
+    } else {
+      ctx.fillStyle = col; ctx.fillRect(length - 1, -10, 2, 20);
+      ctx.strokeStyle = col; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(-2, -4); ctx.lineTo(3, 0); ctx.lineTo(-2, 4); ctx.stroke();
+    }
+    ctx.fillStyle = col; ctx.fillRect(-5, -12, 3, 2); ctx.fillRect(-5, 10, 3, 2);
+    ctx.restore();
+    const labelY = d.y + (d.dy > 0 ? -24 : 23);
+    ctx.font = '8px sans-serif'; ctx.fillStyle = '#eeeeee'; ctx.fillText(d.name, d.x, labelY);
+    ctx.font = '6px sans-serif'; ctx.fillStyle = col;
+    ctx.fillText(G.doorsLocked ? '战斗封锁' : 'E · 已开启', d.x, labelY + 9);
   }
   ctx.restore();
 }
 
 function drawFloorMap(ctx, G) {
+  ctx.clearRect(0, 0, 100, 66);
   if (!G.floor || G.isBossRoom) return;
   ctx.save();
   const rooms = G.floor.rooms;
   const minY = Math.min(...rooms.map(r => r.y));
-  const point = r => ({ x: VIEW_W - 91 + r.x * 23, y: 74 + (r.y - minY) * 19 });
-  ctx.fillStyle = 'rgba(5,8,12,0.88)'; ctx.fillRect(VIEW_W - 104, 50, 100, 66);
+  const point = r => ({ x: 13 + r.x * 23, y: 24 + (r.y - minY) * 19 });
+  ctx.fillStyle = '#080b10'; ctx.fillRect(0, 0, 100, 66);
   ctx.font = '8px sans-serif'; ctx.textAlign = 'left'; ctx.fillStyle = '#eeeeee';
   const cleared = rooms.filter(r => r.kind === 'combat' && r.cleared).length;
-  ctx.fillText('第 ' + (G.roomIdx + 1) + ' 层 · 清房 ' + cleared + '/3', VIEW_W - 99, 61);
+  ctx.fillText('第 ' + (G.roomIdx + 1) + ' 层 · 清房 ' + cleared + '/3', 5, 11);
   ctx.strokeStyle = '#57616c'; ctx.lineWidth = 1;
   for (const r of rooms) for (const to of r.links) if (to > r.id) {
     const a = point(r), b = point(rooms[to]);
@@ -428,17 +455,18 @@ function drawLasers(ctx, G, t) {
     const a = locked ? 0.9 : 0.35 + Math.sin(t * 20) * 0.15;
     ctx.strokeStyle = hexA('#ff4757', a);
     ctx.lineWidth = locked ? 1.5 : 1;
+    const hit = G.raycastWall(l.x0, l.y0, Math.atan2(l.y1 - l.y0, l.x1 - l.x0), 500);
     ctx.beginPath();
     ctx.moveTo(l.x0, l.y0);
-    ctx.lineTo(l.x1, l.y1);
+    ctx.lineTo(hit.x, hit.y);
     ctx.stroke();
     ctx.fillStyle = hexA('#ff4757', 0.9);
-    ctx.fillRect(l.x1 - 1, l.y1 - 1, 2, 2);
+    ctx.fillRect(hit.x - 1, hit.y - 1, 2, 2);
   }
 }
 
 /* ---------- Boss 扇形扫射激光 ---------- */
-function drawBossLaser(ctx, L, t) {
+function drawBossLaser(ctx, G, L, t) {
   if (!L || L.phase === 'done') return;
   if (L.phase === 'charge') {
     // 蓄力预告：细线
@@ -446,7 +474,7 @@ function drawBossLaser(ctx, L, t) {
     const base = lerp(L.a0, L.a1, prog);
     for (let i = 0; i < L.count; i++) {
       const a = base + (i / (L.count - 1) - 0.5) * L.spread;
-      const hit = G0ray(ctx, L.x0, L.y0, a);
+      const hit = G.raycastWall(L.x0, L.y0, a, 520);
       ctx.strokeStyle = hexA('#ff4757', 0.18 + prog * 0.4);
       ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(L.x0, L.y0); ctx.lineTo(hit.x, hit.y); ctx.stroke();
@@ -462,15 +490,6 @@ function drawBossLaser(ctx, L, t) {
       ctx.drawImage(makeGlow('#ff4757', 10), b.x1 - 10, b.y1 - 10);
     }
   }
-}
-function G0ray(ctx, x, y, a) {
-  // 渲染层用的射线终点（粗略，用于预告线）
-  const steps = 130;
-  for (let i = 1; i <= steps; i++) {
-    const x1 = x + Math.cos(a) * i * 4, y1 = y + Math.sin(a) * i * 4;
-    if (x1 < 0 || y1 < 0 || x1 > VIEW_W || y1 > VIEW_H) return { x: x1, y: y1 };
-  }
-  return { x: x + Math.cos(a) * 520, y: y + Math.sin(a) * 520 };
 }
 
 /* ---------- 残影 ---------- */
@@ -810,7 +829,7 @@ function icon(name, size = 24) {
   };
   draw(); artReady.then(draw); return canvas;
 }
-root.ZERO_RENDER = { attach, makeSprite, icon, artReady };
+root.ZERO_RENDER = { attach, makeSprite, icon, artReady, drawFloorMap, doorGeometry, drawLasers, drawBossLaser };
 if (typeof module !== 'undefined' && module.exports) module.exports = root.ZERO_RENDER;
 
 })(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : this));

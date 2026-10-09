@@ -105,6 +105,13 @@ function runMechanics(env = loadMechanics(), only) {
       const pushed=fixture();pushed.player.kx=60;step(pushed);assert.ok(pushed.player.x>240,'击退必须沿外力方向位移');
       const ray=G.raycastWall(17.1,208,Math.PI,50);
       assert.ok(ray.x>=16&&ray.x<17.1&&ray.len<2,'近墙射线必须停在墙面外侧');
+      const oblique=fixture();oblique.debugJump(4,1);
+      const map=C.MAPS[oblique.mapId];
+      for(let i=-20;i<=20;i++) {
+        const end=oblique.raycastWall(120,136,i/100,520);
+        assert.ok(end.x<176,'斜向射线必须停在第一面墙前');
+        assert.notEqual(map[Math.floor(end.y/16)][Math.floor(end.x/16)],'#','射线终点不得落入墙内');
+      }
       const before={x:21.1,y:208,r:5};
       assert.equal(context(G).moveAxis(before,'x',-4),true,'碰墙移动必须拒绝');
       assert.equal(before.x,21.1,'碰撞不能在解析之前先写入墙内位置');

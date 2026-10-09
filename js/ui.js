@@ -25,6 +25,7 @@ function init(d) {
     hpPips: el('hpPips'), shieldFill: el('shieldFill'), wpnRow: el('wpnRow'),
     dashFill: el('dashFill'), zoneLabel: el('zoneLabel'), roomLabel: el('roomLabel'),
     score: el('score'), combo: el('combo'), hudBL: el('hudBL'), toasts: el('toasts'),
+    floorMap: el('floorMap'), objective: el('objective'),
     bossBar: el('bossBar'), bossName: el('bossName'), bossFill: el('bossFill'),
     bossGhost: el('bossGhost'), bossPhases: document.querySelectorAll('#bossPhases .bphase'),
     prompt: el('prompt'), banner: el('banner'), bannerText: el('bannerText'), bannerSub: el('bannerSub'),

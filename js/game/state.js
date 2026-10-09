@@ -97,7 +97,12 @@ PARTS.state = function (ctx) {
     const steps = Math.ceil(maxLen / 4);
     for (let i = 1; i <= steps; i++) {
       const x = x0 + cx * i * 4, y = y0 + cy * i * 4;
-      if (G.solidAtPx(x, y)) return { x: x - cx * 3, y: y - cy * 3, len: i * 4 - 3 };
+      if (G.solidAtPx(x, y)) {
+        // Preserve the usual wall margin, but an oblique ray may need the full
+        // previous sample to keep its endpoint outside the solid tile.
+        const back = G.solidAtPx(x - cx * 3, y - cy * 3) ? 4 : 3;
+        return { x: x - cx * back, y: y - cy * back, len: i * 4 - back };
+      }
     }
     return { x: x0 + cx * maxLen, y: y0 + cy * maxLen, len: maxLen };
   };
