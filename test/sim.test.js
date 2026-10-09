@@ -16,6 +16,7 @@ const LIB = require('./lib.js');
 const { DT, HANG_SECONDS, SEEDS, log, check, failureCount, simulateRun, CORE, GAME, BOT } = LIB;
 require('./rooms.test.js');
 require('./difficulty-curve.test.js');
+require('./navigation-issues.test.js');
 
 /* ---------------- 主流程 ---------------- */
 console.log('========================================');

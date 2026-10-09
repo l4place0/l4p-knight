@@ -1,10 +1,15 @@
 # HANDOFF · 零号协议 ZERO PROTOCOL 开发交接文档
 
-> 交接日期：2026-10-09 · 交接版本：v1.14.1（浏览器实测 HUD、预警与房门修复）
+> 交接日期：2026-10-09 · 交接版本：v1.14.2（AI 导航与战斗停滞修复）
 > 项目来源：`ai-benchmark/glm-5,3-flash/zcode/My Soul Knight/shot01`（已完整复制至本目录，逐文件 diff 校验一致）
 > 本文目标：让任何开发者（人或 AI）在不询问原作者的情况下继续开发。
 
 ---
+
+v1.14.2：保留 v1.12 的传送门导航修复，补充真实历史检查点验证。`botStalled` 触发后电磁炮保持开火输入，
+避免墙边反复取消蓄力；同一脱困阶段忽略隔墙冲锋预警，普通战斗感知与数值保持。
+`npm run test:navigation`（亦在 npm test 内）覆盖五种子、原始门检查点、三项修复移除和停滞/异常非零退出。
+`test/navigation-browser.html` 为按真实时间运行的固定验收场景。完整记录见 [004/005 修复报告](docs/qa/navigation-issues-v1.14.2.md)。
 
 v1.14.1：常驻 HUD 从战场移到上下栏，`floorMap` 为独立画布，鼠标仍按游戏画布矩形换算坐标。
 `fit` 将 HUD 高度计入缩放，窄屏允许小于 1 倍；晶片区可滚动。房门绘制沿外向射线贴到第一面墙，
@@ -233,8 +238,8 @@ debugClear 清场、debugSpawn 摆怪、限时断言）。诊断卡点用 `test/
 5. **引力井仅拉扯玩家**：如需拉扯敌军，注意与击退衰减、`resolveOutOfWall` 的交互并重跑嵌墙回归。
 6. **人类化 bot 传送门导航停滞**：已于 v1.12（`c924f23`）修复，见 [issue 004](docs/issues/004-seed3-portal-navigation-stall.md)。
    `test/difficulty.test.js` 保留十秒内通过的回归；`test/diag.portal.js` 从 `458bd1a` 加载历史源码，以保持旧场景可复现。仿真提供结构化 outcome，超时/异常会使验收失败。
-7. **z4b 完美 bot 战斗停滞**：原 seed=21 在 v1.11 可清房，但 seed=9/stalker 与 seed=43/prototype
-   仍出现停滞，见 [issue](docs/issues/005-z4b-perfect-bot-stall.md)。尚未定位根因，不宣称已修复。
+7. **z4b 完美 bot 战斗停滞**：v1.14.2 复核旧种子，并修复 seed=46 的电磁炮蓄力取消和 seed=52 的隔墙冲锋规避循环，
+   见 [issue 005](docs/issues/005-z4b-perfect-bot-stall.md)。四英雄 × 200 种子场景通过；后续改动仍需保持固定场景与整局验收。
 
 ## 7. 建议开发路线图（按优先级）
 

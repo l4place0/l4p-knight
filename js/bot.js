@@ -168,7 +168,10 @@ function createBot(seed, genes) {
     for (const e of G.enemies) {
       if (e.dead || e.type !== 'charger' || e.state !== 'aim') continue;
       const d = dist(P.x, P.y, e.x, e.y);
-      if (d < 90) {
+      // During stall recovery, ignore a charger hidden behind a wall: its dash
+      // cannot reach this side, and the phantom threat can cancel the BFS route.
+      // Keep the usual combat perception until the existing stall watchdog fires.
+      if (d < 90 && (!ignoreBomber || G.losClear(e.x, e.y, P.x, P.y))) {
         const a = e.dashA || 0;
         const ex = e.x + Math.cos(a) * 90, ey = e.y + Math.sin(a) * 90;
         const pd = G.pointSegDist(P.x, P.y, e.x, e.y, ex, ey);
@@ -462,7 +465,11 @@ function createBot(seed, genes) {
       const canSee = G.losClear(P.x, P.y, target.x, target.y);
       const isGuardBlocked = target.type === 'guard' && target.broken <= 0 && w.type !== 'rail' && w.id !== 'blade'
         && Math.abs(angDiff(actualA, target.facing)) < 1.15;
-      if (canSee && err < (CONE[w.id] || 0.12) && !isGuardBlocked) {
+      // A charging railgun can repeatedly lose sight at a wall edge before its
+      // charge completes. After a real damage stall, hold the trigger while
+      // moving around cover; the normal cooldown and wall ray still apply.
+      const railStallFire = botStalled && w.type === 'rail';
+      if ((canSee || railStallFire) && err < (CONE[w.id] || 0.12) && !isGuardBlocked) {
         input.fire = true;
       }
     } else {
