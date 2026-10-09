@@ -2,7 +2,7 @@
 
 零号协议浏览器主版本，GitHub 仓库 `l4place0/l4p-knight`，署名 `l4place`；源码、文档、素材统一 MIT。
 
-Agent 任务、过程和归档全部留在本目录。原 HANDOFF 保存为 [handoff-history.md](handoff-history.md)，其旧路径与限制只代表历史语境。
+Agent 任务、过程和归档全部留在本目录，入口见 [资料索引](README.md) 与 [任务索引](tasks/README.md)。原 HANDOFF 保存为 [历史交接](legacy/HANDOFF-v1.14.3.md)，其旧路径与限制只代表历史语境。
 
 共享入口：[架构](../docs/architecture.md)、[开发](../docs/development.md)、[配置](../docs/configuration.md)、[玩法](../docs/gameplay.md)、[发布](../docs/releasing.md)。问题状态见 [issues](../docs/issues/README.md)。
 

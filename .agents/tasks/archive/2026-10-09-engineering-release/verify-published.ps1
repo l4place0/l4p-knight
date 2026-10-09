@@ -1,5 +1,5 @@
 $ErrorActionPreference = 'Stop'
-$verificationRootPath = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
+$verificationRootPath = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../..'))
 $verificationFilePaths = @('index.html', 'generated/config.js')
 $verificationFilePaths += Get-ChildItem -LiteralPath (Join-Path $verificationRootPath 'src') -Recurse -File | ForEach-Object { [IO.Path]::GetRelativePath($verificationRootPath, $_.FullName) }
 $verificationFilePaths += Get-ChildItem -LiteralPath (Join-Path $verificationRootPath 'assets') -Recurse -File -Filter '*.png' | ForEach-Object { [IO.Path]::GetRelativePath($verificationRootPath, $_.FullName) }

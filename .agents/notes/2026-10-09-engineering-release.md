@@ -12,10 +12,13 @@ commits:
   - "82c52c6 JSON 配置、src 迁移、LFS、MIT 与浏览器发布流水线"
   - "96e97c2 归并旧 Agent 计划与工具配置"
   - "48ecec2 Agent-only 归档推送跳过重复 CI 和部署"
+  - "ed49029 发布验证、线上核对脚本与会话总结"
 tags: [engineering, configuration, lfs, github, pages, release]
 ---
 
 # 任务归档 · 浏览器工程整理与发布
+
+计划、决策与过程脚本见 [任务过程归档](../tasks/archive/2026-10-09-engineering-release/README.md)。
 
 - **起点**：v1.14.3 → **产出**：v1.15.0 浏览器主版本、统一配置和 Actions 发布工程。
 
@@ -38,7 +41,7 @@ tags: [engineering, configuration, lfs, github, pages, release]
 - HTTP 根页面和 dist 子目录页面：标题、AI 开局、武器、地图与 HUD 正常；控制台 error/warn 均为空。
 - [Linux CI](https://github.com/l4place0/l4p-knight/actions/runs/37915612267)：success，包含完整回归和逐帧对照。
 - [Pages 部署](https://github.com/l4place0/l4p-knight/actions/runs/37915612443)：success；站点 HTTP 200，release.json 为 1.15.0，配置摘要一致。
-- 线上文件核对：38 个 HTML/配置/源码/PNG 文件与本地内容一致，18 张真实 PNG 按 SHA-256 比较；验证脚本见 .agents/tasks/verify-published.ps1。
+- 线上文件核对：38 个 HTML/配置/源码/PNG 文件与本地内容一致，18 张真实 PNG 按 SHA-256 比较；[验证脚本](../tasks/archive/2026-10-09-engineering-release/verify-published.ps1)。
 - 本地浏览器固定帧实际回放到 victory：休闲、prototype、seed=1，591.0 秒、94 击杀、35 受击、4 次商店；此前搜索见证独立仿真为 603.95 秒。
 
 ## 复现命令

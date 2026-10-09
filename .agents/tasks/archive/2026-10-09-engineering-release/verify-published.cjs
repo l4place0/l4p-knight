@@ -1,10 +1,10 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
-const root=path.resolve(__dirname,'../..'),base='https://l4place0.github.io/l4p-knight/';
-const {list}=require('../../scripts/build.cjs');
+const root=path.resolve(__dirname,'../../../..'),base='https://l4place0.github.io/l4p-knight/';
+const {list}=require('../../../../scripts/build.cjs');
 async function main() {
   const release=await fetch(base+'release.json',{signal:AbortSignal.timeout(20000)}).then(r=>{if(!r.ok)throw new Error('Release HTTP '+r.status);return r.json();});
-  if(release.configurationHash!==require('../../scripts/config.cjs').loadConfig().hash)throw new Error('Published configuration mismatch');
+  if(release.configurationHash!==require('../../../../scripts/config.cjs').loadConfig().hash)throw new Error('Published configuration mismatch');
   const files=['index.html','generated/config.js',...list(path.join(root,'src')).map(f=>path.relative(root,f)),...list(path.join(root,'assets')).filter(f=>f.endsWith('.png')).map(f=>path.relative(root,f))];
   for(let start=0;start<files.length;start+=4) {
     await Promise.all(files.slice(start,start+4).map(async file=>{
