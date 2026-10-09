@@ -132,8 +132,8 @@ node test/serve.js 8941                        # 浏览器 QA：/test/browser-sm
 
 ## 遗留
 
-- [传送门导航 BUG](../issue/seed3-portal-navigation-stall.md) 按原安排延期，历史四组对照仍能精确复现。
-- [z4b 完美 bot 停滞](../issue/z4b-perfect-bot-stall.md) 未修复；旧 seed=21 已可清房，新 seed=9／43 仍停滞。
+- [传送门导航 BUG](../issues/004-seed3-portal-navigation-stall.md) 按原安排延期，历史四组对照仍能精确复现。
+- [z4b 完美 bot 停滞](../issues/005-z4b-perfect-bot-stall.md) 未修复；旧 seed=21 已可清房，新 seed=9／43 仍停滞。
   接受的 M3 校准／留出 batch 为零停滞，额外诊断不得混入通过率。
 - 随机变异仍有幸存项，包括表现层、边界比较与 bot 决策参数；`--strict` 尚不作为必选门。
 - 所有通过率都是固定场景验收，种子间／房间间相关，不能当作真人胜率或保证任意后续种子均达标。

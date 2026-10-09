@@ -87,6 +87,6 @@ node test/structure.check.js
 - 高技巧默认 bot 的普通房通过率为 27%–56%；此配置显著压低整体通关率，不能从单房比例推断真人整局胜率。
   当前完整通关证据集中在原型机；未声明其他英雄完整通关已验证。
 - 额外的完美 bot 诊断出现 z4b 停滞，旧矩阵种子 1–50 也有 1 例（prototype/seed=21）；
-  对应 [待排查记录](../issue/z4b-perfect-bot-stall.md)。它不计入 M3 难度达标证据。
-- [seed=3 传送门导航 BUG](../issue/seed3-portal-navigation-stall.md) 按安排继续延期，诊断脚本固定原始小怪以保留复现。
+  对应 [待排查记录](../issues/005-z4b-perfect-bot-stall.md)。它不计入 M3 难度达标证据。
+- [seed=3 传送门导航 BUG](../issues/004-seed3-portal-navigation-stall.md) 按安排继续延期，诊断脚本固定原始小怪以保留复现。
 - 两批各 100 场景是固定样本验收，无法保证任意后续种子都低于 37%；修改数值、英雄或构筑后须重跑并保留报告。

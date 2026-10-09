@@ -110,7 +110,7 @@ npm run test:mechanics-mutation   # 定向删改必须被实际断言检出
 - 全流程测试允许人类化 bot 阵亡，并用实际当前数值的完美 bot 验证通关（原型机 seed=16，227.3s）；
   同时独立验证单房难度。没有注入额外火力、不死或跳关。
 - [完整标定报告](docs/balance/enemy-difficulty-v1.10.md) 包含分英雄结果、标尺和限制。
-  [传送门导航 BUG](docs/issue/seed3-portal-navigation-stall.md) 继续延期修复。
+  [传送门导航 BUG](docs/issues/004-seed3-portal-navigation-stall.md) 当时延期，后于 v1.12 修复。
 
 ```bash
 npm run balance:enemies                              # 7 房 × 100，难度硬验收

@@ -231,10 +231,10 @@ debugClear 清场、debugSpawn 摆怪、限时断言）。诊断卡点用 `test/
    英雄平衡改动后重跑全英雄分房统计与流程样本。
 4. **z2a 地图有 32 格封闭内室**（装饰性，BFS 可达刷怪已规避死局，纯浪费空间）；如改造需重验第 2 区平衡。
 5. **引力井仅拉扯玩家**：如需拉扯敌军，注意与击退衰减、`resolveOutOfWall` 的交互并重跑嵌墙回归。
-6. **人类化 bot 传送门导航停滞**：已记录于 [issue](docs/issue/seed3-portal-navigation-stall.md)，按操作者要求延期修复；
-   `test/diag.portal.js` 从 `458bd1a` 加载历史源码，以保持旧场景可复现。仿真提供结构化 outcome，超时/异常会使验收失败。
+6. **人类化 bot 传送门导航停滞**：已于 v1.12（`c924f23`）修复，见 [issue 004](docs/issues/004-seed3-portal-navigation-stall.md)。
+   `test/difficulty.test.js` 保留十秒内通过的回归；`test/diag.portal.js` 从 `458bd1a` 加载历史源码，以保持旧场景可复现。仿真提供结构化 outcome，超时/异常会使验收失败。
 7. **z4b 完美 bot 战斗停滞**：原 seed=21 在 v1.11 可清房，但 seed=9/stalker 与 seed=43/prototype
-   仍出现停滞，见 [issue](docs/issue/z4b-perfect-bot-stall.md)。尚未定位根因，不宣称已修复。
+   仍出现停滞，见 [issue](docs/issues/005-z4b-perfect-bot-stall.md)。尚未定位根因，不宣称已修复。
 
 ## 7. 建议开发路线图（按优先级）
 
