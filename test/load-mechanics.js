@@ -4,11 +4,13 @@ const path = require('node:path');
 const vm = require('node:vm');
 const {execFileSync}=require('node:child_process');
 const ROOT = path.resolve(__dirname, '..');
-const FILES = ['js/core.js', ...['state','player','enemies','bosses','rooms','systems'].map(p=>'js/game/'+p+'.js'), 'js/game.js', 'js/bot.js'];
+const FILES = ['src/core.js', ...['state','player','enemies','bosses','rooms','systems'].map(p=>'src/game/'+p+'.js'), 'src/game.js', 'src/bot.js'];
 function loadMechanics(mutation, ref) {
   const world = vm.createContext({ console, Math });
+  if (!ref) world.ZERO_CONFIG = require('../scripts/config.cjs').loadConfig();
   for (const file of FILES) {
-    let source = (ref ? execFileSync('git',['show',ref+':'+file],{cwd:ROOT,encoding:'utf8'}) : fs.readFileSync(path.join(ROOT,file),'utf8')).replace(/\r\n/g,'\n');
+    const historicalFile = file.replace(/^src\//, 'js/');
+    let source = (ref ? execFileSync('git',['show',ref+':'+historicalFile],{cwd:ROOT,encoding:'utf8'}) : fs.readFileSync(path.join(ROOT,file),'utf8')).replace(/\r\n/g,'\n');
     if (mutation && file === mutation.file) {
       if (source.split(mutation.from).length !== 2) throw new Error('变异锚点必须唯一：'+mutation.name);
       source = source.replace(mutation.from, mutation.to);

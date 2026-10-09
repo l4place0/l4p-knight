@@ -1,0 +1,346 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "difficulty",
+  "type": "object",
+  "properties": {
+    "enemies": {
+      "type": "object",
+      "properties": {
+        "1": {
+          "type": "object",
+          "properties": {
+            "hpMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "speedMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "aggression": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "bulletMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "densityMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "dmgMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "hpMul",
+            "speedMul",
+            "aggression",
+            "bulletMul",
+            "densityMul",
+            "dmgMul"
+          ],
+          "additionalProperties": false
+        },
+        "2": {
+          "type": "object",
+          "properties": {
+            "hpMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "speedMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "aggression": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "bulletMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "densityMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "dmgMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "hpMul",
+            "speedMul",
+            "aggression",
+            "bulletMul",
+            "densityMul",
+            "dmgMul"
+          ],
+          "additionalProperties": false
+        },
+        "3": {
+          "type": "object",
+          "properties": {
+            "hpMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "speedMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "aggression": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "bulletMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "densityMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "dmgMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "hpMul",
+            "speedMul",
+            "aggression",
+            "bulletMul",
+            "densityMul",
+            "dmgMul"
+          ],
+          "additionalProperties": false
+        },
+        "4": {
+          "type": "object",
+          "properties": {
+            "hpMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "speedMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "aggression": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "bulletMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "densityMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "dmgMul": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "hpMul",
+            "speedMul",
+            "aggression",
+            "bulletMul",
+            "densityMul",
+            "dmgMul"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "additionalProperties": false
+    },
+    "profiles": {
+      "type": "object",
+      "properties": {
+        "challenge": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "target": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "damageScale": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "desc": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "name",
+            "target",
+            "damageScale",
+            "desc"
+          ],
+          "additionalProperties": false
+        },
+        "standard": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "target": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "damageScale": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "desc": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "name",
+            "target",
+            "damageScale",
+            "desc"
+          ],
+          "additionalProperties": false
+        },
+        "casual": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "target": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "damageScale": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "desc": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "name",
+            "target",
+            "damageScale",
+            "desc"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "challenge",
+        "standard",
+        "casual"
+      ],
+      "additionalProperties": false
+    },
+    "curve": {
+      "type": "object",
+      "properties": {
+        "routeDamage": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "bossDamage": {
+          "type": "object",
+          "properties": {
+            "boss": {
+              "type": "number",
+              "minimum": 0
+            },
+            "boss2": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "boss",
+            "boss2"
+          ],
+          "additionalProperties": false
+        },
+        "bossHp": {
+          "type": "object",
+          "properties": {
+            "boss": {
+              "type": "number",
+              "minimum": 0
+            },
+            "boss2": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "boss",
+            "boss2"
+          ],
+          "additionalProperties": false
+        },
+        "extraEnemies": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "enemyHp": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "clearLootChance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "routeDamage",
+        "bossDamage",
+        "bossHp",
+        "extraEnemies",
+        "enemyHp",
+        "clearLootChance"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "enemies",
+    "profiles",
+    "curve"
+  ],
+  "additionalProperties": false
+}

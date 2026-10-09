@@ -50,8 +50,8 @@ function unlocks() {
   const r = store.get() || {};
   const clears = r.clears || 0;
   return {
-    heroZero: clears >= 1,   // 零·原型机：累计通关 1 次
-    chipSlot: clears >= 3,   // 初始晶片槽：累计通关 3 次
+    heroZero: clears >= C.CONFIG.progression.unlocks.heroZero,   // 零·原型机：累计通关 1 次
+    chipSlot: clears >= C.CONFIG.progression.unlocks.chipSlot,   // 初始晶片槽：累计通关 3 次
   };
 }
 

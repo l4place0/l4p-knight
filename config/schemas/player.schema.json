@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "player",
+  "type": "object",
+  "properties": {
+    "stats": {
+      "type": "object",
+      "properties": {
+        "dmg": {
+          "type": "number",
+          "minimum": 0
+        },
+        "rate": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "proj": {
+          "type": "number",
+          "minimum": 0
+        },
+        "spreadMul": {
+          "type": "number",
+          "minimum": 0
+        },
+        "pierce": {
+          "type": "number",
+          "minimum": 0
+        },
+        "bounce": {
+          "type": "number",
+          "minimum": 0
+        },
+        "crit": {
+          "type": "number",
+          "minimum": 0
+        },
+        "critMul": {
+          "type": "number",
+          "minimum": 0
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0
+        },
+        "dashCd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "shieldMax": {
+          "type": "number",
+          "minimum": 0
+        },
+        "shieldDelay": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "melee": {
+          "type": "number",
+          "minimum": 0
+        },
+        "meleeRange": {
+          "type": "number",
+          "minimum": 0
+        },
+        "killHeal": {
+          "type": "number",
+          "minimum": 0
+        },
+        "killSpeed": {
+          "type": "number",
+          "minimum": 0
+        },
+        "revenge": {
+          "type": "number",
+          "minimum": 0
+        },
+        "maxHpAdd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "noSplitPenalty": {
+          "type": "boolean"
+        },
+        "bouncePierce": {
+          "type": "boolean"
+        },
+        "undying": {
+          "type": "boolean"
+        },
+        "dashResetKill": {
+          "type": "boolean"
+        },
+        "railMul": {
+          "type": "number",
+          "minimum": 0
+        },
+        "railAoe": {
+          "type": "number",
+          "minimum": 0
+        },
+        "frost": {
+          "type": "number",
+          "minimum": 0
+        },
+        "chain": {
+          "type": "number",
+          "minimum": 0
+        },
+        "reload": {
+          "type": "number",
+          "minimum": 0
+        },
+        "lucky": {
+          "type": "number",
+          "minimum": 0
+        },
+        "dashEcho": {
+          "type": "number",
+          "minimum": 0
+        },
+        "chainBig": {
+          "type": "number",
+          "minimum": 0
+        },
+        "frostAmp": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "dmg",
+        "rate",
+        "proj",
+        "spreadMul",
+        "pierce",
+        "bounce",
+        "crit",
+        "critMul",
+        "speed",
+        "dashCd",
+        "shieldMax",
+        "shieldDelay",
+        "melee",
+        "meleeRange",
+        "killHeal",
+        "killSpeed",
+        "revenge",
+        "maxHpAdd",
+        "noSplitPenalty",
+        "bouncePierce",
+        "undying",
+        "dashResetKill",
+        "railMul",
+        "railAoe",
+        "frost",
+        "chain",
+        "reload",
+        "lucky",
+        "dashEcho",
+        "chainBig",
+        "frostAmp"
+      ],
+      "additionalProperties": false
+    },
+    "radius": {
+      "type": "number",
+      "minimum": 0
+    },
+    "minHealth": {
+      "type": "number",
+      "minimum": 0
+    },
+    "moveSpeed": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "moveResponse": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "shieldDelay": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "shieldRegen": {
+      "type": "number",
+      "minimum": 0
+    },
+    "dashDuration": {
+      "type": "number",
+      "minimum": 0
+    },
+    "dashCooldown": {
+      "type": "number",
+      "minimum": 0
+    },
+    "dashInvulnerability": {
+      "type": "number",
+      "minimum": 0
+    },
+    "dashSpeed": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "hurtInvulnerability": {
+      "type": "number",
+      "minimum": 0
+    },
+    "undyingInvulnerability": {
+      "type": "number",
+      "minimum": 0
+    },
+    "killSpeedMultiplier": {
+      "type": "number",
+      "minimum": 0
+    },
+    "comboCap": {
+      "type": "number",
+      "minimum": 0
+    },
+    "comboDamage": {
+      "type": "number",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "stats",
+    "radius",
+    "minHealth",
+    "moveSpeed",
+    "moveResponse",
+    "shieldDelay",
+    "shieldRegen",
+    "dashDuration",
+    "dashCooldown",
+    "dashInvulnerability",
+    "dashSpeed",
+    "hurtInvulnerability",
+    "undyingInvulnerability",
+    "killSpeedMultiplier",
+    "comboCap",
+    "comboDamage"
+  ],
+  "additionalProperties": false
+}

@@ -37,13 +37,13 @@ const full=require('./difficulty-balance.js').run({hero:'bulwark',seed:518},{dif
 assert.equal(full.outcome,'victory','Bulwark/518 must finish the actual full run under the unchanged time limit');
 assert.equal(full.combatRoomsCleared,21);assert.equal(full.shopVisits,4);assert.equal(full.bossDown,2);
 // Negative controls: removing each repair must make its acceptance fail.
-const noRail=loadMechanics({name:'remove stalled rail fire',file:'js/bot.js',
+const noRail=loadMechanics({name:'remove stalled rail fire',file:'src/bot.js',
   from:"const railStallFire = botStalled && w.type === 'rail';",to:'const railStallFire = false;'});
 assert.equal(N.run(N.z4b(noRail),spatialViolations).outcome,'stall','Rail repair removal must reproduce the stall');
-const noChargerWall=loadMechanics({name:'restore hidden charger fear',file:'js/bot.js',
+const noChargerWall=loadMechanics({name:'restore hidden charger fear',file:'src/bot.js',
   from:'if (d < 90 && (!ignoreBomber || G.losClear(e.x, e.y, P.x, P.y))) {',to:'if (d < 90) {'});
 assert.equal(N.run(N.z4b(noChargerWall,52),spatialViolations).outcome,'stall','Wall-threat repair removal must reproduce seed 52 stall');
-const noPortal=loadMechanics({name:'restore portal inertia',file:'js/bot.js',
+const noPortal=loadMechanics({name:'restore portal inertia',file:'src/bot.js',
   from:'const portalNavigation = !target && (!!G.portal || !!(G.navigationDoor && G.navigationDoor()));',
   to:'const portalNavigation = false;'});
 assert.equal(N.run(N.portal(noPortal),spatialViolations).outcome,'timeout','Portal repair removal must reproduce navigation timeout');

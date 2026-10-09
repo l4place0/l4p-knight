@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "heroes",
+  "type": "object",
+  "properties": {},
+  "required": [],
+  "additionalProperties": {
+    "anyOf": [
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weapon": {
+            "type": "string",
+            "minLength": 1
+          },
+          "maxHp": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "shieldMax": {
+            "type": "number",
+            "minimum": 0
+          },
+          "dmg": {
+            "type": "number",
+            "minimum": 0
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0
+          },
+          "dashCd": {
+            "type": "number",
+            "minimum": 0
+          },
+          "crit": {
+            "type": "number",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "weapon",
+          "maxHp",
+          "shieldMax",
+          "dmg",
+          "speed",
+          "dashCd",
+          "crit",
+          "desc"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weapon": {
+            "type": "string",
+            "minLength": 1
+          },
+          "maxHp": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "shieldMax": {
+            "type": "number",
+            "minimum": 0
+          },
+          "dmg": {
+            "type": "number",
+            "minimum": 0
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0
+          },
+          "dashCd": {
+            "type": "number",
+            "minimum": 0
+          },
+          "crit": {
+            "type": "number",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "weapon",
+          "maxHp",
+          "shieldMax",
+          "dmg",
+          "speed",
+          "dashCd",
+          "crit",
+          "desc"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weapon": {
+            "type": "string",
+            "minLength": 1
+          },
+          "maxHp": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "shieldMax": {
+            "type": "number",
+            "minimum": 0
+          },
+          "dmg": {
+            "type": "number",
+            "minimum": 0
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0
+          },
+          "dashCd": {
+            "type": "number",
+            "minimum": 0
+          },
+          "crit": {
+            "type": "number",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "weapon",
+          "maxHp",
+          "shieldMax",
+          "dmg",
+          "speed",
+          "dashCd",
+          "crit",
+          "desc"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weapon": {
+            "type": "string",
+            "minLength": 1
+          },
+          "maxHp": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "shieldMax": {
+            "type": "number",
+            "minimum": 0
+          },
+          "dmg": {
+            "type": "number",
+            "minimum": 0
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0
+          },
+          "dashCd": {
+            "type": "number",
+            "minimum": 0
+          },
+          "crit": {
+            "type": "number",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "weapon",
+          "maxHp",
+          "shieldMax",
+          "dmg",
+          "speed",
+          "dashCd",
+          "crit",
+          "desc"
+        ],
+        "additionalProperties": false
+      }
+    ]
+  }
+}

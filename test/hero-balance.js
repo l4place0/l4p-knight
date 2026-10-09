@@ -1,7 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
-const C=require('../js/core.js');
+const C=require('../src/core.js');
 const {batch,enumerate,summarize,GENES,BUILDS}=require('./enemy-balance.js');
 function heroSummary(results) {
   const heroes={};
@@ -27,7 +27,7 @@ async function main() {
     weapons[weapon]={...summarize(results),role:weapon==='blade'?'secondary-defense':'primary',results};
     console.log('weapon',weapon,weapons[weapon].passRate,weapons[weapon].outcomes);
   }
-  const report={version:'1.11',genes:GENES,builds:BUILDS,difficulty:C.ENEMY_DIFF,heroDefinitions:C.HEROES,weaponDefinitions:C.WEAPONS,
+  const report={configurationHash:C.CONFIG.hash,version:require('../package.json').version,genes:GENES,builds:BUILDS,difficulty:C.ENEMY_DIFF,heroDefinitions:C.HEROES,weaponDefinitions:C.WEAPONS,
     criteria:{room:'每房 M3 等权通过率 >0 且 <37%，运行故障 0',hero:'每英雄跨七房通过率 >=10% 且 <37%，英雄差距 <=15 个百分点，两批独立判定',weapon:'远程主武器跨七房通过率 >0 且 <37%，六武器均无运行故障；相位刃是副手防御，不要求单持清房'},calibration,holdout,weapons};
   const args=process.argv.slice(2),out=args.includes('--out')?args[args.indexOf('--out')+1]:'docs/balance/hero-difficulty-v1.11.json';
   fs.writeFileSync(out,JSON.stringify(report,null,2)+'\n');

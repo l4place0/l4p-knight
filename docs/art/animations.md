@@ -11,9 +11,9 @@
 
 运行 `npm start`，打开 [动作预览](http://127.0.0.1:8941/assets/art/animations/preview.html)。
 支持角色和动作选择、暂停、六帧逐帧查看、速度调整及左右翻转；预览显示原图单格。
-[prompts.json](prompts.json) 保存实际生成提示词及修整提示词。部分修整尝试被后续生成替代。
+[prompts.json](../../.agents/art/animation-prompts.json) 保存实际生成提示词及修整提示词。部分修整尝试被后续生成替代。
 
-`js/animation.js` 按固定网格读取并缓存帧，不逐帧裁边或改变缩放，因此保留动作的位置变化。
+`src/animation.js` 按固定网格读取并缓存帧，不逐帧裁边或改变缩放，因此保留动作的位置变化。
 游戏显示尺寸为普通角色 30、Boss 50 像素；向左朝向由镜像实现，目前没有上下方向的独立图集。
 开火、挥刃、冲刺、受击、护盾破裂、闪现及死亡由实际事件触发，待机和移动读取游戏状态。
 死亡序列播完保留末帧，玩家结算界面等待死亡过程播放；房间切换清理敌人残骸。
@@ -25,3 +25,5 @@
 验证：`npm run test:animation`；浏览器验证需 Playwright 和 Edge：
 `node test/animation-browser.js http://127.0.0.1:8941 msedge`。
 浏览器检查全部 546 帧透明解码、91 组动作差异、真实移动六帧、事件触发、死亡结算时序及加载失败回退。
+
+所有动画资源采用根目录 MIT LICENSE。

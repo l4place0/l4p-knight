@@ -1,9 +1,9 @@
 /* 诊断脚本 2：观测单只贴墙 gunner 停滞时 bot 的微观决策 */
 'use strict';
-require('../js/core.js');
-const { dist } = require('../js/core.js');
-const GAME = require('../js/game.js');
-const BOT = require('../js/bot.js');
+require('../src/core.js');
+const { dist } = require('../src/core.js');
+const GAME = require('../src/game.js');
+const BOT = require('../src/bot.js');
 
 const seed = parseInt(process.argv[2] || '1');
 const DT = 1 / 60;

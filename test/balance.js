@@ -10,7 +10,7 @@
  *   可选：--size 100 --workers 6 --playerDmg 4（模拟测试 handicap）
  *
  * 通过率定义：BOSS_CAP 游戏秒内击破 Boss（bossDown）；阵亡/超时/停滞/违规均计失败。
- * 依赖 js/game/bosses.js 的 G.bossTuning 注入钩（hpMul/speedMul/aggression/bulletMul）。
+ * 依赖 src/game/bosses.js 的 G.bossTuning 注入钩（hpMul/speedMul/aggression/bulletMul）。
  * ============================================================ */
 'use strict';
 const path = require('path');
@@ -48,9 +48,9 @@ function buildScenarios(bossId, size, seedStart = 1) {
 }
 
 function runScenario(spec) {
-  const CORE = require(path.join(ROOT, 'js', 'core.js'));
-  const GAME = require(path.join(ROOT, 'js', 'game.js'));
-  const BOT = require(path.join(ROOT, 'js', 'bot.js'));
+  const CORE = require(path.join(ROOT, 'src', 'core.js'));
+  const GAME = require(path.join(ROOT, 'src', 'game.js'));
+  const BOT = require(path.join(ROOT, 'src', 'bot.js'));
   const G = GAME.createGame({ seed: spec.seed, headless: true });
   G.damageTuning=1; // 历史 Boss 标定的原伤害口径。
   const wd = workerData;
@@ -97,7 +97,7 @@ function runScenario(spec) {
   const hpLost = hpStart - (G.player.hp + G.player.shield);
   return {
     outcome, seconds: +(frames * DT).toFixed(1),
-    hpLost, dmgTaken: G.damageTaken, hero: spec.hero, seed: spec.seed,
+    hpLost, dmgTaken: G.damageTaken, hero: spec.hero, seed: spec.seed, configuration: G.getConfiguration(),
   };
 }
 

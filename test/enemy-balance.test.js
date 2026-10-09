@@ -4,8 +4,8 @@
 'use strict';
 const assert = require('node:assert/strict');
 const { spawnSync } = require('node:child_process');
-const CORE = require('../js/core.js');
-const GAME = require('../js/game.js');
+const CORE = require('../src/core.js');
+const GAME = require('../src/game.js');
 const { ORIGINAL, enumerate, summarize } = require('./enemy-balance.js');
 const { simulateRun } = require('./lib.js');
 function isolated() {

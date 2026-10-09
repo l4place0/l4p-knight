@@ -9,9 +9,9 @@
 const fs = require('fs');
 const path = require('path');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
-const CORE = require('../js/core.js');
-const GAME = require('../js/game.js');
-const BOT = require('../js/bot.js');
+const CORE = require('../src/core.js');
+const GAME = require('../src/game.js');
+const BOT = require('../src/bot.js');
 const { spatialViolations } = require('./invariants.js');
 const DT = 1 / 60, ROOM_CAP = 180, STALL_SECONDS = 30;
 const GENES = { commit: 30, trackK: 3, sight: 100, delay: 10, dashSkip: 0.6 };
@@ -66,7 +66,7 @@ function runScenario(spec, opts) {
       if (stall >= STALL_SECONDS) { outcome = 'stall'; break; }
     }
   }
-  return { ...spec, outcome, seconds: round((frames + (outcome === 'timeout' ? 0 : 1)) * DT),
+  return { ...spec, configuration:G.getConfiguration(), outcome, seconds: round((frames + (outcome === 'timeout' ? 0 : 1)) * DT),
     hits: G.damageTaken, hpEnd: round(G.player.hp), shieldEnd: round(G.player.shield), kills: G.kills,
     ...(reason ? { reason } : {}) };
 }
@@ -128,7 +128,7 @@ async function main() {
   }
   if(opts.out) {
     const file=path.resolve(opts.out); fs.mkdirSync(path.dirname(file),{recursive:true});
-    fs.writeFileSync(file,JSON.stringify({config:opts,genes:opts.perfect?null:GENES,difficulty:CORE.ENEMY_DIFF,rooms,results},null,2)+'\n');
+    fs.writeFileSync(file,JSON.stringify({configurationHash:CORE.CONFIG.hash,config:opts,genes:opts.perfect?null:GENES,difficulty:CORE.ENEMY_DIFF,rooms,results},null,2)+'\n');
   }
   if(opts.verify && Object.values(rooms).some(r=>!r.qualified)) process.exitCode=1;
   if(results.some(r=>!['clear','defeat'].includes(r.outcome))) process.exitCode=1;

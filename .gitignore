@@ -20,3 +20,12 @@ test/mutation-results/
 
 # 可通过 test/art-assets.js 重建的浏览器截图
 test/art-preview/
+
+# 可重建产物与本地依赖
+generated/
+dist/
+node_modules/
+coverage/
+.env
+.env.*
+!.env.example

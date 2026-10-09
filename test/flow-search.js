@@ -15,7 +15,7 @@ if(!isMainThread) {
     if(seed===workerData.limit)parentPort.postMessage({done:true,hero:workerData.hero,seed:null,outcomes});
   }
 } else {
-  const C=require('../js/core.js'),limit=Number(process.argv[2]||10000);
+  const C=require('../src/core.js'),limit=Number(process.argv[2]||10000);
   const any=process.argv.includes('--any'),workers=[];
   const tasks=Object.keys(C.HEROES).map(hero=>new Promise((resolve,reject)=>{
     const w=new Worker(__filename,{workerData:{hero,limit}});

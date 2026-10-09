@@ -1,1 +1,7 @@
 - `.agents/notes/` 存放会话归档笔记：每完成一项任务，复制其中的 `template.md` 为 `YYYY-MM-DD-<主题>.md` 并填写（front matter 的 author 用 `模型@harness` 格式），笔记须关联相关 git 提交。
+- Agent 任务计划、过程记录、交接和过程脚本全部放 `.agents/`；当前入口见 `.agents/handoff.md`。
+- `docs/` 仅存人类与 Agent 共用的文档；源码放 `src/`；正式数值以 `config/*.json` 为唯一来源。
+- 禁止手改 `generated/` 或提交 `dist/`，不得在源码维护重复配置默认值。
+- 二进制素材使用 Git LFS；保留历史提交和旧诊断路径，不自动重写历史。
+- 验证：`npm run config:generate` → `npm run test:ci`；本次迁移对照为 `npm run test:equivalence`，改玩法须追加专项。
+- 浏览器为主版本；其他引擎依据配置、共享规格与参考验收重写，不提前引入引擎依赖。

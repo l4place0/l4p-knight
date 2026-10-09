@@ -1,0 +1,72 @@
+[
+  {
+    "idx": 1,
+    "name": "第 1 区 · 废弃工厂",
+    "short": "废弃工厂",
+    "accent": "#45f0e2",
+    "maps": [
+      "z1a",
+      "z1b"
+    ],
+    "weights": {
+      "charger": 4,
+      "gunner": 3
+    }
+  },
+  {
+    "idx": 2,
+    "name": "第 2 区 · 熔断机房",
+    "short": "熔断机房",
+    "accent": "#ffb84d",
+    "maps": [
+      "z2a",
+      "z2b"
+    ],
+    "weights": {
+      "charger": 3,
+      "gunner": 3,
+      "guard": 2,
+      "sniper": 1,
+      "bomber": 1.5
+    }
+  },
+  {
+    "idx": 3,
+    "name": "第 3 区 · 核心圣所",
+    "short": "核心圣所",
+    "accent": "#ff4757",
+    "maps": [
+      "z3a"
+    ],
+    "weights": {
+      "charger": 2.5,
+      "gunner": 3,
+      "guard": 2,
+      "sniper": 2,
+      "bomber": 2
+    },
+    "boss": true,
+    "bossId": "boss"
+  },
+  {
+    "idx": 4,
+    "name": "第 4 区 · 虚空回廊",
+    "short": "虚空回廊",
+    "accent": "#e8e8ee",
+    "maps": [
+      "z4a",
+      "z4b"
+    ],
+    "weights": {
+      "charger": 1.5,
+      "gunner": 2.5,
+      "guard": 2,
+      "sniper": 2.5,
+      "bomber": 2,
+      "wraith": 2.5,
+      "echo": 0.6
+    },
+    "boss": true,
+    "bossId": "boss2"
+  }
+]

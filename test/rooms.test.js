@@ -1,7 +1,7 @@
 'use strict';
 const assert = require('node:assert/strict');
-const CORE = require('../js/core.js');
-const { createGame } = require('../js/game.js');
+const CORE = require('../src/core.js');
+const { createGame } = require('../src/game.js');
 const { spatialViolations } = require('./invariants.js');
 const DT = 1 / 60;
 

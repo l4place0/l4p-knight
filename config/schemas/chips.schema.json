@@ -1,0 +1,1032 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "chips",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "anyOf": [
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "overcharge"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "damage": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "damage"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "overclock"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "rate": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "required": [
+              "rate"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "split"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "projectiles": {
+                "type": "number",
+                "minimum": 0
+              },
+              "damagePenalty": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "projectiles",
+              "damagePenalty"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "pierce"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "bounce"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "bounces": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "bounces"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "glass"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "damage": {
+                "type": "number",
+                "minimum": 0
+              },
+              "healthPenalty": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "damage",
+              "healthPenalty"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "nano"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "probabilityCap": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "healChance": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "probabilityCap",
+              "healChance"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "kinetic"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "duration": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "duration"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "capacitor"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "delayFloor": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "delayBase": {
+                "type": "number",
+                "minimum": 0
+              },
+              "delayReduction": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "delayFloor",
+              "delayBase",
+              "delayReduction"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "bladecore"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "meleeDamage": {
+                "type": "number",
+                "minimum": 0
+              },
+              "meleeRange": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "meleeDamage",
+              "meleeRange"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "crit"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "critChance": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "critMultiplier": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "critChance",
+              "critMultiplier"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "servo"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "speed": {
+                "type": "number",
+                "minimum": 0
+              },
+              "cooldownFloor": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "cooldownBase": {
+                "type": "number",
+                "minimum": 0
+              },
+              "cooldownReduction": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "speed",
+              "cooldownFloor",
+              "cooldownBase",
+              "cooldownReduction"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "steady"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "spreadFloor": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "spreadBase": {
+                "type": "number",
+                "minimum": 0
+              },
+              "spreadReduction": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "spreadFloor",
+              "spreadBase",
+              "spreadReduction"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "vengeance"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "damageCap": {
+                "type": "number",
+                "minimum": 0
+              },
+              "damage": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "damageCap",
+              "damage"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "frost"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "enabled"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "chain"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "enabled"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "reload"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "enabled"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "lucky"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "enabled"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "dashecho"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "damageCap": {
+                "type": "number",
+                "minimum": 0
+              },
+              "damage": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "damageCap",
+              "damage"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "rarity",
+          "desc",
+          "weight",
+          "params"
+        ],
+        "additionalProperties": false
+      }
+    ]
+  }
+}

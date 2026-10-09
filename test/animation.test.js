@@ -1,10 +1,10 @@
 'use strict';
 const assert = require('node:assert/strict');
-const A = require('../js/animation.js');
-const C = require('../js/core.js');
+const A = require('../src/animation.js');
+const C = require('../src/core.js');
 global.ZERO_CORE = C;
-const GAME = require('../js/game.js');
-const BOT = require('../js/bot.js');
+const GAME = require('../src/game.js');
+const BOT = require('../src/bot.js');
 // A cycle visits every process frame; one-shot collapse must never return to life.
 assert.deepEqual(Array.from({ length: 6 }, (_, i) => A.frameIndex((i + 0.1) / 6, 1, false)), [0,1,2,3,4,5]);
 assert.equal(A.frameIndex(10, 1, false), 5);

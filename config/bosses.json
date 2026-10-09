@@ -1,0 +1,14 @@
+{
+  "boss": {
+    "aggression": 2.3374,
+    "bulletMul": 2.637,
+    "densityMul": 3.291,
+    "dmgMul": 4.068
+  },
+  "boss2": {
+    "aggression": 4.912,
+    "bulletMul": 3.869,
+    "densityMul": 7.3675,
+    "dmgMul": 6.14
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "enemies": {
+    "1": {
+      "hpMul": 3,
+      "speedMul": 1.8,
+      "aggression": 4.5,
+      "bulletMul": 2.4,
+      "densityMul": 3,
+      "dmgMul": 4
+    },
+    "2": {
+      "hpMul": 3,
+      "speedMul": 1.8,
+      "aggression": 4.5,
+      "bulletMul": 2.4,
+      "densityMul": 3,
+      "dmgMul": 4
+    },
+    "3": {
+      "hpMul": 3,
+      "speedMul": 1.8,
+      "aggression": 4.5,
+      "bulletMul": 2.4,
+      "densityMul": 3,
+      "dmgMul": 4
+    },
+    "4": {
+      "hpMul": 3.2,
+      "speedMul": 1.8,
+      "aggression": 4.5,
+      "bulletMul": 2.4,
+      "densityMul": 3,
+      "dmgMul": 4
+    }
+  },
+  "profiles": {
+    "challenge": {
+      "name": "挑战",
+      "target": 37,
+      "damageScale": 0.252,
+      "desc": "紧张战斗 · 容错较低"
+    },
+    "standard": {
+      "name": "标准",
+      "target": 67,
+      "damageScale": 0.207,
+      "desc": "推荐体验 · 适度容错"
+    },
+    "casual": {
+      "name": "休闲",
+      "target": 99,
+      "damageScale": 0.12,
+      "desc": "轻松探索 · 高容错"
+    }
+  },
+  "curve": {
+    "routeDamage": [
+      1.6,
+      1.45,
+      1.85,
+      1.5
+    ],
+    "bossDamage": {
+      "boss": 2.05,
+      "boss2": 1.5
+    },
+    "bossHp": {
+      "boss": 0.85,
+      "boss2": 0.6
+    },
+    "extraEnemies": 1,
+    "enemyHp": 0.8,
+    "clearLootChance": 0.2333333333333333
+  }
+}

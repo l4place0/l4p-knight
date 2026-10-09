@@ -17,25 +17,18 @@ PARTS.player = function (ctx) {
 
   /* ---------------- 属性计算 ---------------- */
   G.computeStats = function () {
-    const s = {
-      dmg: 1, rate: 1, proj: 0, spreadMul: 1, pierce: 0, bounce: 0,
-      crit: 0.10, critMul: 2, speed: 1, dashCd: 1, shieldMax: 0, shieldDelay: 1,
-      melee: 1, meleeRange: 1, killHeal: 0, killSpeed: 0, revenge: 0, maxHpAdd: 0,
-      noSplitPenalty: false, bouncePierce: false, undying: false, dashResetKill: false,
-      railMul: 1, railAoe: 0,
-      frost: 0, chain: 0, reload: 0, lucky: 0, dashEcho: 0, chainBig: 0, frostAmp: 0,
-    };
+    const s = {...C.CONFIG.player.stats};
     // 晶片：lv = 升级次数，效果缩放 k = 1.5^lv
     for (const id of G.chips) {
       const c = CHIPS.find(c => c.id === id); if (!c) continue;
       const lv = (G.chipLv && G.chipLv[id]) || 0;
-      c.apply(s, lv > 0 ? Math.pow(1.5, lv) : 1);
+      c.apply(s, lv > 0 ? Math.pow(C.CONFIG.progression.chipUpgradeMultiplier, lv) : 1);
     }
     G.synActive = [];
     for (const syn of SYNERGIES) {
       if (syn.need.every(n => G.chips.includes(n))) { syn.apply(s); G.synActive.push(syn); }
     }
-    if (s.noSplitPenalty && G.chips.includes('split')) s.dmg += 0.22 * (s.splitK || 1);
+    if (s.noSplitPenalty && G.chips.includes('split')) s.dmg += C.CONFIG.chips.find(c => c.id === 'split').params.damagePenalty * (s.splitK || 1);
     // 商店永久强化与英雄底子
     s.shieldMax += (G.bonusShield || 0);
     s.dmg *= (1 + (G.powerBonus || 0));
@@ -46,7 +39,7 @@ PARTS.player = function (ctx) {
     if (w && w.type === 'rail' && s.pierce > 0) s.pierceAll = true;
     G.stats = s;
     if (G.player) {
-      G.player.maxHp = Math.max(2, H.maxHp + s.maxHpAdd);
+      G.player.maxHp = Math.max(C.CONFIG.player.minHealth, H.maxHp + s.maxHpAdd);
       G.player.maxShield = H.shieldMax + s.shieldMax;
       G.player.hp = Math.min(G.player.hp, G.player.maxHp);
       G.player.shield = Math.min(G.player.shield, G.player.maxShield);
@@ -58,14 +51,14 @@ PARTS.player = function (ctx) {
   G.weapons = [WEAPONS.smg, WEAPONS.blade];
   G.weaponSlot = 0;
   G.player = {
-    x: 0, y: 0, vx: 0, vy: 0, kx: 0, ky: 0, r: 5,
+    x: 0, y: 0, vx: 0, vy: 0, kx: 0, ky: 0, r: C.CONFIG.player.radius,
     hp: 6, maxHp: 6, shield: 3, maxShield: 3, shieldT: 0,
     dashT: 0, dashCd: 0, dashA: 0, iframes: 0, aimA: 0,
     fireT: 0, chargeT: 0, meleeCd: 0, slashT: 0, slashA: 0,
     bob: 0, recoil: 0, undyingUsed: false, muzzleT: 0,
   };
 
-  function comboMul() { return 1 + Math.min(G.combo, 25) * 0.02; }
+  function comboMul() { return 1 + Math.min(G.combo, C.CONFIG.player.comboCap) * C.CONFIG.player.comboDamage; }
   function echoMul() { return G.dashEchoT > 0 ? 1 + (G.stats ? (G.stats.dashEcho || 0) : 0) : 1; }
 
   function fireGun(w, pellets, spread, dmgMul) {
@@ -187,7 +180,7 @@ PARTS.player = function (ctx) {
     const s = G.stats;
     if (s.undying && !P.undyingUsed && P.hp - Math.max(0, n - P.shield) <= 0) {
       P.undyingUsed = true;
-      P.hp = 1; P.shield = P.maxShield; P.iframes = 1.6;
+      P.hp = 1; P.shield = P.maxShield; P.iframes = C.CONFIG.player.undyingInvulnerability;
       ctx.toast('不灭战意：拒绝倒下！', '#45f0e2');
       ctx.addRing(P.x, P.y, '#45f0e2', { vr: 300, life: 0.5, width: 3 });
       G.sfx('deflect'); return;
@@ -195,7 +188,7 @@ PARTS.player = function (ctx) {
     const absorb = Math.min(P.shield, n);
     P.shield -= absorb; n -= absorb;
     if (n > 0) P.hp -= n;
-    P.iframes = 0.9; P.shieldT = 0;
+    P.iframes = C.CONFIG.player.hurtInvulnerability; P.shieldT = 0;
     G.damageTaken++;
     G.vengeanceT = 3;
     G.hurtFx = 1; ctx.shake(3.5); ctx.flash('#ff4757', 0.10);
@@ -247,8 +240,8 @@ PARTS.player = function (ctx) {
 
     // 护盾充能
     P.shieldT += dt;
-    if (P.shieldT > 2.6 * s.shieldDelay && P.shield < P.maxShield) {
-      P.shield = Math.min(P.maxShield, P.shield + 1.4 * dt);
+    if (P.shieldT > C.CONFIG.player.shieldDelay * s.shieldDelay && P.shield < P.maxShield) {
+      P.shield = Math.min(P.maxShield, P.shield + C.CONFIG.player.shieldRegen * dt);
     }
 
     // 冲刺
@@ -257,10 +250,10 @@ PARTS.player = function (ctx) {
       const ml = Math.hypot(inp.moveX, inp.moveY);
       if (ml > 0.1) a = Math.atan2(inp.moveY, inp.moveX);
       else a = P.aimA;
-      P.dashA = a; P.dashT = 0.16;
+      P.dashA = a; P.dashT = C.CONFIG.player.dashDuration;
       if (G.visualEvent) G.visualEvent('dash', P);
-      P.dashCd = 0.9 * s.dashCd;
-      P.iframes = Math.max(P.iframes, 0.24);
+      P.dashCd = C.CONFIG.player.dashCooldown * s.dashCd;
+      P.iframes = Math.max(P.iframes, C.CONFIG.player.dashInvulnerability);
       G.dashEchoT = G.stats.dashEcho ? (G.synActive.some(s2 => s2.id === 'phasekill') ? 2.0 : 1.0) : 0;
       G.sfx('dash');
     }
@@ -269,13 +262,13 @@ PARTS.player = function (ctx) {
     let mx = clamp(inp.moveX, -1, 1), my = clamp(inp.moveY, -1, 1);
     const mlen = Math.hypot(mx, my);
     if (mlen > 1) { mx /= mlen; my /= mlen; }
-    const spd = 96 * s.speed * (G.killSpeedT > 0 ? 1.3 : 1);
+    const spd = C.CONFIG.player.moveSpeed * s.speed * (G.killSpeedT > 0 ? C.CONFIG.player.killSpeedMultiplier : 1);
     if (P.dashT > 0) {
       P.dashT -= dt;
-      P.vx = Math.cos(P.dashA) * 345; P.vy = Math.sin(P.dashA) * 345;
+      P.vx = Math.cos(P.dashA) * C.CONFIG.player.dashSpeed; P.vy = Math.sin(P.dashA) * C.CONFIG.player.dashSpeed;
       if (G.ghosts.length < 30) G.ghosts.push({ x: P.x, y: P.y, life: 0.25, max: 0.25, aimA: P.aimA });
     } else {
-      const k = 1 - Math.exp(-13 * dt);
+      const k = 1 - Math.exp(-C.CONFIG.player.moveResponse * dt);
       P.vx += (mx * spd - P.vx) * k;
       P.vy += (my * spd - P.vy) * k;
     }

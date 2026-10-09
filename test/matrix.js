@@ -22,10 +22,10 @@
 const fs = require('fs');
 const os = require('os');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
-require('../js/core.js');
-const CORE = require('../js/core.js');
-const GAME = require('../js/game.js');
-const BOT = require('../js/bot.js');
+require('../src/core.js');
+const CORE = require('../src/core.js');
+const GAME = require('../src/game.js');
+const BOT = require('../src/bot.js');
 const { spatialViolations } = require('./invariants.js');
 
 const DT = 1 / 60;
@@ -298,7 +298,7 @@ async function main() {
 
   if (opts.json || opts.out) {
     const report = {
-      config: { seeds: opts.seeds, heroes: opts.heroes || 'all', workers: W, dmg: opts.dmg || null },
+      configurationHash: CORE.CONFIG.hash, config: { seeds: opts.seeds, heroes: opts.heroes || 'all', workers: W, dmg: opts.dmg || null },
       wallMs, count: results.length, passed: results.length - fails.length, failed: fails.length,
       byOutcome, slowest, baseline: baselineInfo, results,
     };

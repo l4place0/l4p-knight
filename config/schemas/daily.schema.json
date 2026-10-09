@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "daily",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "anyOf": [
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "coinOnly"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "flag": {
+            "type": "object",
+            "properties": {
+              "coinOnly": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "coinOnly"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "desc",
+          "flag"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "coinRain"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "flag": {
+            "type": "object",
+            "properties": {
+              "coinRain": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "coinRain"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "desc",
+          "flag"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "eliteUp"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "flag": {
+            "type": "object",
+            "properties": {
+              "eliteUp": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "eliteUp"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "desc",
+          "flag"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "shopSale"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "flag": {
+            "type": "object",
+            "properties": {
+              "shopSale": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "shopSale"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "desc",
+          "flag"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "glassStart"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "flag": {
+            "type": "object",
+            "properties": {
+              "glassStart": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "glassStart"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "desc",
+          "flag"
+        ],
+        "additionalProperties": false
+      }
+    ]
+  }
+}

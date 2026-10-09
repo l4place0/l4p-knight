@@ -15,14 +15,15 @@ PARTS.rooms = function (ctx) {
   const { TAU, clamp, dist, TILE, CHIPS, SYNERGIES, WEAPONS, HEROES, ZONES } = C;
   const G = ctx.G;
   const rng = ctx.rng;
+  const progression = C.CONFIG.progression, shop = progression.shop;
 
   /* ---------------- 结算 ---------------- */
   function endStats() {
     const t = G.runTime;
-    const rating = (t < 300 && G.damageTaken <= 6) ? 'S' : (t < 420 && G.damageTaken <= 12) ? 'A' : 'B';
+    const rating = (t < progression.rating.sTime && G.damageTaken <= progression.rating.sHits) ? 'S' : (t < progression.rating.aTime && G.damageTaken <= progression.rating.aHits) ? 'A' : 'B';
     return {
       time: t, kills: G.kills, maxCombo: G.maxCombo, damageTaken: G.damageTaken,
-      score: G.score, rating, difficulty: G.difficultyId,
+      score: G.score, rating, difficulty: G.difficultyId, configuration: G.getConfiguration(),
       chips: G.chips.map(id => {
         const c = CHIPS.find(c => c.id === id);
         const lv = (G.chipLv && G.chipLv[id]) || 0;
@@ -119,7 +120,7 @@ PARTS.rooms = function (ctx) {
     G.doorsLocked = !room.cleared;
     G.roomVisit = (G.roomVisit || 0) + 1;
     // 波次
-    const total = 3 + (G.zoneIdx + 1) * 2 + G.roomIdx * 2;
+    const total = progression.budget.base + (G.zoneIdx + 1) * progression.budget.zone + G.roomIdx * progression.budget.floor;
     const curve = G.curveTuning || C.DIFFICULTY_CURVE;
     const budget = Math.floor(total / 3) + (id <= total % 3 ? 1 : 0) + curve.extraEnemies;
     const w1 = Math.ceil(budget / 2);
@@ -134,7 +135,7 @@ PARTS.rooms = function (ctx) {
     G.roomLabel = '第 ' + (G.zoneIdx + 1) + ' 区 · ' + (G.roomIdx + 1) + ' 层 · ' + room.name;
     G.pickups = room.pickups.slice();
     // 宝箱房必出武器箱；后续楼层每个战斗房首次进入时有 20% 概率。
-    if (!room.visited && (room.kind === 'treasure' || (room.kind === 'combat' && (G.zoneIdx >= 1 || G.roomIdx >= 1) && rng.chance(0.2)))) {
+    if (!room.visited && (room.kind === 'treasure' || (room.kind === 'combat' && (G.zoneIdx >= 1 || G.roomIdx >= 1) && rng.chance(progression.combatCrateChance)))) {
       const spot = farSpot(140);
       if (spot) {
         const pool = ['smg', 'shotgun', 'railgun'].filter(w => w !== G.weapons[0].id);
@@ -226,7 +227,7 @@ PARTS.rooms = function (ctx) {
         const co = G.daily && G.daily.flag.coinOnly;
         const curve = G.curveTuning || C.DIFFICULTY_CURVE;
         if (rng.chance(curve.clearLootChance)) {
-          G.pickups.push({ x: spot.x, y: spot.y, kind: co ? 'coin' : rng.chance(4 / 7) ? 'heart' : 'battery', t: 0 });
+          G.pickups.push({ x: spot.x, y: spot.y, kind: co ? 'coin' : rng.chance(progression.clearHeartChance) ? 'heart' : 'battery', t: 0 });
         }
         if (room) {
           room.cleared = true; G.doorsLocked = false;
@@ -312,23 +313,23 @@ PARTS.rooms = function (ctx) {
   };
 
   function openShop() {
-    let disc = G.stats.lucky ? 1 - Math.min(0.5, 0.15 * (G.stats.luckyK || 1)) : 1;
-    if (G.daily && G.daily.flag.shopSale) disc *= 0.7;
+    let disc = G.stats.lucky ? 1 - Math.min(shop.maxLuckyDiscount, shop.luckyDiscount * (G.stats.luckyK || 1)) : 1;
+    if (G.daily && G.daily.flag.shopSale) disc *= shop.sale;
     const P = (n) => Math.max(1, Math.round(n * disc));
-    const items = [{ kind: 'heal', name: '纳米医疗包', desc: '回复 2 点生命', price: P(6), rarity: 1 }];
+    const items = [{ kind: 'heal', name: '纳米医疗包', desc: '回复 ' + shop.heal + ' 点生命', price: P(shop.prices.heal), rarity: 1 }];
     const pool = ['chip', 'battery', 'weapon', 'power'];
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < shop.extraItems; i++) {
       const k = rng.pick(pool);
       if (k === 'chip') {
         const c = rng.pick(CHIPS);
-        items.push({ kind: 'chip', chipId: c.id, name: c.name, desc: c.desc, rarity: c.rarity, price: P(12) });
+        items.push({ kind: 'chip', chipId: c.id, name: c.name, desc: c.desc, rarity: c.rarity, price: P(shop.prices.chip) });
       } else if (k === 'battery') {
-        items.push({ kind: 'battery', name: '护盾电容组', desc: '护盾上限 +1 并回满护盾', price: P(10), rarity: 2 });
+        items.push({ kind: 'battery', name: '护盾电容组', desc: '护盾上限 +' + shop.shield + ' 并回满护盾', price: P(shop.prices.weapon), rarity: 2 });
       } else if (k === 'weapon') {
-        const w = rng.pick(['smg', 'shotgun', 'railgun', 'homing', 'grenade'].filter(x => x !== G.weapons[0].id));
+        const w = rng.pick(shop.weaponPool.filter(x => x !== G.weapons[0].id));
         items.push({ kind: 'weapon', weapon: w, name: WEAPONS[w].name, desc: WEAPONS[w].desc, price: P(10), rarity: 2 });
       } else {
-        items.push({ kind: 'power', name: '攻击强化剂', desc: '永久伤害 +8%', price: P(14), rarity: 3 });
+        items.push({ kind: 'power', name: '攻击强化剂', desc: '永久伤害 +' + Math.round(shop.power * 100) + '%', price: P(shop.prices.power), rarity: 3 });
       }
     }
     G.shopItems = items;
@@ -345,8 +346,8 @@ PARTS.rooms = function (ctx) {
     G.coins -= it.price;
     it.sold = true;
     if (it.kind === 'heal') {
-      G.player.hp = Math.min(G.player.maxHp, G.player.hp + 2);
-      ctx.addFloater(G.player.x, G.player.y - 12, '+2', '#ff4757');
+      G.player.hp = Math.min(G.player.maxHp, G.player.hp + shop.heal);
+      ctx.addFloater(G.player.x, G.player.y - 12, '+' + shop.heal, '#ff4757');
     } else if (it.kind === 'chip') {
       const before = G.synActive.map(s2 => s2.id);
       const res = G.acquireChip(it.chipId);
@@ -354,7 +355,7 @@ PARTS.rooms = function (ctx) {
       for (const syn of newly) { ctx.banner('羁绊激活 · ' + syn.name, syn.desc, '#ffb84d', 2.4); G.sfx('syn'); }
       if (!newly.length && res === 'up') ctx.toast('晶片升级：' + it.name + ' → Lv.' + ((G.chipLv[it.chipId] || 0) + 1) + '（效果 ×1.5）', '#ffb84d');
     } else if (it.kind === 'battery') {
-      G.bonusShield = (G.bonusShield || 0) + 1;
+      G.bonusShield = (G.bonusShield || 0) + shop.shield;
       G.computeStats();
       G.player.shield = G.player.maxShield;
     } else if (it.kind === 'weapon') {
@@ -362,7 +363,7 @@ PARTS.rooms = function (ctx) {
       G.computeStats();
       ctx.toast('已换装：' + WEAPONS[it.weapon].name, '#ffb84d');
     } else if (it.kind === 'power') {
-      G.powerBonus = (G.powerBonus || 0) + 0.08;
+      G.powerBonus = (G.powerBonus || 0) + shop.power;
       G.computeStats();
     }
     G.sfx('buy');

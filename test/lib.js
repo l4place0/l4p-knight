@@ -11,10 +11,10 @@
  *   由 sim.test.js 顺序调用。
  * ============================================================ */
 'use strict';
-require('../js/core.js');
-const CORE = require('../js/core.js');
-const GAME = require('../js/game.js');
-const BOT = require('../js/bot.js');
+require('../src/core.js');
+const CORE = require('../src/core.js');
+const GAME = require('../src/game.js');
+const BOT = require('../src/bot.js');
 const { spatialViolations } = require('./invariants.js');
 
 /* ---------------- 常量 ---------------- */
@@ -122,7 +122,7 @@ function simulateRun(seed, opts) {
   return {
     ok: G.state === 'victory' && errors.length === 0,
     outcome: outcome || (opts.maxSeconds ? 'limit' : 'timeout'),
-    errors, trace, stats, G, victoryAt,
+    errors, trace, stats, G, victoryAt, configuration: G.getConfiguration(),
   };
 }
 

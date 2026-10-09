@@ -79,7 +79,7 @@ node -e "const {simulateRun}=require('./test/lib.js'); const {ORIGINAL}=require(
 ## 关联资料
 
 - [诊断脚本](../../test/diag.portal.js)
-- [bot 导航与移动惯性](../../js/bot.js)
+- [bot 导航与移动惯性](../../src/bot.js)
 - [仿真基建](../../test/lib.js) · [聚合验收入口](../../test/sim.test.js)
 - [完整诊断归档](../../.agents/notes/2026-10-07-seed3-portal-diagnosis.md)
 

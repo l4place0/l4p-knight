@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('node:fs');
 const {Worker,isMainThread,parentPort,workerData}=require('node:worker_threads');
-const C=require('../js/core.js'),GAME=require('../js/game.js'),BOT=require('../js/bot.js');
+const C=require('../src/core.js'),GAME=require('../src/game.js'),BOT=require('../src/bot.js');
 const {spatialViolations}=require('./invariants.js');
 const GENES={commit:30,trackK:3,sight:100,delay:10,dashSkip:0.6};
 function scenarios(size=100,seedStart=1){return Array.from({length:size},(_,i)=>({hero:Object.keys(C.HEROES)[i%4],seed:seedStart+Math.floor(i/4)}));}
@@ -35,7 +35,7 @@ function run(spec,opts={}){
     }
   }
   if(outcome==='timeout')reason='1200s hard limit';
-  return {...spec,outcome,seconds:+(Math.min(frames+1,1200*60)/60).toFixed(2),zone:G.zoneIdx+1,map:G.mapId,kills:G.kills,hits:G.damageTaken,
+  return {...spec,configuration:G.getConfiguration(),outcome,seconds:+(Math.min(frames+1,1200*60)/60).toFixed(2),zone:G.zoneIdx+1,map:G.mapId,kills:G.kills,hits:G.damageTaken,
     floor:G.roomIdx+1,room:G.isBossRoom?'boss':G.floor?.rooms[G.floor.current].kind,
     combatRoomsCleared:cleared.size,shopVisits:G.shopVisits,chips:G.chips.length,
     perZone:perZone.map(z=>({...z,seconds:+z.seconds.toFixed(2),routeSeconds:+z.routeSeconds.toFixed(2),bossSeconds:+z.bossSeconds.toFixed(2)})),
@@ -87,7 +87,7 @@ async function main(){
   }
   const results=await batch(opts),summary=summarize(results,C.DIFFICULTIES[difficulty].target);
   console.log(JSON.stringify({opts,summary,stages:summarizeCurve(results),invalid:results.filter(r=>!['victory','defeat'].includes(r.outcome))}));
-  const out=get('--out');if(out){fs.mkdirSync(require('node:path').dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify({gameVersion:require('../package.json').version,genes:GENES,config:opts,profile:C.DIFFICULTIES[difficulty],curve:opts.curve||C.DIFFICULTY_CURVE,summary,stages:summarizeCurve(results),results},null,2)+'\n');}
+  const out=get('--out');if(out){fs.mkdirSync(require('node:path').dirname(out),{recursive:true});fs.writeFileSync(out,JSON.stringify({configurationHash:C.CONFIG.hash,gameVersion:require('../package.json').version,genes:GENES,config:opts,profile:C.DIFFICULTIES[difficulty],curve:opts.curve||C.DIFFICULTY_CURVE,summary,stages:summarizeCurve(results),results},null,2)+'\n');}
   const meetsTarget=args.includes('--holdout') ? summary.confidence95[0]<=summary.target&&summary.target<=summary.confidence95[1] :
     Math.abs(summary.passRate-summary.target)<=Number(get('--tolerance',5));
   if(summary.invalid||(args.includes('--verify')&&!meetsTarget))process.exitCode=1;

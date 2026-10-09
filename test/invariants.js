@@ -1,5 +1,5 @@
 'use strict';
-const CORE = require('../js/core.js');
+const CORE = require('../src/core.js');
 // 独立读取地图定义；不调用被测碰撞助手，避免助手出错时探针也失明。
 function spatialViolations(G) {
   const map = CORE.MAPS[G.mapId], issues = [];

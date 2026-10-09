@@ -5,7 +5,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const {execFileSync} = require('node:child_process');
 const root = path.resolve(__dirname, '..');
-const source = fs.readFileSync(path.join(root, 'js/render.js'), 'utf8');
+const source = fs.readFileSync(path.join(root, 'src/render.js'), 'utf8');
 
 // Emulate the canvas contract: local images may be drawn, but pixel reads throw.
 // This is a renderer fault regression, not a substitute for Edge file:// QA.
@@ -39,11 +39,11 @@ function load(readMode, renderSource = source) {
       pending.push(this);
     }
   }
-  const world = vm.createContext({console, URL, Image, document: {
-    currentScript: {src:'https://example.test/js/render.js'},
+  const world = vm.createContext({console, URL, Image, ZERO_CONFIG: require('../scripts/config.cjs').loadConfig(), document: {
+    currentScript: {src:'https://example.test/src/render.js'},
     createElement: () => new Canvas(),
   }});
-  vm.runInContext(fs.readFileSync(path.join(root,'js/core.js'),'utf8'), world);
+  vm.runInContext(fs.readFileSync(path.join(root,'src/core.js'),'utf8'), world);
   vm.runInContext(renderSource, world);
   for(const img of pending) img.onload();
   return {R:world.ZERO_RENDER,C:world.ZERO_CORE};

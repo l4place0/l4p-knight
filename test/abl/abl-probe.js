@@ -10,9 +10,9 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..', '..');
 let CORE, GAME, BOT;
 try {
-  CORE = require(path.join(ROOT, 'js', 'core.js'));
-  GAME = require(path.join(ROOT, 'js', 'game.js'));
-  BOT = require(path.join(ROOT, 'js', 'bot.js'));
+  CORE = require(path.join(ROOT, 'src', 'core.js'));
+  GAME = require(path.join(ROOT, 'src', 'game.js'));
+  BOT = require(path.join(ROOT, 'src', 'bot.js'));
 } catch (e) {
   console.log('KILLED-LOAD: ' + e.message);
   process.exit(1);

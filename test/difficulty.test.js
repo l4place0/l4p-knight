@@ -31,7 +31,7 @@ for(const outcome of ['timeout','stall','error','violation'])assert.equal(summar
   const G=GAME.createGame({seed:3,headless:true});G.startRun();G.debugJump(3,1);G.loadBossRoom('boss');G.debugClear();
   G.waves=[];G.wavIdx=99;G.pendSpawns=[];G.chipOffered=true;
   G.player.x=270.51;G.player.y=58.9;G.portal={x:200,y:200};
-  const bot=require('../js/bot.js').createBot(3,{commit:45,trackK:2,sight:85,delay:15,dashSkip:0.85});
+  const bot=require('../src/bot.js').createBot(3,{commit:45,trackK:2,sight:85,delay:15,dashSkip:0.85});
   for(let i=0;i<600&&G.zoneIdx===2;i++){bot.update(G,1/60,G.input);G.update(1/60);}
   assert.equal(G.zoneIdx,3,'Post-Boss portal navigation must finish in ten seconds');
 }

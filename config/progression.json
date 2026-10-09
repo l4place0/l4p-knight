@@ -1,0 +1,43 @@
+{
+  "budget": {
+    "base": 3,
+    "zone": 2,
+    "floor": 2
+  },
+  "combatCrateChance": 0.2,
+  "clearHeartChance": 0.5714285714285714,
+  "chipUpgradeMultiplier": 1.5,
+  "shop": {
+    "prices": {
+      "heal": 6,
+      "chip": 12,
+      "battery": 10,
+      "weapon": 10,
+      "power": 14
+    },
+    "heal": 2,
+    "shield": 1,
+    "power": 0.08,
+    "sale": 0.7,
+    "luckyDiscount": 0.15,
+    "maxLuckyDiscount": 0.5,
+    "extraItems": 2,
+    "weaponPool": [
+      "smg",
+      "shotgun",
+      "railgun",
+      "homing",
+      "grenade"
+    ]
+  },
+  "rating": {
+    "sTime": 300,
+    "sHits": 6,
+    "aTime": 420,
+    "aHits": 12
+  },
+  "unlocks": {
+    "heroZero": 1,
+    "chipSlot": 3
+  }
+}

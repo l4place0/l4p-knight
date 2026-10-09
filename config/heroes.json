@@ -1,0 +1,50 @@
+{
+  "vanguard": {
+    "id": "vanguard",
+    "name": "游隼 · 突击兵",
+    "weapon": "smg",
+    "maxHp": 6,
+    "shieldMax": 3,
+    "dmg": 1,
+    "speed": 1,
+    "dashCd": 1,
+    "crit": 0,
+    "desc": "均衡开局 · 标准火力"
+  },
+  "bulwark": {
+    "id": "bulwark",
+    "name": "磐石 · 重装员",
+    "weapon": "shotgun",
+    "maxHp": 7,
+    "shieldMax": 4,
+    "dmg": 0.95,
+    "speed": 0.92,
+    "dashCd": 1,
+    "crit": 0,
+    "desc": "霰弹起步 · 高生命高护盾，机动稍缓"
+  },
+  "stalker": {
+    "id": "stalker",
+    "name": "夜隼 · 猎手",
+    "weapon": "smg",
+    "maxHp": 5,
+    "shieldMax": 3,
+    "dmg": 1,
+    "speed": 1.1,
+    "dashCd": 0.7,
+    "crit": 0.12,
+    "desc": "高机动高暴击 · 生命上限 -1"
+  },
+  "prototype": {
+    "id": "prototype",
+    "name": "零 · 原型机",
+    "weapon": "railgun",
+    "maxHp": 5,
+    "shieldMax": 3,
+    "dmg": 1,
+    "speed": 1,
+    "dashCd": 1,
+    "crit": 0.05,
+    "desc": "零号原型验证机 · 电磁炮起步 · 暴击 +5%（通关 1 次解锁）"
+  }
+}

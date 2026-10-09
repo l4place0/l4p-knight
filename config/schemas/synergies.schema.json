@@ -1,0 +1,494 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "synergies",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "anyOf": [
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "infinite"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "need": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "rate": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "damage": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "rate",
+              "damage"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "need",
+          "desc",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "fullburst"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "need": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "projectiles": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "projectiles"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "need",
+          "desc",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "quantum"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "need": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "params": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "need",
+          "desc",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "undying"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "need": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "params": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "need",
+          "desc",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "shadowstep"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "need": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "params": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "need",
+          "desc",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "berserk"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "need": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "damage": {
+                "type": "number",
+                "minimum": 0
+              },
+              "meleeDamage": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "damage",
+              "meleeDamage"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "need",
+          "desc",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "finaljudge"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "need": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "railMultiplier": {
+                "type": "number",
+                "minimum": 0
+              },
+              "explosionRadius": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "railMultiplier",
+              "explosionRadius"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "need",
+          "desc",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "chainreact"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "need": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "enabled"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "need",
+          "desc",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "zerocold"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "need": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "enabled"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "need",
+          "desc",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "phasekill"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "need": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "damage": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "damage"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "need",
+          "desc",
+          "params"
+        ],
+        "additionalProperties": false
+      }
+    ]
+  }
+}

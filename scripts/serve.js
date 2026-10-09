@@ -1,4 +1,4 @@
-/* 极简静态服务器：node test/serve.js [port]  （默认 8941） */
+/* 极简静态服务器：node scripts/serve.js [port]  （默认 8941） */
 'use strict';
 const http = require('http');
 const fs = require('fs');

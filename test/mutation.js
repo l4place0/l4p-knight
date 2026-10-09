@@ -16,7 +16,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync, spawnSync } = require('child_process');
-const CORE = require('../js/core.js');
+const CORE = require('../src/core.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
@@ -35,10 +35,10 @@ const WANT_JSON = args.includes('--json');
 
 /* ---------------- 目标池（无头可测层；浏览器专用层不在无头检测范围） ---------------- */
 const FILES = [
-  'js/core.js',
-  'js/game/state.js', 'js/game/systems.js', 'js/game/player.js',
-  'js/game/enemies.js', 'js/game/bosses.js', 'js/game/rooms.js',
-  'js/bot.js',
+  'src/core.js',
+  'src/game/state.js', 'src/game/systems.js', 'src/game/player.js',
+  'src/game/enemies.js', 'src/game/bosses.js', 'src/game/rooms.js',
+  'src/bot.js',
 ].filter(f => !FILE_FILTER || f.includes(FILE_FILTER));
 
 /* ---------------- 变异点采集（行级分类，块注释深度感知） ---------------- */
@@ -141,7 +141,7 @@ const OP_IDS = ['CONST', 'CMP', 'LOGIC', 'ARITH', 'BOOL', 'NEG', 'DEL', 'RET'];
 
 /* 幸存者归类（继承消融实验的聚类结论） */
 function classify(rel, line) {
-  if (rel === 'js/core.js' && /^\s*'/.test(line)) return '数据-表现层（精灵/地图/字体行）';
+  if (rel === 'src/core.js' && /^\s*'/.test(line)) return '数据-表现层（精灵/地图/字体行）';
   if (/G\.sfx\(|addParts\(|addRing\(|addFloater\(|flash\(|banner\(|shake\(|toast\(/.test(line)) return '表现层（音效/粒子/反馈）';
   return '逻辑盲区';
 }
@@ -273,7 +273,7 @@ function writeJson() {
 }
 
 if (STRICT) {
-  const logicSurvivors = survivors.filter(s => s.file.startsWith('js/game/'));
+  const logicSurvivors = survivors.filter(s => s.file.startsWith('src/game/'));
   if (killRate < STRICT_MIN || logicSurvivors.length) {
     console.log('STRICT 未过门槛：杀率 ' + killRate + '% < ' + STRICT_MIN + '% 或逻辑层存在 ' + logicSurvivors.length + ' 个幸存者');
     process.exit(1);

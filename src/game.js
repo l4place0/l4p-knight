@@ -1,6 +1,6 @@
 /* ============================================================
  * 零号协议 ZERO PROTOCOL —— game.js（装配门面）
- * 游戏核心已拆为六部件（js/game/）：state / systems / player / enemies / bosses /
+ * 游戏核心已拆为六部件（src/game/）：state / systems / player / enemies / bosses /
  * rooms，各自只注册工厂到 ZERO_GAME_PARTS，不做即时逻辑。本文件只负责装配：
  *   - 浏览器：index.html 按「六部件 → 本门面」顺序加载，部件先行注册；
  *   - Node：此处按同一顺序 require 六部件（注册幂等，重复 require 无副作用）。
@@ -42,6 +42,9 @@ function createGame(opts) {
   PARTS.rooms(ctx);
 
   const G = ctx.G;
+  G.getConfiguration = () => ({hash: ctx.C.CONFIG.hash, overrides: JSON.parse(JSON.stringify({
+    enemyTuning:G.enemyTuning, bossTuning:G.bossTuning, curveTuning:G.curveTuning, damageTuning:G.damageTuning, debugDmg:G.debugDmg
+  }))});
   if (!ctx.headless && root.ZERO_RENDER) root.ZERO_RENDER.attach(G);
   else G.render = function () {};
   G.computeStats();  // 标题界面 HUD 即会读取属性袋，创建时初始化避免空引用

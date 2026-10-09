@@ -1,0 +1,42 @@
+[
+  {
+    "id": "coinOnly",
+    "name": "通货紧缩",
+    "desc": "补给只掉金币——心与电池绝迹",
+    "flag": {
+      "coinOnly": true
+    }
+  },
+  {
+    "id": "coinRain",
+    "name": "金币雨",
+    "desc": "敌人与守卫的金币掉落翻倍",
+    "flag": {
+      "coinRain": true
+    }
+  },
+  {
+    "id": "eliteUp",
+    "name": "精英横行",
+    "desc": "第 2 区起精英出现率约 3 倍",
+    "flag": {
+      "eliteUp": true
+    }
+  },
+  {
+    "id": "shopSale",
+    "name": "补给日",
+    "desc": "补给站全品 7 折（可与幸运之手叠加）",
+    "flag": {
+      "shopSale": true
+    }
+  },
+  {
+    "id": "glassStart",
+    "name": "玻璃开局",
+    "desc": "开局免费装备「玻璃大炮」：伤害 +60%，生命上限 -1",
+    "flag": {
+      "glassStart": true
+    }
+  }
+]

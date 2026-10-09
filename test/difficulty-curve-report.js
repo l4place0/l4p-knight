@@ -1,6 +1,6 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const C=require('../js/core.js');
+const C=require('../src/core.js');
 const {summarize,summarizeCurve}=require('./difficulty-balance.js');
 const dir=path.join(__dirname,'../docs/balance');
 const read=name=>JSON.parse(fs.readFileSync(path.join(dir,name),'utf8'));

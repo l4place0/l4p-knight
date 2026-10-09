@@ -42,8 +42,8 @@ function runMechanics(env = loadMechanics(), only) {
         assert.ok(C.ENEMY_DEFS[id].pools[phase].length>0);
         assert.ok(C.ENEMY_DEFS[id].pools[phase].every(a=>attacks.has(a)));
       }
-      assert.equal(require('../js/core.js'),globalThis.ZERO_CORE,'CommonJS/全局导出同一数据');
-      assert.deepEqual(plain(C),plain(require('../js/core.js')),'浏览器加载/Node 数据契约');
+      assert.equal(require('../src/core.js'),globalThis.ZERO_CORE,'CommonJS/全局导出同一数据');
+      assert.deepEqual(plain(C),plain(require('../src/core.js')),'浏览器加载/Node 数据契约');
     },
     heroes() {
       for(const id of Object.keys(C.HEROES)) {

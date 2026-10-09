@@ -19,10 +19,7 @@ PARTS.bosses = function (ctx) {
    * 全流程语境=预扣生命；两 Boss 均通过率 < 37%）：
    * v1.11 修正武器/护盾结算后重标：boss1 25% · boss2 30%。HP/弹速/单发伤害保留。
    * G.bossTuning（实验注入钩）与之相乘。 */
-  const BOSS_DIFF = {
-    boss: { aggression: 2.3374, bulletMul: 2.637, densityMul: 3.291, dmgMul: 4.068 },
-    boss2: { aggression: 4.912, bulletMul: 3.869, densityMul: 7.3675, dmgMul: 6.14 },
-  };
+  const BOSS_DIFF = C.CONFIG.bosses;
 
   function diffOf(e) { return BOSS_DIFF[e.type] || {}; }
 

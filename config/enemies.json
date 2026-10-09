@@ -1,0 +1,158 @@
+{
+  "charger": {
+    "name": "突击机兵",
+    "hp": 15,
+    "r": 6,
+    "speed": 46,
+    "mass": 1,
+    "contact": 1,
+    "score": 10
+  },
+  "gunner": {
+    "name": "弹幕炮台",
+    "hp": 11,
+    "r": 5.5,
+    "speed": 34,
+    "mass": 1,
+    "contact": 1,
+    "score": 10
+  },
+  "guard": {
+    "name": "防暴盾卫",
+    "hp": 28,
+    "r": 6.5,
+    "speed": 24,
+    "mass": 1.8,
+    "contact": 1,
+    "score": 18
+  },
+  "sniper": {
+    "name": "激光狙击",
+    "hp": 9,
+    "r": 5.5,
+    "speed": 30,
+    "mass": 0.9,
+    "contact": 1,
+    "score": 14
+  },
+  "bomber": {
+    "name": "自爆蜂群",
+    "hp": 8,
+    "r": 5,
+    "speed": 58,
+    "mass": 0.8,
+    "contact": 0,
+    "score": 12
+  },
+  "wraith": {
+    "name": "虚空徘徊者",
+    "hp": 13,
+    "r": 6,
+    "speed": 40,
+    "mass": 1,
+    "contact": 1,
+    "score": 16
+  },
+  "echo": {
+    "name": "镜像残影",
+    "hp": 8,
+    "r": 5,
+    "speed": 26,
+    "mass": 0.7,
+    "contact": 0,
+    "score": 8
+  },
+  "boss": {
+    "name": "零号 · 处刑者",
+    "hp": 3053,
+    "r": 15,
+    "speed": 151,
+    "mass": 9,
+    "contact": 2,
+    "score": 800,
+    "isBoss": true,
+    "final": false,
+    "color": "#ff4757",
+    "sub": "ZONE GUARDIAN",
+    "phases": [
+      {
+        "name": "弹幕压制",
+        "color": "#45f0e2"
+      },
+      {
+        "name": "激光处刑",
+        "color": "#ff4757"
+      },
+      {
+        "name": "地毯轰炸",
+        "color": "#ffb84d"
+      }
+    ],
+    "pools": {
+      "1": [
+        "ring",
+        "fan"
+      ],
+      "2": [
+        "fanlaser",
+        "ring",
+        "fan"
+      ],
+      "3": [
+        "mines",
+        "spiral",
+        "ring",
+        "mines",
+        "fan"
+      ]
+    }
+  },
+  "boss2": {
+    "name": "终焉 · 回响体",
+    "hp": 5564,
+    "r": 15,
+    "speed": 153,
+    "mass": 9,
+    "contact": 2,
+    "score": 1500,
+    "isBoss": true,
+    "final": true,
+    "color": "#e8e8ee",
+    "sub": "FINAL BOSS",
+    "phases": [
+      {
+        "name": "镜像裂变",
+        "color": "#e8e8ee"
+      },
+      {
+        "name": "引力陷阱",
+        "color": "#ffb84d"
+      },
+      {
+        "name": "相位风暴",
+        "color": "#ff4757"
+      }
+    ],
+    "pools": {
+      "1": [
+        "ring",
+        "clones",
+        "fan",
+        "clones"
+      ],
+      "2": [
+        "spiral",
+        "gravity",
+        "fanlaser",
+        "gravity"
+      ],
+      "3": [
+        "clones",
+        "blinkstorm",
+        "gravity",
+        "mines",
+        "blinkstorm"
+      ]
+    }
+  }
+}

@@ -1,0 +1,515 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "weapons",
+  "type": "object",
+  "properties": {},
+  "required": [],
+  "additionalProperties": {
+    "anyOf": [
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tier": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "interval": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "dmg": {
+            "type": "number",
+            "minimum": 0
+          },
+          "pellets": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "spread": {
+            "type": "number",
+            "minimum": 0
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0
+          },
+          "knock": {
+            "type": "number",
+            "minimum": 0
+          },
+          "range": {
+            "type": "number",
+            "minimum": 0
+          },
+          "color": {
+            "type": "string",
+            "minLength": 1
+          },
+          "shake": {
+            "type": "number",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "tier",
+          "interval",
+          "dmg",
+          "pellets",
+          "spread",
+          "speed",
+          "knock",
+          "range",
+          "color",
+          "shake",
+          "desc"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tier": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "interval": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "dmg": {
+            "type": "number",
+            "minimum": 0
+          },
+          "pellets": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "spread": {
+            "type": "number",
+            "minimum": 0
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0
+          },
+          "knock": {
+            "type": "number",
+            "minimum": 0
+          },
+          "range": {
+            "type": "number",
+            "minimum": 0
+          },
+          "color": {
+            "type": "string",
+            "minLength": 1
+          },
+          "shake": {
+            "type": "number",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "tier",
+          "interval",
+          "dmg",
+          "pellets",
+          "spread",
+          "speed",
+          "knock",
+          "range",
+          "color",
+          "shake",
+          "desc"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tier": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "interval": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "dmg": {
+            "type": "number",
+            "minimum": 0
+          },
+          "pellets": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "spread": {
+            "type": "number",
+            "minimum": 0
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0
+          },
+          "knock": {
+            "type": "number",
+            "minimum": 0
+          },
+          "range": {
+            "type": "number",
+            "minimum": 0
+          },
+          "color": {
+            "type": "string",
+            "minLength": 1
+          },
+          "shake": {
+            "type": "number",
+            "minimum": 0
+          },
+          "charge": {
+            "type": "number",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "tier",
+          "interval",
+          "dmg",
+          "pellets",
+          "spread",
+          "speed",
+          "knock",
+          "range",
+          "color",
+          "shake",
+          "desc"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tier": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "interval": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "dmg": {
+            "type": "number",
+            "minimum": 0
+          },
+          "pellets": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "spread": {
+            "type": "number",
+            "minimum": 0
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0
+          },
+          "knock": {
+            "type": "number",
+            "minimum": 0
+          },
+          "range": {
+            "type": "number",
+            "minimum": 0
+          },
+          "arc": {
+            "type": "number",
+            "minimum": 0
+          },
+          "color": {
+            "type": "string",
+            "minLength": 1
+          },
+          "shake": {
+            "type": "number",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "tier",
+          "interval",
+          "dmg",
+          "pellets",
+          "spread",
+          "speed",
+          "knock",
+          "range",
+          "color",
+          "shake",
+          "desc"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tier": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "interval": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "dmg": {
+            "type": "number",
+            "minimum": 0
+          },
+          "pellets": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "spread": {
+            "type": "number",
+            "minimum": 0
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0
+          },
+          "knock": {
+            "type": "number",
+            "minimum": 0
+          },
+          "range": {
+            "type": "number",
+            "minimum": 0
+          },
+          "color": {
+            "type": "string",
+            "minLength": 1
+          },
+          "shake": {
+            "type": "number",
+            "minimum": 0
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bulletLife": {
+            "type": "number",
+            "minimum": 0
+          },
+          "bulletR": {
+            "type": "number",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "tier",
+          "interval",
+          "dmg",
+          "pellets",
+          "spread",
+          "speed",
+          "knock",
+          "range",
+          "color",
+          "shake",
+          "desc"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tier": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "interval": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "dmg": {
+            "type": "number",
+            "minimum": 0
+          },
+          "pellets": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "spread": {
+            "type": "number",
+            "minimum": 0
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0
+          },
+          "knock": {
+            "type": "number",
+            "minimum": 0
+          },
+          "range": {
+            "type": "number",
+            "minimum": 0
+          },
+          "color": {
+            "type": "string",
+            "minLength": 1
+          },
+          "shake": {
+            "type": "number",
+            "minimum": 0
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bulletLife": {
+            "type": "number",
+            "minimum": 0
+          },
+          "bulletR": {
+            "type": "number",
+            "minimum": 0
+          },
+          "blastDmg": {
+            "type": "number",
+            "minimum": 0
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "tier",
+          "interval",
+          "dmg",
+          "pellets",
+          "spread",
+          "speed",
+          "knock",
+          "range",
+          "color",
+          "shake",
+          "desc"
+        ],
+        "additionalProperties": false
+      }
+    ]
+  }
+}

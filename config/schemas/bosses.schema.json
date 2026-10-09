@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "bosses",
+  "type": "object",
+  "properties": {
+    "boss": {
+      "type": "object",
+      "properties": {
+        "aggression": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "bulletMul": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "densityMul": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "dmgMul": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "aggression",
+        "bulletMul",
+        "densityMul",
+        "dmgMul"
+      ],
+      "additionalProperties": false
+    },
+    "boss2": {
+      "type": "object",
+      "properties": {
+        "aggression": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "bulletMul": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "densityMul": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "dmgMul": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "aggression",
+        "bulletMul",
+        "densityMul",
+        "dmgMul"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "boss",
+    "boss2"
+  ],
+  "additionalProperties": false
+}

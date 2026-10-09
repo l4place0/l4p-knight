@@ -1,0 +1,560 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "enemies",
+  "type": "object",
+  "properties": {
+    "charger": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hp": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "r": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mass": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "contact": {
+          "type": "number",
+          "minimum": 0
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "name",
+        "hp",
+        "r",
+        "speed",
+        "mass",
+        "contact",
+        "score"
+      ],
+      "additionalProperties": false
+    },
+    "gunner": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hp": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "r": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mass": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "contact": {
+          "type": "number",
+          "minimum": 0
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "name",
+        "hp",
+        "r",
+        "speed",
+        "mass",
+        "contact",
+        "score"
+      ],
+      "additionalProperties": false
+    },
+    "guard": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hp": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "r": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mass": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "contact": {
+          "type": "number",
+          "minimum": 0
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "name",
+        "hp",
+        "r",
+        "speed",
+        "mass",
+        "contact",
+        "score"
+      ],
+      "additionalProperties": false
+    },
+    "sniper": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hp": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "r": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mass": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "contact": {
+          "type": "number",
+          "minimum": 0
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "name",
+        "hp",
+        "r",
+        "speed",
+        "mass",
+        "contact",
+        "score"
+      ],
+      "additionalProperties": false
+    },
+    "bomber": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hp": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "r": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mass": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "contact": {
+          "type": "number",
+          "minimum": 0
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "name",
+        "hp",
+        "r",
+        "speed",
+        "mass",
+        "contact",
+        "score"
+      ],
+      "additionalProperties": false
+    },
+    "wraith": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hp": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "r": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mass": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "contact": {
+          "type": "number",
+          "minimum": 0
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "name",
+        "hp",
+        "r",
+        "speed",
+        "mass",
+        "contact",
+        "score"
+      ],
+      "additionalProperties": false
+    },
+    "echo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hp": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "r": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mass": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "contact": {
+          "type": "number",
+          "minimum": 0
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "name",
+        "hp",
+        "r",
+        "speed",
+        "mass",
+        "contact",
+        "score"
+      ],
+      "additionalProperties": false
+    },
+    "boss": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hp": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "r": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mass": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "contact": {
+          "type": "number",
+          "minimum": 0
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0
+        },
+        "isBoss": {
+          "type": "boolean"
+        },
+        "final": {
+          "type": "boolean"
+        },
+        "color": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sub": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "color": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "name",
+              "color"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "pools": {
+          "type": "object",
+          "properties": {
+            "1": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "2": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "3": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "1",
+            "2",
+            "3"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "name",
+        "hp",
+        "r",
+        "speed",
+        "mass",
+        "contact",
+        "score",
+        "isBoss",
+        "final",
+        "color",
+        "sub",
+        "phases",
+        "pools"
+      ],
+      "additionalProperties": false
+    },
+    "boss2": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hp": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "r": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mass": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "contact": {
+          "type": "number",
+          "minimum": 0
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0
+        },
+        "isBoss": {
+          "type": "boolean"
+        },
+        "final": {
+          "type": "boolean"
+        },
+        "color": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sub": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "color": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "name",
+              "color"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "pools": {
+          "type": "object",
+          "properties": {
+            "1": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "2": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "3": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "1",
+            "2",
+            "3"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "name",
+        "hp",
+        "r",
+        "speed",
+        "mass",
+        "contact",
+        "score",
+        "isBoss",
+        "final",
+        "color",
+        "sub",
+        "phases",
+        "pools"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "charger",
+    "gunner",
+    "guard",
+    "sniper",
+    "bomber",
+    "wraith",
+    "echo",
+    "boss",
+    "boss2"
+  ],
+  "additionalProperties": false
+}

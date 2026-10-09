@@ -1,0 +1,120 @@
+[
+  {
+    "id": "infinite",
+    "name": "无限火力协议",
+    "need": [
+      "overclock",
+      "overcharge"
+    ],
+    "desc": "射速再 +15%，伤害 +10%",
+    "params": {
+      "rate": 0.15,
+      "damage": 0.1
+    }
+  },
+  {
+    "id": "fullburst",
+    "name": "全弹发射",
+    "need": [
+      "split",
+      "steady"
+    ],
+    "desc": "弹道再 +1，抵消分裂弹匣的减伤",
+    "params": {
+      "projectiles": 1
+    }
+  },
+  {
+    "id": "quantum",
+    "name": "量子穿透",
+    "need": [
+      "pierce",
+      "bounce"
+    ],
+    "desc": "反弹后的子弹获得无限贯穿",
+    "params": {}
+  },
+  {
+    "id": "undying",
+    "name": "不灭战意",
+    "need": [
+      "nano",
+      "capacitor"
+    ],
+    "desc": "每场战斗首次致命伤：保留 1 生命并回满护盾",
+    "params": {}
+  },
+  {
+    "id": "shadowstep",
+    "name": "暗影步伐",
+    "need": [
+      "servo",
+      "kinetic"
+    ],
+    "desc": "击杀敌人立即刷新冲刺冷却",
+    "params": {}
+  },
+  {
+    "id": "berserk",
+    "name": "狂战协议",
+    "need": [
+      "glass",
+      "vengeance"
+    ],
+    "desc": "伤害 +25%，近战伤害 +50%",
+    "params": {
+      "damage": 0.25,
+      "meleeDamage": 0.5
+    }
+  },
+  {
+    "id": "finaljudge",
+    "name": "终焉裁决",
+    "need": [
+      "pierce",
+      "glass",
+      "overcharge"
+    ],
+    "desc": "电磁炮伤害 ×1.6，命中点引发小型爆炸",
+    "params": {
+      "railMultiplier": 1.6,
+      "explosionRadius": 28
+    }
+  },
+  {
+    "id": "chainreact",
+    "name": "链式反应",
+    "need": [
+      "chain",
+      "overcharge"
+    ],
+    "desc": "爆炸半径 +60%，爆炸伤害 ×1.5",
+    "params": {
+      "enabled": 1
+    }
+  },
+  {
+    "id": "zerocold",
+    "name": "绝对零度",
+    "need": [
+      "frost",
+      "steady"
+    ],
+    "desc": "减速效果提升至 55%，减速目标受伤 +20%",
+    "params": {
+      "enabled": 1
+    }
+  },
+  {
+    "id": "phasekill",
+    "name": "相位刺杀",
+    "need": [
+      "dashecho",
+      "crit"
+    ],
+    "desc": "冲刺回响提升至 +60% 且持续 2 秒",
+    "params": {
+      "damage": 0.6
+    }
+  }
+]

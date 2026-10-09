@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path');
 const {batch,summarize,summarizeCurve}=require('./difficulty-balance.js');
-const C=require('../js/core.js');
+const C=require('../src/core.js');
 (async()=>{
   const config=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
   for(const [i,candidate] of config.candidates.entries()){

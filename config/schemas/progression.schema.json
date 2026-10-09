@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "progression",
+  "type": "object",
+  "properties": {
+    "budget": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "zone": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "floor": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "base",
+        "zone",
+        "floor"
+      ],
+      "additionalProperties": false
+    },
+    "combatCrateChance": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "clearHeartChance": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "chipUpgradeMultiplier": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "shop": {
+      "type": "object",
+      "properties": {
+        "prices": {
+          "type": "object",
+          "properties": {
+            "heal": {
+              "type": "number",
+              "minimum": 0
+            },
+            "chip": {
+              "type": "number",
+              "minimum": 0
+            },
+            "battery": {
+              "type": "number",
+              "minimum": 0
+            },
+            "weapon": {
+              "type": "number",
+              "minimum": 0
+            },
+            "power": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "heal",
+            "chip",
+            "battery",
+            "weapon",
+            "power"
+          ],
+          "additionalProperties": false
+        },
+        "heal": {
+          "type": "number",
+          "minimum": 0
+        },
+        "shield": {
+          "type": "number",
+          "minimum": 0
+        },
+        "power": {
+          "type": "number",
+          "minimum": 0
+        },
+        "sale": {
+          "type": "number",
+          "minimum": 0
+        },
+        "luckyDiscount": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "maxLuckyDiscount": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "extraItems": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "weaponPool": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "prices",
+        "heal",
+        "shield",
+        "power",
+        "sale",
+        "luckyDiscount",
+        "maxLuckyDiscount",
+        "extraItems",
+        "weaponPool"
+      ],
+      "additionalProperties": false
+    },
+    "rating": {
+      "type": "object",
+      "properties": {
+        "sTime": {
+          "type": "number",
+          "minimum": 0
+        },
+        "sHits": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "aTime": {
+          "type": "number",
+          "minimum": 0
+        },
+        "aHits": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "sTime",
+        "sHits",
+        "aTime",
+        "aHits"
+      ],
+      "additionalProperties": false
+    },
+    "unlocks": {
+      "type": "object",
+      "properties": {
+        "heroZero": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "chipSlot": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "heroZero",
+        "chipSlot"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "budget",
+    "combatCrateChance",
+    "clearHeartChance",
+    "chipUpgradeMultiplier",
+    "shop",
+    "rating",
+    "unlocks"
+  ],
+  "additionalProperties": false
+}

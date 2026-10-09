@@ -4,12 +4,12 @@
  * 守护四组结构不变量（不跑游戏逻辑、不启动服务器）：
  *   A. index.html <script src> 编排：与磁盘 js 文件一一对应、无重复，
  *      且与下方「编排顺序表」完全一致 —— 硬性钉死：
- *      js/game/ 六部件（state/systems/player/enemies/bosses/rooms）必须在
- *      js/game.js 之前、js/main.js 必须最后。
+ *      src/game/ 六部件（state/systems/player/enemies/bosses/rooms）必须在
+ *      src/game.js 之前、src/main.js 必须最后。
  *   B. Node 可加载模块（core / game 门面 / bot / audio）require 不抛错且导出面非空：
  *      ZERO_CORE 含 CHIPS / HEROES / ZONES / dailyForDate，
  *      ZERO_GAME 含 createGame，ZERO_BOT 含 createBot。
- *   C. js/*.js 与 js/game/*.js 每个文件通过 node --check 语法检查。
+ *   C. src/*.js 与 src/game/*.js 每个文件通过 node --check 语法检查。
  *   D. UI 模块（storage/input/hud/ui/main）存在且含 ZERO_ 命名空间注册字样
  *      —— 浏览器专用文件，仅做文本级检查，绝不 require。
  * ============================================================ */
@@ -28,24 +28,25 @@ const rel = (...p) => path.join(ROOT, ...p).split(path.sep).join('/');
  * render 仅在 createGame 调用时经 ZERO_RENDER.attach 生效，排在门面之后即可；
  * main 引用以上全部命名空间，故必须末位。 */
 const SCRIPT_ORDER = [
-  'js/core.js',
-  'js/game/state.js',
-  'js/game/systems.js',
-  'js/game/player.js',
-  'js/game/enemies.js',
-  'js/game/bosses.js',
-  'js/game/rooms.js',
-  'js/game.js',
-  'js/animation.js',
-  'js/render.js',
-  'js/audio.js',
-  'js/music.js',
-  'js/bot.js',
-  'js/storage.js',
-  'js/input.js',
-  'js/hud.js',
-  'js/ui.js',
-  'js/main.js',
+  'generated/config.js',
+  'src/core.js',
+  'src/game/state.js',
+  'src/game/systems.js',
+  'src/game/player.js',
+  'src/game/enemies.js',
+  'src/game/bosses.js',
+  'src/game/rooms.js',
+  'src/game.js',
+  'src/animation.js',
+  'src/render.js',
+  'src/audio.js',
+  'src/music.js',
+  'src/bot.js',
+  'src/storage.js',
+  'src/input.js',
+  'src/hud.js',
+  'src/ui.js',
+  'src/main.js',
 ];
 const GAME_PARTS = ['state', 'systems', 'player', 'enemies', 'bosses', 'rooms'];
 const UI_MODULES = ['storage', 'input', 'hud', 'ui', 'main'];
@@ -58,17 +59,17 @@ function ok(cond, msg) {
   return !!cond;
 }
 
-/* 磁盘上的 js/*.js 与 js/game/*.js 全集（正斜杠相对路径，排序稳定） */
+/* 磁盘上的 src/*.js 与 src/game/*.js 全集（正斜杠相对路径，排序稳定） */
 function listGameJs() {
   const out = [];
-  const jsDir = rel('js');
+  const jsDir = rel('src');
   for (const f of fs.readdirSync(jsDir)) {
-    if (f.endsWith('.js') && fs.statSync(path.join(jsDir, f)).isFile()) out.push('js/' + f);
+    if (f.endsWith('.js') && fs.statSync(path.join(jsDir, f)).isFile()) out.push('src/' + f);
   }
-  const gDir = rel('js', 'game');
+  const gDir = rel('src', 'game');
   if (fs.existsSync(gDir) && fs.statSync(gDir).isDirectory()) {
     for (const f of fs.readdirSync(gDir)) {
-      if (f.endsWith('.js') && fs.statSync(path.join(gDir, f)).isFile()) out.push('js/game/' + f);
+      if (f.endsWith('.js') && fs.statSync(path.join(gDir, f)).isFile()) out.push('src/game/' + f);
     }
   }
   return out.sort();
@@ -108,11 +109,11 @@ else {
     + ' · 实际 ' + (scripts[at] || '（缺）') + '）');
 }
 /* 钉死项单独断言：即使顺序表整体失配，也能精确定位违例 */
-const facadeIdx = scripts.indexOf('js/game.js');
-const partIdx = GAME_PARTS.map(n => scripts.indexOf('js/game/' + n + '.js'));
+const facadeIdx = scripts.indexOf('src/game.js');
+const partIdx = GAME_PARTS.map(n => scripts.indexOf('src/game/' + n + '.js'));
 ok(partIdx.every(i => i !== -1) && facadeIdx !== -1 && partIdx.every(i => i < facadeIdx),
-  'game 六部件（' + GAME_PARTS.join('/') + '）全部位于 js/game.js 之前');
-ok(scripts.length > 0 && scripts[scripts.length - 1] === 'js/main.js', 'js/main.js 位于编排末位');
+  'game 六部件（' + GAME_PARTS.join('/') + '）全部位于 src/game.js 之前');
+ok(scripts.length > 0 && scripts[scripts.length - 1] === 'src/main.js', 'src/main.js 位于编排末位');
 
 /* ---------------- 【B】Node 可加载模块与导出面 ---------------- */
 console.log('【B】Node 可加载模块 require 与导出面');
@@ -120,33 +121,33 @@ function requireMod(relPath) {
   try { return { mod: require(rel(relPath)) }; }
   catch (e) { return { err: e }; }
 }
-const coreR = requireMod('js/core.js');
-if (coreR.err) ok(false, 'js/core.js require 不抛错 — ' + coreR.err.message);
+const coreR = requireMod('src/core.js');
+if (coreR.err) ok(false, 'src/core.js require 不抛错 — ' + coreR.err.message);
 else {
-  ok(true, 'js/core.js require 不抛错');
+  ok(true, 'src/core.js require 不抛错');
   ok(nonEmpty(coreR.mod.CHIPS), 'ZERO_CORE.CHIPS 非空');
   ok(nonEmpty(coreR.mod.HEROES), 'ZERO_CORE.HEROES 非空');
   ok(nonEmpty(coreR.mod.ZONES), 'ZERO_CORE.ZONES 非空');
   ok(typeof coreR.mod.dailyForDate === 'function', 'ZERO_CORE.dailyForDate 为函数');
 }
-const gameR = requireMod('js/game.js');
-if (gameR.err) ok(false, 'js/game.js（门面）require 不抛错 — ' + gameR.err.message);
+const gameR = requireMod('src/game.js');
+if (gameR.err) ok(false, 'src/game.js（门面）require 不抛错 — ' + gameR.err.message);
 else {
-  ok(true, 'js/game.js（门面）require 不抛错');
+  ok(true, 'src/game.js（门面）require 不抛错');
   ok(typeof gameR.mod.createGame === 'function', 'ZERO_GAME.createGame 为函数');
 }
-const botR = requireMod('js/bot.js');
-if (botR.err) ok(false, 'js/bot.js require 不抛错 — ' + botR.err.message);
+const botR = requireMod('src/bot.js');
+if (botR.err) ok(false, 'src/bot.js require 不抛错 — ' + botR.err.message);
 else {
-  ok(true, 'js/bot.js require 不抛错');
+  ok(true, 'src/bot.js require 不抛错');
   ok(typeof botR.mod.createBot === 'function', 'ZERO_BOT.createBot 为函数');
 }
-const audioR = requireMod('js/audio.js');
-if (audioR.err) ok(false, 'js/audio.js require 不抛错 — ' + audioR.err.message);
-else ok(nonEmpty(audioR.mod), 'js/audio.js require 不抛错且导出面非空');
+const audioR = requireMod('src/audio.js');
+if (audioR.err) ok(false, 'src/audio.js require 不抛错 — ' + audioR.err.message);
+else ok(nonEmpty(audioR.mod), 'src/audio.js require 不抛错且导出面非空');
 
 /* ---------------- 【C】语法检查（node --check） ---------------- */
-console.log('【C】js/*.js 与 js/game/*.js 逐文件 node --check');
+console.log('【C】src/*.js 与 src/game/*.js 逐文件 node --check');
 for (const f of listGameJs()) {
   try {
     execFileSync(process.execPath, ['--check', rel(f)], { stdio: ['ignore', 'pipe', 'pipe'] });
@@ -160,7 +161,7 @@ for (const f of listGameJs()) {
 /* ---------------- 【D】UI 模块（文本级检查，不 require） ---------------- */
 console.log('【D】UI 模块存在性与 ZERO_ 命名空间注册字样（浏览器专用，仅文本级）');
 for (const name of UI_MODULES) {
-  const f = 'js/' + name + '.js';
+  const f = 'src/' + name + '.js';
   if (!fs.existsSync(rel(f))) { ok(false, 'UI 模块 ' + f + ' 存在'); continue; }
   ok(true, 'UI 模块 ' + f + ' 存在');
   const src = fs.readFileSync(rel(f), 'utf8');

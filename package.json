@@ -1,10 +1,10 @@
 {
   "name": "zero-protocol",
-  "version": "1.14.3",
+  "version": "1.15.0",
   "description": "零号协议 ZERO PROTOCOL —— 黑白灰像素风肉鸽弹幕射击游戏（类似《元气骑士》），内置 AI 代打与全自动仿真自检",
   "private": true,
   "scripts": {
-    "start": "node test/serve.js 8941",
+    "start": "node scripts/config.cjs && node scripts/serve.js 8941",
     "test": "node test/sim.test.js",
     "test:animation": "node test/animation.test.js",
     "test:difficulty": "node test/difficulty.test.js",
@@ -19,6 +19,22 @@
     "balance:heroes": "node test/hero-balance.js",
     "balance:enemies": "node test/enemy-balance.js --verify",
     "matrix": "node test/matrix.js --seeds 1-200",
-    "diag": "node test/diag.js 1"
-  }
+    "diag": "node test/diag.js 1",
+    "config:generate": "node scripts/config.cjs",
+    "config:check": "node scripts/config.cjs --check",
+    "check": "node scripts/config.cjs --check && node test/structure.check.js && node test/config.test.js && node test/build.test.js",
+    "build": "node scripts/build.cjs",
+    "test:equivalence": "node test/refactor-equivalence.js",
+    "test:ci": "npm run check && npm test && npm run test:animation && npm run test:difficulty && npm run test:enemies && npm run test:mechanics-mutation"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "author": "l4place",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/l4place0/l4p-knight.git"
+  },
+  "homepage": "https://l4place0.github.io/l4p-knight/"
 }
