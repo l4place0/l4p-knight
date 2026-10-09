@@ -8,7 +8,7 @@
 | [001](001-hud-occludes-playfield.md) | P1 | HUD、小地图遮住角色与推进目标 | closed · 2b5105b |
 | [002](002-warning-rays-ignore-walls.md) | P2 | 狙击与首领预警线未使用实际墙体遮挡 | closed · 2b5105b |
 | [003](003-room-door-presentation.md) | P2 | 房门是地面方框/红叉，缺少门洞与状态反馈 | closed · 2b5105b |
-| [004](004-seed3-portal-navigation-stall.md) | 未评定 | 区域守卫击破后 AI 传送门导航停滞 | closed · c924f23（v1.12） |
-| [005](005-z4b-perfect-bot-stall.md) | 未评定 | z4b 完美 bot 战斗停滞 | open · 待排查（历史记录） |
+| [004](004-seed3-portal-navigation-stall.md) | 未评定 | 区域守卫击破后 AI 传送门导航停滞 | closed · c924f23；f4d71cc 补齐验收 |
+| [005](005-z4b-perfect-bot-stall.md) | 未评定 | z4b 完美 bot 战斗停滞 | closed · f4d71cc（v1.14.2） |
 
-001–003 验收：[v1.14.1 修复报告](../qa/browser-fixes-v1.14.1.md)。004、005 的诊断与验证见各自记录；历史优先级未重新评定。
+001–003 验收：[v1.14.1 修复报告](../qa/browser-fixes-v1.14.1.md)。004–005 验收：[v1.14.2 修复报告](../qa/navigation-issues-v1.14.2.md)；历史优先级未重新评定。
